@@ -1,0 +1,122 @@
+---
+title:      遥感技术学习——论文1《Hyperspectral Unmixing Based on Local》
+description: 基于局部的像元分解技术
+date:       2016-08-02 20:44:00
+categories:
+    - 技多不压身
+tags:
+    - 图像处理
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+# 前言
+
+----------
+
+毕设相关方向第一篇论文的学习笔记，持续更新~
+
+论文题目：《Hyperspectral Unmixing Based on Local》
+
+作者：
+
+ - Shaoquan Zhang
+ - Jun Li
+ - Kai Liu
+ - Chengzhi Deng
+ - Lin Liu
+ - Antonio Plaza
+
+----------
+
+
+# 正文
+
+----------
+
+## 名词解释
+
+ - **混合像元**（`Mixed Pixel`）：地球自然表面几乎不是由均一物质所组成的。当具有不同波谱属性的物质出现在同一个像素内时，就会出现波谱混合现象，既混合像元（`Mixed Pixel`）。如果混合像元的尺度很大（宏观），那么混合像元将存在线性关系。对于微观的混合，混合像元通常表现为非线性关系。
+ - **混合像元分解**：在一个给定的地理场景中，地表由少数几种地物（端元）组成，并且这些地物具有相对稳定的光谱特征，因此，遥感图像的像元反射率可以表示为端元的光谱特征和这个像元面积比例（丰度）的函数。这个函数就是混合像元分解模型。混合像元分解指从实际光谱数据(一般为多地物光谱混合的数据)中*提取各种地物成分*（端元）以及*各成分所占的比例*（丰度）的方法。端元提取和丰度估计是混合像元分解的两个重要的过程。
+ - **端元(endmembers)提取**：在混合图像中提取出各种成分。
+ - **丰度估计**：对每种估计出来的端元物质的比例加以估计。丰度满足非负性、合为一的约束。
+
+----------
+
+## 主要内容
+
+----------
+
+### Abstract
+
+> The proposed approach, which is called local collaborative sparse unmixing, considers the fact that endmember signatures generally appear distributed in local spatial regions instead of uniformly distributed throughout the scene.
+
+考虑到在实际问题中，端元签名一般分布式地出现在局部的空间区域，而不是均匀分布在整个场景，因此提出名为“`local collaborative sparse unmixing`”的方法。
+
+----------
+
+### I. INTRODUCTION 简介
+
+> Two kinds of spectral unmixing models have been commonly used in the literature to address the mixed pixel problem: linear and nonlinear
+
+两种常用于解决混合像元问题的混合像元分解模型：线性和非线性模型。
+
+> The linear mixture model exhibits practical advantages, such as ease of implementation and flexibility in different applications. In this letter, we will focus exclusively on the linear mixture model.
+
+线性混合模型具有实际的优势，在不同的应用中更加易用、灵活。在这篇论文中，我们**将重点放在线性混合模型**。
+
+> sparse unmixing has been developed as a semisupervised approach,in which `mixed pixels` are expressed in the form of linear combinations of a number of pure spectral signatures from a large spectral library that is known in advance.
+
+稀疏分解已经发展成为一个*半监督的方法（？）*，即**混合像元**用许多`pure spectral signatures`的线性组合进行表达，这些`pure spectral signatures`来自一个已知的巨大光谱库。
+
+> The `sparse unmixing algorithm` via `variable splitting` and `augmented Lagrangian` (SUnSAL) was one of the first methods developed for this purpose, which generally assumes that the number of endmembers participating in each pixel is low. 
+
+稀疏分解算法通过变量分裂和增广拉格朗日式，是第一个为此目的而开发的方法，在此方法中一般假设参与每个像素的端元数量较低。
+
+> The `collaborative SUnSAL (CLSUnSAL)` was developed under the assumption that all pixels in a hyperspectral image share the same active set of endmembers.
+
+协同增广拉格朗日式是在“所有在高光谱图像中的像素点共享同一有效集(the same active set)的端元”这一假设下开发的。
+
+> the `local spatial information` plays an important role in `sparse unmixing` as unmixing problems generally become easier in a local scale rather than a global scale.
+
+局部空间信息在稀疏分解中起着重要的作用，分解问题在局部规模而非全局规模中变得更加容易。
+
+> The proposed approach, which is called local collaborative sparse unmixing (LCSU), assumes that neighboring pixels share the same active set of endmembers.
+
+本文提出的方法称作**局部协同稀疏分解（LCSU）**，假设相邻的像素共享相同同一有效集的端元。
+
+> In comparison with the global assumption enforced by CLSUnSAL, the proposed LCSU assumes that endmembers tend to appear localized in spatially homogeneous areas instead of distributed over the full image.
+
+与CLSUnSAL执行的全局假设相比，本文提出的LCSU假定**端元更趋向于出现在局部空间同质区域**而非分布在整个图像。
+
+----------
+
+### II. COLLABORATIVE SPARSE UNMIXING 协同稀疏分解
+
+> `Sparse unmixing` finds a linear combination of endmembers for an observed pixel i from a large spectral library as follows:
+
+使用稀疏分解方法得到端元的线性组合，像素点i作为观察点：
+
+（1）$$y_i = Ax_i + n_i$$
+
+> where yi denotes an L × 1 pixel vector of the observed hyperspectral data, L denotes `the number of bands`, A ∈ RL×m is a `spectral library`, m is the number of `spectral signatures` in A, xi denotes the abundance vector corresponding to library A, and ni is an L × 1 vector collecting the errors affecting the measurements at each spectral band.
+
+其中：
+
+ - \\(y_i\\)表示：观测的高光谱数据\\(L×1\\)像素矢量
+ - \\(L\\)表示：光谱带的数量（`the number of bands`）
+ - \\(A \subseteq \mathbb R^{\mathbb L× \mathbb m}\\)表示：光谱库，\\(m\\)指\\(A\\)中光谱特征的数量
+ - \\(x_i\\)表示：光谱库\\(A\\)对应的丰度矢量
+ - \\(n_i\\)表示：一个\\(L×1\\)的矢量，该矢量收集影响每个光谱带测量的错误信息
+ 
+
+>  As the number of endmembers involved in a mixed pixel is usually very small when compared with the size of the spectral library, the vector of fractional abundances x is sparse. The unmixing problem can be formulated as an 2 − 0 norm optimization problem.
+
+与光谱库的大小相比，参与混合像元的端元数量通常很小，分数矢量丰度$x$是稀疏的。分解问题可归结为一个*\\(l_2-l_0\\)范数优化问题（？？？）*。
+
+> where \\(\|\|x_i\|\|_0\\) denotes the number of the nonzero components of the vector \\(x_i\\) , and \\(λ\\) is a regularization parameter that weights the two terms of the objective function. However, the \\(l_0\\) term leads to an NP-hard problem, and thus, it is very difficult to solve. In [21] and [22], it was proven that the \\(l_0\\) norm can be replaced by the \\(l_1\\) norm under a certain condition of the restricted isometric property. In this context, the previous problem becomes.
+
+其中：
+
+ - \\(\|\|x_i\|\|_0\\)表示：矢量\\(\|\|x_i\|\|\\)的非零分量
+ - \\(λ\\)是：规则化参数，用于权重目标函数的两个条件
