@@ -1,6 +1,6 @@
 ---
 title:       在诗意框架中使用Migration
-description: 跪倒在南方盛夏的艳阳下。
+description: 关于Laravel
 date:       2017-07-26 20:17:00
 categories:
     - Web屠龙刀
