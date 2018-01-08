@@ -123,6 +123,32 @@ listDemo3 = [listDemo2, 'listDemo3']
 #print(listDemo3)
 ```
 
+#### 关于列表推导式
+
+列表推导式（list comprehension）是一种简化代码的优美方法。它利用其他列表来创建新的列表。
+
+组成：
+- 方括号
+- 表达式
+- for语句
+
+创建一个包含 1 到 10 的平方的列表。
+
+```
+[x*x for x in range(10)]
+```
+
+只选取出能被 3 整除的数，可以再跟一个 if 语句。
+
+```
+[x*x for x in range(10) if x % 3 == 0]
+```
+
+也可以使用多个 for 语句。
+
+```
+[(x, y) for x in range(3) for y in range(3)]
+```
 
 ### 2.2 Tuple
 

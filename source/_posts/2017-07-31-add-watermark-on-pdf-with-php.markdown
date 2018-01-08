@@ -223,6 +223,22 @@ exec("pdftk input_file.pdf output output_file.pdf");
 
 附：[PDFtk 的各种安装姿势][6]。
 
+### 关于中文显示
+
+新版本的 TCPDF 已支持中文，在 `TCPDF/fonts` 目录下存在 `cid0cs.php` 与 `stsonstdlight.php` 均能有效支持中文显示。
+
+可以使用 `setFont` 方法进行调用：
+
+```
+// 设置字体
+$pdf->SetFont('cid0cs', '', $font_size);
+```
+
+```
+// 设置字体
+$pdf->SetFont('stsongstdlight', '', $font_size);
+```
+
 ## 总结
 
 在研究给 PDF 文档打水印的过程中一波三折。
