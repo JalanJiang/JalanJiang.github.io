@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="江佳扬 | 刘璐璐的执此一生 | PHP | Python | 技术博客"><meta name="baidu-site-verification" content="tuVRQSbbQY"><title>LeetCode Notebook | 忘归</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/6.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">LeetCode Notebook</h1><a id="logo" href="/.">忘归</a><p class="description">我的肩上是风，风上是闪烁的群星。</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/history/"><i class="fa fa-book"> 老来多健忘</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">LeetCode Notebook</h1><div class="post-meta">Apr 1, 2016<span> | </span><span class="category"><a href="/categories/技多不压身/">技多不压身</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span></div><a data-disqus-identifier="2016/04/01/2016-04-05-leetcode-notebook/" href="/2016/04/01/2016-04-05-leetcode-notebook/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><h1 id="List"><a href="#List" class="headerlink" title="List"></a>List</h1><ul>
+<li><p><a href="#zero">338. Counting Bits</a></p>
+</li>
+<li><p><a href="#one">292. Nim Game</a></p>
+</li>
+<li><p><a href="#two">136. Single Number</a></p>
+</li>
+<li><p><a href="#three">258. Add Digits</a></p>
+</li>
+<li><p><a href="#four">226. Invert Binary Tree</a></p>
+</li>
+<li><p><a href="#five">283. Move Zeroes</a> </p>
+</li>
+<li><p><a href="#six">237. Delete Node in a Linked List</a></p>
+</li>
+<li><p><a href="#seven">260. Single Number III</a></p>
+</li>
+</ul>
+<p><strong>LeetCode刷题思路，持续更新中……</strong></p>
+<h1 id="零-338-Counting-Bits"><a href="#零-338-Counting-Bits" class="headerlink" title="零 338. Counting Bits"></a>零 <span id="zero">338. Counting Bits</span></h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a><a href="https://leetcode.com/problems/counting-bits/" target="_blank" rel="external">题目</a></h2><p>Given a non negative integer number num. For every numbers i in the range 0 ≤ i ≤ num calculate the number of 1’s in their binary representation and return them as an array.</p>
+<p><strong>Example:</strong><br>For num = <code>5</code> you should return <code>[0,1,1,2,1,2]</code>.</p>
+<p><strong>Follow up:</strong></p>
+<p>It is very easy to come up with a solution with run time O(n*sizeof(integer)). But can you do it in linear time O(n) /possibly in a single pass?<br>Space complexity should be O(n).<br>Can you do it like a boss? Do it without using any builtin function like __builtin_popcount in c++ or in any other language.</p>
+<p><strong>Tag</strong>: <code>Bit Manipulation</code>、<code>Dynamic Programming</code></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>根据题目要求，即给出一个数<code>num</code>，计算从<code>0~num</code>的整数二进制形态中数字<code>1</code>的个数。</p>
+<h3 id="解法一"><a href="#解法一" class="headerlink" title="解法一"></a>解法一</h3><p>若使用时间复杂度为<code>O(n*sizeof(integer))</code>的算法，还是比较简单的。即循环<code>0~num</code>每个整数<code>i</code>，循环执行<code>i&amp;=(i-1)</code>，计算<code>i</code>二进制形态中数字<code>1</code>的个数。</p>
+<h3 id="解法二"><a href="#解法二" class="headerlink" title="解法二"></a>解法二</h3><p>而题目要求<code>in linear time O(n)</code>的线性时间算法。<br>我们用数组<code>res</code>存储最后的结果，将<code>res[0]</code>先置0。通过如下递推，可以获得一些规律：</p>
+<table><br>    <tr><br>        <th>i</th><br>        <th>(i-1)&amp;i</th><br>        <th>count</th><br>        <th>res[i]</th><br>    </tr><br>    <tr><br>        <td>1</td><br>        <td>0</td><br>        <td>count=0</td><br>        <td>res[1] = res[count]+1 = res[0]+1 = 1</td><br>    </tr><br>    <tr><br>        <td>2</td><br>        <td>0</td><br>        <td>count=0</td><br>        <td>res[2] = res[count]+1 = res[0]+1 = 1</td><br>    </tr><br>    <tr><br>        <td>3</td><br>        <td>1</td><br>        <td>count++, count=1</td><br>        <td>res[3] = res[count]+1 = count[1]+1 = 2</td><br>    </tr><br>    <tr><br>        <td>4</td><br>        <td>0</td><br>        <td>count=0</td><br>        <td>res[4] = res[count]+1 = count[0]+1 = 1</td><br>    </tr><br></table><br>即：若计算<code>i&amp;(i-1)</code>后：<br><br>1. 结果等于零，则该二进制数中仅有<code>1</code>个数字<code>1</code>,此时将<code>count</code>的值置为<code>0</code>，<code>res[i] = res[count] + 1 = res[0] + 1 = 1</code>;<br>2. 结果不等于零，则该二进制数中数字<code>1</code>的个数大于<code>1</code>。该数字<code>i</code>可以拆分成<code>&lt;i</code>的数字。比如：<br> - 3 = 1 + 2<br> - 5 = 3 + 2<br> - 7 = 5 + 2<br><br>即：可以用<code>res[j]</code> (j &lt; i) 来计算<code>res[i]</code>的值<br><br>## 解决方法<br><br>### 解法一：run time O(n<em>sizeof(integer))<br><br><strong><code>c++</code> Solution</strong><br><br>    class Solution {<br>    public:<br>        vector<int> countBits(int num) {<br>            vector<int> result;<br>            int cnt;<br>            for(int i=0; i&lt;=num; i++) {<br>                int t = i;<br>                for(cnt=0; t&gt;0; cnt++) {<br>                    t &amp;= (t-1);<br>                }<br>                result.push_back(cnt);<br>            }<br>            return result;<br>        }<br>    };<br><br>### 解法二：run time O(n)<br><br><strong><code>c++</code> Solution</strong><br><br>    class Solution {<br>    public:<br>        vector<int> countBits(int num) {<br>            vector<int> res;<br>            res.push_back(0);<br>            int count = 0;<br><br>            for (int i = 1; i &lt;= num; ++ i) {<br>                if (((i - 1) &amp; i) == 0) {<br>                    count = 0;<br>                } else {<br>                    count += 1;<br>                }<br>                res.push_back(1 + res[count]);<br>            }<br>            return res;<br>        }<br>    };<br><br>———-<br><br><br># 一 <span id="one">292. Nim Game</span><br><br>## <a href="https://leetcode.com/problems/nim-game/" target="_blank" rel="external">题目</a><br>You are playing the following Nim Game with your friend: There is a heap of stones on the table, each time one of you take turns to remove 1 to 3 stones. The one who removes the last stone will be the winner. <strong>You will take the first turn</strong> to remove the stones.<br><br>Both of you are very clever and have optimal strategies for the game. Write a function to determine whether you can win the game given the number of stones in the heap.<br><br>For example, if there are 4 stones in the heap, then you will never win the game: no matter 1, 2, or 3 stones you remove, the last stone will always be removed by your friend.<br><br><br>## 思路<br>根据题设条件： 当<code>n∈[1,3]</code>时，先手必胜。<br><br>当<code>n == 4</code>时，无论先手第一轮如何选取，下一轮都会转化为<code>n∈[1,3]</code>的情形，此时先手必负。<br><br>当<code>n∈[5,7]</code>时，先手必胜，先手分别通过取走<code>[1,3]</code>颗石头，可将状态转化为<code>n == 4</code>时的情形，此时后手必负。<br><br>当<code>n == 8</code>时，无论先手第一轮如何选取，下一轮都会转化为<code>n∈[5,7]</code>的情形，此时先手必负。<br><br>所以，我们仅需关注<code>n</code>的个数是否为<code>4</code>的倍数即可。<br><br>## 解决方法<br><br><strong><code>c++</code> Solution</strong><br><br>    class Solution {<br>    public:<br>        bool canWinNim(int n) {<br>            if(n%4 == 0) {<br>                return false;<br>            } else {<br>                return true;<br>            }<br>        }<br>    };<br><br>———-<br><br><br># 二 <span id="two">136. Single Number</span><br><br>## <a href="https://leetcode.com/problems/single-number/" target="_blank" rel="external">题目</a><br><br>Given an array of integers, every element appears twice except for one. Find that single one.<br><br>Note:<br>Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?<br><br><strong>Tag:</strong><code>Hash Table</code>；<code>Bit Manipulation</code><br><br>## 思路<br><br>题目要求：在一个整数数组中，每个元素会出现两次或一次，要求找出仅出现一次的元素。<br>看到题目后第一反应是使用<code>Hash Table</code>来解决。但在题目<code>Tag</code>中提示可以使用<code>Bit Manipulation</code>，于是想到用位运算中异或的方法：<br><br>&gt; <strong><code>A ^ B ^ A = B</code></strong><br><br>将整数数组<code>nums</code>中的每个数循环执行异或操作，最终得到的结果就是仅出现单次的数。<br><br>## 解决方法<br><br><strong><code>c++</code> Solution</strong><br><br>    class Solution {<br>    public:<br>        int singleNumber(vector<int>&amp; nums) {<br>            int result = nums[0];<br>            for(int i=1; i<nums.size(); i++)="" {="" result="" ^="nums[i];" }="" return="" result;="" };="" ----------="" #="" 三="" <span="" id="three">258. Add Digits<br><br>## <a href="https://leetcode.com/problems/add-digits/" target="_blank" rel="external">题目</a><br><br>Given a non-negative integer num, repeatedly add all its digits until the result has only one digit.<br><br><strong>For example</strong>:<br><br>Given num = 38, the process is like: 3 + 8 = 11, 1 + 1 = 2. Since 2 has only one digit, return it.<br><br><strong>Follow up:</strong><br>Could you do it without any loop/recursion in O(1) runtime?<br><br><em>*Tag</em></nums.size();></int></int></int></int></int></em>:<code>Math</code><br><br>## 思路<br><br>拿到题目后的第一想法还是对<code>num</code>进行循环取模求和运算，但题目要求<code>O(1)</code>的时间复杂度，那么应当又是一道有规律可循的题了。<br><br>我们对一系列数的运算结果进行观察：<br><table><br>    <tr><br>        <th>num</th><br>        <th>result</th><br>    </tr><br>    <tr><br>        <td>1</td><br>        <td>1</td><br>    </tr><br>    <tr><br>        <td>2</td><br>        <td>2</td><br>    </tr><br>    <tr><br>        <td>3</td><br>        <td>3</td><br>    </tr><br>    <tr><br>        <td>4</td><br>        <td>4</td><br>    </tr><br>    <tr><br>        <td>5</td><br>        <td>5</td><br>    </tr><br>    <tr><br>        <td>6</td><br>        <td>6</td><br>    </tr><br>    <tr><br>        <td>7</td><br>        <td>7</td><br>    </tr><br>    <tr><br>        <td>8</td><br>        <td>8</td><br>    </tr><br>    <tr><br>        <td>9</td><br>        <td>9</td><br>    </tr><br>    <tr><br>        <td>10</td><br>        <td>1</td><br>    </tr><br>    <tr><br>        <td>11</td><br>        <td>2</td><br>    </tr><br>    <tr><br>        <td>12</td><br>        <td>3</td><br>    </tr><br>    <tr><br>        <td>13</td><br>        <td>4</td><br>    </tr><br>    <tr><br>        <td>14</td><br>        <td>5</td><br>    </tr><br>    <tr><br>        <td>15</td><br>        <td>6</td><br>    </tr><br>    <tr><br>        <td>16</td><br>        <td>7</td><br>    </tr><br>    <tr><br>        <td>17</td><br>        <td>8</td><br>    </tr><br>    <tr><br>        <td>18</td><br>        <td>9</td><br>    </tr><br>    <tr><br>        <td>19</td><br>        <td>1</td><br>    </tr><br>    <tr><br>        <td>20</td><br>        <td>2</td><br>    </tr><br></table>
+
+<p>从结果可以观察出，都是<code>1~9</code>的循环数。因此对于某数字<code>num</code>得出的<code>result</code>应当为：</p>
+<blockquote>
+<p><code>result = (num-1)%9 + 1</code></p>
+</blockquote>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p><strong><code>c++</code> Solution</strong></p>
+<pre><code>class Solution {
+public:
+    int addDigits(int num) {
+        return (num-1)%9+1;
+    }
+};
+</code></pre><hr>
+<h1 id="四-226-Invert-Binary-Tree"><a href="#四-226-Invert-Binary-Tree" class="headerlink" title="四 226. Invert Binary Tree"></a>四 <span id="four">226. Invert Binary Tree</span></h1><h2 id="题目-1"><a href="#题目-1" class="headerlink" title="题目"></a><a href="https://leetcode.com/problems/invert-binary-tree/" target="_blank" rel="external">题目</a></h2><p>Invert a binary tree.<br><img src="https://leanote.com/api/file/getImage?fileId=5704fe24ab64412bd500014c" alt="title"><br>to<br><img src="https://leanote.com/api/file/getImage?fileId=5704fe33ab64412bd500014d" alt="title"><br><strong>Trivia:</strong><br>This problem was inspired by this original tweet by Max Howell:<br>Google: 90% of our engineers use the software you wrote (Homebrew), but you can’t invert a binary tree on a whiteboard so fuck off.<br><strong>Tag</strong>:<code>Tree</code></p>
+<h2 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h2><p>二叉树的反转就是将左右子树不停地调换位置，可以用递归的方式实现。</p>
+<h2 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法"></a>解决方法</h2><p><strong><code>c++</code> Solution</strong></p>
+<pre><code>/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        if(root) {
+            //  调换左右子树位置
+            TreeNode *t;
+            t = root-&gt;left;
+            root-&gt;left = root-&gt;right;
+            root-&gt;right = t;
+            //  递归
+            invertTree(root-&gt;left);
+            invertTree(root-&gt;right);
+        }
+        return root;
+    }
+};
+</code></pre><hr>
+<h1 id="五-283-Move-Zeroes"><a href="#五-283-Move-Zeroes" class="headerlink" title="五 283. Move Zeroes"></a>五 <span id="five">283. Move Zeroes</span></h1><h2 id="题目-2"><a href="#题目-2" class="headerlink" title="题目"></a>题目</h2><p>Given an array nums, write a function to move all 0’s to the end of it while maintaining the relative order of the non-zero elements.</p>
+<p><strong>For example</strong>, given nums = [0, 1, 0, 3, 12], after calling your function, nums should be [1, 3, 12, 0, 0].</p>
+<p><strong>Note:</strong><br>You must do this in-place without making a copy of the array.<br>Minimize the total number of operations.</p>
+<p><strong>Tag</strong>: <code>Array</code>、<code>Two Pointers</code></p>
+<h2 id="思路-2"><a href="#思路-2" class="headerlink" title="思路"></a>思路</h2><p>题目不允许<code>copy array</code>，如果要把数字0都移动到数组末尾，第一想法还是当遇到<code>0</code>时，将数组循环前移，再在末尾插入<code>0</code>。或者直接使用<code>vector</code>的<code>erase()</code>，擦除<code>0</code>所在位置，并在末尾<code>push_back(0)</code>。<br>But……这种方法分分钟超时了……<br>题目中Tag提示<code>Two Pinters</code>，估计就是用双指针进行数字交换了。<br>使用两个指针<code>i</code>和<code>j</code>指向数组的下标，通过<code>i</code>循环<code>nums[i]</code>，每当遇到非零数字时，交换<code>nums[i]</code>与<code>nums[j]</code>，并执行<code>j++</code>。<br>若存在<code>0</code>，则能让<code>j</code>始终指向数字<code>0</code>，当<code>i</code>指向<code>非0</code>数字时，交换二者。</p>
+<h2 id="解决方法-2"><a href="#解决方法-2" class="headerlink" title="解决方法"></a>解决方法</h2><h3 id="解法一-1"><a href="#解法一-1" class="headerlink" title="解法一"></a>解法一</h3><p><code>c++ Solution</code></p>
+<pre><code>class Solution {
+public:
+    void moveZeroes(vector&lt;int&gt;&amp; nums) {
+        for(int i=0, j=0; i&lt;nums.size(); i++) {
+            if(nums[i] != 0) {
+                swap(nums[i], nums[j]);
+                j++;
+            }
+        }
+    }
+};
+</code></pre><h3 id="解法二-1"><a href="#解法二-1" class="headerlink" title="解法二"></a>解法二</h3><p><code>c++ Solution</code> <strong>Time Limit Exceeded</strong></p>
+<pre><code>class Solution {
+public:
+    void moveZeroes(vector&lt;int&gt;&amp; nums) {
+        int size = nums.size();
+        for(int i=0; i&lt;size; i++) {
+            if(nums[i] == 0) {
+                nums.erase(nums.begin()+i);
+                nums.push_back(0);
+                i = 0;
+            }
+        }
+    }
+};
+</code></pre><hr>
+<h1 id="六-237-Delete-Node-in-a-Linked-List"><a href="#六-237-Delete-Node-in-a-Linked-List" class="headerlink" title="六 237. Delete Node in a Linked List"></a>六 <span id="six">237. Delete Node in a Linked List</span></h1><h2 id="题目-3"><a href="#题目-3" class="headerlink" title="题目"></a>题目</h2><p>Write a function to delete a node (except the tail) in a singly linked list, given only access to that node.</p>
+<p>Supposed the linked list is <code>1 -&gt; 2 -&gt; 3 -&gt; 4</code>and you are given the third node with value <code>3</code>, the linked list should become <code>1 -&gt; 2 -&gt; 4</code>after calling your function.</p>
+<p>Tag: <code>Linked List</code></p>
+<h2 id="思路-3"><a href="#思路-3" class="headerlink" title="思路"></a>思路</h2><p>假设链表中要删除的节点是<code>node</code>，想法是：找到指向<code>node</code>的节点（如图中值为<code>2</code>的结点），改变该节点的指针，指向<code>node-&gt;next</code>。</p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=5706388fab64412bd5000cfa" alt="title"></p>
+<p>然而答题区的函数只传入了一个要删除的节点，难道要遍历找到<code>pre</code>吗……然而也没有给我链表的首指针啊……</p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=57063b83ab64412a3500101c" alt="title"></p>
+<p>所以应该直接在给定的<code>node</code>上做文章。把<code>node</code>更改为<code>node-&gt;next</code>并把<code>node-&gt;next</code>删除~如下图所示。</p>
+<p><img src="https://leanote.com/api/file/getImage?fileId=57063803ab64412a35001006" alt="title"></p>
+<h2 id="解决方法-3"><a href="#解决方法-3" class="headerlink" title="解决方法"></a>解决方法</h2><pre><code>/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        ListNode* t = node-&gt;next;
+        *node = *t;
+        delete t;
+    }
+};
+</code></pre><p>值得一提，代码中的<code>*node = *t</code>非常有意思，即<code>*node = *node-&gt;next</code>，它等价于：</p>
+<pre><code>node-&gt;val = node-&gt;next-&gt;val;
+node-&gt;next = node-&gt;next-&gt;next;
+</code></pre><hr>
+<h1 id="七-260-Single-Number-III"><a href="#七-260-Single-Number-III" class="headerlink" title="七 260. Single Number III"></a>七 <span id="seven">260. Single Number III</span></h1><h2 id="题目-4"><a href="#题目-4" class="headerlink" title="题目"></a><a href="https://leetcode.com/problems/single-number-iii/" target="_blank" rel="external">题目</a></h2><p>Given an array of numbers nums, in which exactly two elements appear only once and all the other elements appear exactly twice. Find the two elements that appear only once.</p>
+<p><strong>For example</strong>:</p>
+<p>Given nums = [1, 2, 1, 3, 2, 5], return [3, 5].</p>
+<p><strong>Note</strong>:<br>The order of the result is not important. So in the above example, [5, 3] is also correct.<br>Your algorithm should run in linear runtime complexity. Could you implement it using only constant space complexity?</p>
+<p><strong>Tag</strong>:<code>Bit Manipulation</code></p>
+<h2 id="思路-4"><a href="#思路-4" class="headerlink" title="思路"></a>思路</h2><p>看到<strong>Tag</strong>中的“位操作”提示，看来又是非常interesting的一题。找出数组中仅出现一次的数的方法和上面<a href="#two">136. Single Number</a>一题是一样的，利用 <code>A^B^A = B</code>可用异或的方式找出仅出现一次的数。本题将仅出现一次的数换成2个，因此为求出这两个数，我们也应当将数组中的数分成两个group，分别求解。我们将仅出现一次的两个数设为<code>a</code>和<code>b</code>。</p>
+<ol>
+<li>步骤一：遍历数组，<strong>异或</strong>数组中的所有元素，最终可得到值<code>aXORb</code>。由<code>A^B^A=B</code>可知，<code>aXORb = a^b</code>；</li>
+<li>步骤二：执行<code>aXORb&amp;(~(aXORb-1))</code>找出<code>aXORb</code>中值为<code>1</code>的二进制位。假设<code>aXORb</code>中第<code>i</code>位的数字为<code>1</code>，则代表<code>a</code>与<code>b</code>在该位上的二进制数不同。可假设<code>a</code>在第<code>i</code>位上的数为<code>1</code>，<code>b</code>在第<code>i</code>位上的数为<code>0</code>；</li>
+<li>步骤三：将数组中所有数据分为两组。A组：第<code>i</code>位的数与<code>a</code>相同，B组：第<code>i</code>位的数与<code>b</code>相同；</li>
+<li>步骤四：异或<code>A</code>组所有元素，得到<code>A</code>，异或<code>B</code>组所有元素，得到<code>b</code>。</li>
+</ol>
+<h2 id="解决方法-4"><a href="#解决方法-4" class="headerlink" title="解决方法"></a>解决方法</h2><pre><code>class Solution {
+public:
+    vector&lt;int&gt; singleNumber(vector&lt;int&gt;&amp; nums) {
+        vector&lt;int&gt; result = {0, 0};
+        int aXORb = 0;
+        for(int i = 0; i&lt;nums.size(); i++) {
+            aXORb ^= nums[i];
+        }
+
+        int last = aXORb&amp;(~(aXORb-1));
+
+        for(int i = 0; i&lt;nums.size(); i++) {
+            if((last &amp; nums[i]) != 0) {
+                result[0] ^= nums[i];
+            } else {
+                result[1] ^= nums[i];
+            }
+        }
+
+        return result;
+    }
+};
+</code></pre></div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://jalan.space/2016/04/01/2016-04-05-leetcode-notebook/" data-id="cjcn9wtbc000bnoxgitp711ix" class="article-share-link">分享</a><div class="tags"><a href="/tags/算法/">算法</a></div><div class="post-nav"><a href="/2016/07/07/2016-07-09-big-fish-and-chinese-flowering-crabapple/" class="pre">《大鱼·海棠》——没有想象中的那么好</a><a href="/2016/02/13/2016-02-13-machine-learning-fundations-one/" class="next">《机器学习基石》笔记——第一讲：Learning Problem</a></div><iframe src="/donate/?AliPayQR=/img/AliPayQR.jpg&amp;WeChatQR=/img/WeChatQR.jpg&amp;GitHub=https://github.com/Kaiyuan/donate-page&amp;BTCQR=null&amp;BTCKEY=null&amp;PayPal=null" style="overflow-x:hidden; overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;" frameborder="0" scrolling="no"></iframe><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'jalanjiang';
+var disqus_identifier = '2016/04/01/2016-04-05-leetcode-notebook/';
+var disqus_title = 'LeetCode Notebook';
+var disqus_url = 'http://jalan.space/2016/04/01/2016-04-05-leetcode-notebook/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/favicon.ico',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
+  }
+});</script><script id="dsq-count-scr" src="//jalanjiang.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="search" name="word" maxlength="20" placeholder="Search"/><input type="hidden" name="si" value="http://jalan.space"/><input name="tn" type="hidden" value="bds"/><input name="cl" type="hidden" value="3"/><input name="ct" type="hidden" value="2097152"/><input name="s" type="hidden" value="on"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Web屠龙刀/">Web屠龙刀</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/少年人的冲动/">少年人的冲动</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/技多不压身/">技多不压身</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/磨刀石/">磨刀石</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/跨过这道坎/">跨过这道坎</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/matlab/" style="font-size: 15px;">matlab</a> <a href="/tags/jekyll/" style="font-size: 15px;">jekyll</a> <a href="/tags/JavaScript/" style="font-size: 15px;">JavaScript</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/影评/" style="font-size: 15px;">影评</a> <a href="/tags/算法/" style="font-size: 15px;">算法</a> <a href="/tags/meitu/" style="font-size: 15px;">meitu</a> <a href="/tags/Bootstrap/" style="font-size: 15px;">Bootstrap</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/图像处理/" style="font-size: 15px;">图像处理</a> <a href="/tags/Nginx/" style="font-size: 15px;">Nginx</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/生活啊/" style="font-size: 15px;">生活啊</a> <a href="/tags/Laravel/" style="font-size: 15px;">Laravel</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/网络爬虫/" style="font-size: 15px;">网络爬虫</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/20/2018-01-19-python-peewee-doc/">Peewee 使用手册翻译与个人解读</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/17/2018-01-17-sorting-json-data/">json_encode 无序问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/2018-01-10-php-find-closest-color/">PHP 通过比对十六进制 RGB 查找最接近色值</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/07/2018-01-07-python-urlib-beautifulsoup/">Python 爬虫之初体验：urllib 与 BeautifulSoup 的配合</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/06/2018-01-06-mount-disk-in-mac-osx/">原生命令行实现 macOS 下 ntfs 硬盘读写</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/05/2018-01-05-python-mysqlclient-install-error/">Django 环境配置踩坑记之 mysql 驱动安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/03/2018-01-03-python-argparse/">Python命令行解析库argparse</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/02/2018-01-02-retrospect-and-prospect/">2017 to 2018</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/26/2017-12-25-linux-hard-link-and-soft-link/">Linux的硬链接与软链接</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/20/2017-12-16-linux-common-disk/">Linux常用命令之磁盘空间</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//jalanjiang.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://liuluu.github.io/" title="念久" target="_blank">念久</a><ul></ul><a href="http://blog.w2fzu.com/" title="西二在线" target="_blank">西二在线</a><ul></ul><a href="http://www.hongweipeng.com/" title="栖迟於一丘" target="_blank">栖迟於一丘</a><ul></ul><a href="http://shixiong.name/" title="Daemon" target="_blank">Daemon</a><ul></ul><a href="http://csming1995.github.io/" title="Csming's world" target="_blank">Csming's world</a><ul></ul><a href="https://xushenglee.github.io/" title="Xusheng's Blog" target="_blank">Xusheng's Blog</a><ul></ul><a href="https://mychiaki.github.io/" title="Chiaki" target="_blank">Chiaki</a><ul></ul><a href="http://www.ruphi.cn" title="ruphi" target="_blank">ruphi</a><ul></ul><a href="http://lizimeow.cn/" title="栗子膜法师" target="_blank">栗子膜法师</a><ul></ul><a href="undefined" title="null" target="_blank"></a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">忘归.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c47c7dbbbbb8b1bd7729048f358cd896";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
