@@ -68,7 +68,7 @@ ls -al /Users/www | less
 - head
 - tail
 - less
-- cat
+- [cat](/2018/03/21/2018-03-21-linux-common-commands-cat/)
 - ps
 - top
 - ping
@@ -77,7 +77,8 @@ ls -al /Users/www | less
 
 ## 过滤查询
 
-- find
+- [find](/2018/03/21/2018-03-21-linux-common-commands-find/)
+- [xargs](/2018/03/21/2018-03-26-linux-common-commands-xargs/)
 - [grep](/2017/12/16/2017-12-16-linux-common-commands-capture/)
 - [cut](/2017/12/16/2017-12-16-linux-common-commands-capture/)
 - awk

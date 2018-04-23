@@ -1,5 +1,5 @@
 ---
-title:      peewee 使用手册翻译与个人解读
+title:      Peewee 使用手册翻译与个人解读
 description: 一个简单、轻巧的 Python ORM
 date:       2018-01-20 15:58:00
 categories:
