@@ -4,8 +4,8 @@
 
 # Site
 title: 忘归
-subtitle: 我的肩上是风，风上是闪烁的群星。
-description: 江佳扬 | 刘璐璐的执此一生 | PHP | Python | 技术博客
+subtitle: 前程三千世界，此去一路欢歌。
+description: 江佳扬 | 刘璐璐的匆匆过客 | PHP | Python | 技术博客
 author: Jalan.江佳扬
 language: zh-CN
 timezone: 
@@ -79,3 +79,5 @@ theme: maupassant
 deploy:
   type: git
   repo: https://github.com/JalanJiang/JalanJiang.github.io.git
+  name: JalanJiang
+  email: 448300947@qq.com
