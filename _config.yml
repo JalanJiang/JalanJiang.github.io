@@ -4,7 +4,7 @@
 
 # Site
 title: 忘归
-subtitle: 前程三千世界，此去一路欢歌。
+subtitle: 底色悲凉，自在如风。
 description: 江佳扬 | 刘璐璐的匆匆过客 | PHP | Python | 技术博客
 author: Jalan.江佳扬
 language: zh-CN
@@ -73,6 +73,15 @@ pagination_dir: page
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: maupassant
+
+# RSS订阅支持
+plugin:
+- hexo-generator-feed
+
+feed:
+type: atom
+path: atom.xml
+limit: 20
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
