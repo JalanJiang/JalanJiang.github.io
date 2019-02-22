@@ -50,8 +50,8 @@
         <entry file="file://$PROJECT_DIR$/source/about/index.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="-106">
-                <caret line="5" column="19" lean-forward="false" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
+              <first_editor relative-caret-position="48">
+                <caret line="69" column="19" lean-forward="false" selection-start-line="69" selection-start-column="19" selection-end-line="69" selection-end-column="19" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -662,12 +662,12 @@
       <workItem from="1550214171267" duration="4385000" />
       <workItem from="1550560475429" duration="1166000" />
       <workItem from="1550627757770" duration="2469000" />
-      <workItem from="1550737348062" duration="531000" />
+      <workItem from="1550737348062" duration="1164000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="412026000" />
+    <option name="totallyTimeSpent" value="412659000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1205,8 +1205,8 @@
     <entry file="file://$PROJECT_DIR$/source/about/index.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="-106">
-            <caret line="5" column="19" lean-forward="false" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
+          <first_editor relative-caret-position="48">
+            <caret line="69" column="19" lean-forward="false" selection-start-line="69" selection-start-column="19" selection-end-line="69" selection-end-column="19" />
             <folding />
           </first_editor>
           <second_editor />
