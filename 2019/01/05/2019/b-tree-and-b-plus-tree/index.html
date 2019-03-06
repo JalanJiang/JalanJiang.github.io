@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="江佳扬 | 刘璐璐的匆匆过客 | PHP | Python | 技术博客"><title>B-Tree 与 B+Tree | 忘归</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = 'https://hm.baidu.com/hm.js?' + 'c47c7dbbbbb8b1bd7729048f358cd896';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">B-Tree 与 B+Tree</h1><a id="logo" href="/.">忘归</a><p class="description">底色悲凉，自在如风。</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/cat/"><i class="fa fa-heart"> 喵</i></a><a href="/history/"><i class="fa fa-calendar"> 老来多健忘</i></a><a href="/read/"><i class="fa fa-book"> 不如多读书</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">B-Tree 与 B+Tree</h1><div class="post-meta">Jan 5, 2019<span> | </span><span class="category"><a href="/categories/Web屠龙刀/">Web屠龙刀</a></span></div><a class="disqus-comment-count" data-disqus-identifier="2019/01/05/2019/b-tree-and-b-plus-tree/" href="/2019/01/05/2019/b-tree-and-b-plus-tree/#disqus_thread"></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#诞生原因"><span class="toc-number">1.</span> <span class="toc-text">诞生原因</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#磁盘-IO-问题"><span class="toc-number">1.1.</span> <span class="toc-text">磁盘 IO 问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不平衡问题"><span class="toc-number">1.2.</span> <span class="toc-text">不平衡问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-Tree"><span class="toc-number">2.</span> <span class="toc-text">B-Tree</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#特征"><span class="toc-number">2.1.</span> <span class="toc-text">特征</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-Tree-1"><span class="toc-number">3.</span> <span class="toc-text">B+Tree</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#特征-1"><span class="toc-number">3.1.</span> <span class="toc-text">特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优势"><span class="toc-number">3.2.</span> <span class="toc-text">优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#联合索引"><span class="toc-number">3.3.</span> <span class="toc-text">联合索引</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#举个栗子"><span class="toc-number">3.3.1.</span> <span class="toc-text">举个栗子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#联合索引的有效查询条件"><span class="toc-number">3.3.2.</span> <span class="toc-text">联合索引的有效查询条件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#灵魂拷问"><span class="toc-number">3.3.2.1.</span> <span class="toc-text">灵魂拷问</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搜索时间复杂度"><span class="toc-number">4.</span> <span class="toc-text">搜索时间复杂度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉搜索树"><span class="toc-number">4.1.</span> <span class="toc-text">二叉搜索树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#平衡二叉树"><span class="toc-number">4.2.</span> <span class="toc-text">平衡二叉树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在-MySQL-中的使用"><span class="toc-number">5.</span> <span class="toc-text">在 MySQL 中的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InnoDB-索引机制"><span class="toc-number">5.1.</span> <span class="toc-text">InnoDB 索引机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MyISAM-索引机制"><span class="toc-number">5.2.</span> <span class="toc-text">MyISAM 索引机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#两者差异对比"><span class="toc-number">5.3.</span> <span class="toc-text">两者差异对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">6.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="post-content"><p>最近在看 MySQL 的相关书籍，在此复盘一下索引相关的数据结构 B-Tree 和 B+Tree。</p>
+<h2 id="诞生原因"><a href="#诞生原因" class="headerlink" title="诞生原因"></a>诞生原因</h2><p>二叉查找树的时间复杂度已经是 O(logN) 了，为什么还要使用 B-Tree 和 B+Tree 呢？</p>
+<h3 id="磁盘-IO-问题"><a href="#磁盘-IO-问题" class="headerlink" title="磁盘 IO 问题"></a>磁盘 IO 问题</h3><p>平衡二叉树由于树深度过高而造成磁盘 IO 读写过于频繁，从而效率低下。为了减少磁盘 IO 的次数：</p>
+<ul>
+<li>每个节点存储多个元素</li>
+<li>摒弃二叉树，采用多叉树</li>
+</ul>
+<p>从而诞生了多路查找树。</p>
+<h3 id="不平衡问题"><a href="#不平衡问题" class="headerlink" title="不平衡问题"></a>不平衡问题</h3><p>二叉查找树存在的极端情况：所有节点都位于同一侧。</p>
+<p>这种情况下查找效率就十分低下了，因此需要对二叉树左右子树的高度进行平衡化处理，于是就有了平衡二叉树（Balanced Binary Tree）。</p>
+<p>平衡的概念：</p>
+<ul>
+<li>各个分支的高度是均匀的</li>
+<li>左右子树的高度之差绝对值小于 1</li>
+</ul>
+<h2 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B-Tree"></a>B-Tree</h2><p><img src="/img/in-post/b-tree.png" alt="B-Tree"></p>
+<h3 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h3><p>m 阶 B-Tree 特征：</p>
+<ul>
+<li>每个节点最多可以拥有 m 棵子树</li>
+<li>根节点：至少有 2 个节点</li>
+<li>非根非叶节点：至少有 <code>ceil(m/2)</code> 个子树</li>
+<li>非叶节点中的信息：<code>[n, A0, K1, A1, K2, A2, ..., Kn, An]</code><ul>
+<li>n：节点中保存的关键字个数（<code>ceil(m/2) - 1 &lt;= n &lt;= m-1</code>）</li>
+<li>K：关键字，有序，<code>Kn &lt; k(n+1)</code></li>
+<li>A：指向子树根节点的指针</li>
+</ul>
+</li>
+<li>从根到叶子的每一条路径都有相同的长度（叶子节点都在相同层）</li>
+</ul>
+<h2 id="B-Tree-1"><a href="#B-Tree-1" class="headerlink" title="B+Tree"></a>B+Tree</h2><p><img src="/img/in-post/b+tree.png" alt="B+Tree"></p>
+<h3 id="特征-1"><a href="#特征-1" class="headerlink" title="特征"></a>特征</h3><ul>
+<li>有 k 个子树的中间节点包含有 k 个元素（B-Tree 中是 k-1 个元素）</li>
+<li>非叶子节点中每个元素不保存数据，仅用来索引。节点中仅含有其子树（根节点）中的最大（或最小）关键字</li>
+<li>所有叶子节点中包含了全部元素的信息（无论查找成功与否，每次查找都走了一条从根到叶子节点的路径）</li>
+<li>树的所有叶结点构成一个有序链表，可以按照关键码排序的次序遍历全部记录</li>
+</ul>
+<h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><ul>
+<li>单一节点存储更多元素，磁盘 IO 次数更少</li>
+<li>所有查询都要查找到叶子节点，查询性能稳定</li>
+<li>所有叶子节点形成有序链表，便于范围查找（B-Tree 的范围查找需要通过中序遍历实现）</li>
+</ul>
+<h3 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a>联合索引</h3><p>MySQL 中的索引可以以一定顺序引用多个列，这种索引叫做复合（联合）索引，一般的，一个联合索引是一个有序元组 <code>&lt;a1, a2, …, an&gt;</code>，其中各个元素均为数据表的一列。</p>
+<p>联合索引对多个值进行排序的依据是 <code>CREATE TABLE</code> 语句中定义索引时列的顺序。</p>
+<h4 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h4><p>建表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`student`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`cid`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">KEY</span> <span class="string">`name_cid_INX`</span> (<span class="string">`name`</span>,<span class="string">`cid`</span>),</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">8</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8</span><br></pre></td></tr></table></figure>
+<p>这里使用了联合索引，索引列的顺序为 <code>&lt;name, cid&gt;</code>。所以现根据 <code>name</code> 排序，再根据 <code>cid</code> 排序。排序后的数据可能是这样的：</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>cid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>6</td>
+</tr>
+<tr>
+<td>c</td>
+<td>4</td>
+</tr>
+<tr>
+<td>c</td>
+<td>5</td>
+</tr>
+<tr>
+<td>h</td>
+<td>1</td>
+</tr>
+<tr>
+<td>z</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+<p>由排序结果可以观察出：</p>
+<ul>
+<li><code>name</code> 一定是有序的，<code>cid</code> 是无序的（<strong>直接使用第二个cid字段进行条件判断是用不到索引的</strong>）</li>
+<li>若要 <code>cid</code> 有序，<code>name</code> 需等值匹配（<strong>要想使用第二个索引，必须先使用第一个索引的原因</strong>）</li>
+</ul>
+<p>这样看来，一系列多列索引的有效查询条件就很好解释了。</p>
+<h4 id="联合索引的有效查询条件"><a href="#联合索引的有效查询条件" class="headerlink" title="联合索引的有效查询条件"></a>联合索引的有效查询条件</h4><ul>
+<li>全值匹配：和索引中的所有列进行匹配</li>
+<li>匹配最左前缀：只使用索引第一列</li>
+<li>匹配列前缀：可以只匹配某一列的值的开头部分</li>
+<li>匹配范围值：只匹配第一列的范围值</li>
+<li>精确匹配某一列并范围匹配另一列：前缀精确匹配，后续跟一列范围匹配</li>
+</ul>
+<h5 id="灵魂拷问"><a href="#灵魂拷问" class="headerlink" title="灵魂拷问"></a>灵魂拷问</h5><p>如果使用 <code>cid=1 AND name=&#39;小红&#39;</code> 顺序设置 <code>WHERE</code> 是否还会使用索引呢？</p>
+<p><strong>答案是会的</strong>。</p>
+<p>MySQL 查询优化器会判断纠正这条 SQL 语句该以什么样的顺序执行效率最高，最后才生成真正的执行计划。所以 <code>WHERE</code> 中 <code>AND</code> 条件的先后顺序对如何选择索引是无关的，优化器会去分析判断选用哪个索引。</p>
+<h2 id="搜索时间复杂度"><a href="#搜索时间复杂度" class="headerlink" title="搜索时间复杂度"></a>搜索时间复杂度</h2><h3 id="二叉搜索树"><a href="#二叉搜索树" class="headerlink" title="二叉搜索树"></a>二叉搜索树</h3><p>一个有 n 个节点的二叉树，它的最小深度为 <code>log(n)</code>（log 底为2），最大深度为 <code>n</code>（所有节点都在树的同一边）。</p>
+<p>二叉搜索树的深度越小，那么搜索所需要的运算时间越小。一个深度为 <code>log(n)</code> 的二叉搜索树，搜索算法的时间复杂度也是 <code>O(log n)</code>。</p>
+<h3 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h3><p>同样，一棵平衡二叉树的搜索时间复杂度为 <code>O(log n)</code>，n 是节点数，底数是树的分叉数。</p>
+<p><img src="https://images2015.cnblogs.com/blog/303980/201703/303980-20170331183940836-1426600354.png" alt="平衡二叉树高度计算"></p>
+<h2 id="在-MySQL-中的使用"><a href="#在-MySQL-中的使用" class="headerlink" title="在 MySQL 中的使用"></a>在 MySQL 中的使用</h2><h3 id="InnoDB-索引机制"><a href="#InnoDB-索引机制" class="headerlink" title="InnoDB 索引机制"></a>InnoDB 索引机制</h3><p>创建表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`zodiac`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">char</span>(<span class="number">4</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">KEY</span> <span class="string">`index_name`</span> (<span class="string">`name`</span>)</span><br><span class="line">); </span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> zodiac(<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="number">1</span>,<span class="string">'鼠'</span>); &amp;nbsp;</span><br><span class="line"><span class="keyword">insert</span> zodiac(<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="number">2</span>,<span class="string">'牛'</span>); &amp;nbsp;</span><br><span class="line"><span class="keyword">insert</span> zodiac(<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="number">3</span>,<span class="string">'虎'</span>); &amp;nbsp;</span><br><span class="line"><span class="keyword">insert</span> zodiac(<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="number">4</span>,<span class="string">'兔'</span>); &amp;nbsp;</span><br><span class="line"><span class="keyword">insert</span> zodiac(<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="number">5</span>,<span class="string">'龙'</span>); &amp;nbsp;</span><br><span class="line"><span class="keyword">insert</span> zodiac(<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="number">6</span>,<span class="string">'蛇'</span>); &amp;nbsp;</span><br><span class="line"><span class="keyword">insert</span> zodiac(<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="number">7</span>,<span class="string">'马'</span>); &amp;nbsp;</span><br><span class="line"><span class="keyword">insert</span> zodiac(<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="number">8</span>,<span class="string">'羊'</span>); &amp;nbsp;</span><br><span class="line"><span class="keyword">insert</span> zodiac(<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="number">9</span>,<span class="string">'猴'</span>);</span><br><span class="line"><span class="keyword">insert</span> zodiac(<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="number">10</span>,<span class="string">'鸡'</span>); &amp;nbsp;</span><br><span class="line"><span class="keyword">insert</span> zodiac(<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="number">11</span>,<span class="string">'狗'</span>); &amp;nbsp;</span><br><span class="line"><span class="keyword">insert</span> zodiac(<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="number">12</span>,<span class="string">'猪'</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="/img/in-post/innodb-index.png" alt="InnoDB 主索引"></p>
+<ul>
+<li>B+Tree 每个节点的关键字是表的主键</li>
+<li>叶子页（leaf page）包含了数据记录，非叶子节点只包含主键<ul>
+<li>“聚簇”：表示数据行和相邻的键值紧凑地存储在一起，因为索引和数据是保存在同一棵B树之中，从聚簇索引中获取数据通常比在非聚簇索引中要来得快</li>
+</ul>
+</li>
+<li>InnoDB 的数据文件是依靠主键组织起来的，在 InnoDB 下创建表必须指定主键，如果没有显式指定，依然会对该表隐式地定义一个主键作为聚簇索引</li>
+</ul>
+<h3 id="MyISAM-索引机制"><a href="#MyISAM-索引机制" class="headerlink" title="MyISAM 索引机制"></a>MyISAM 索引机制</h3><p><img src="/img/in-post/mysiam-index.png" alt="InnoDB 主索引"></p>
+<ul>
+<li>B+Tree 叶子节点中包含的是数据记录的地址（可以理解为”行号”）</li>
+</ul>
+<h3 id="两者差异对比"><a href="#两者差异对比" class="headerlink" title="两者差异对比"></a>两者差异对比</h3><p><img src="/img/in-post/innodb-mysiam-compare.png" alt="差异对比"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>《高性能 MySQL》</li>
+<li><a href="https://blog.csdn.net/z_ryan/article/details/79685072" target="_blank" rel="noopener">简单剖析B树（B-Tree）与Ｂ+树</a></li>
+<li><a href="https://www.cnblogs.com/xiaoxi/p/6868087.html" target="_blank" rel="noopener">MySQL和B树的那些事</a></li>
+<li><a href="https://www.cnblogs.com/vincently/p/4526560.html" target="_blank" rel="noopener">【经典数据结构】B树与B+树</a></li>
+<li><a href="https://www.zhihu.com/question/36996520" target="_blank" rel="noopener">mysql索引最左匹配原则的理解?</a></li>
+</ul>
+</div><div class="tags"><a href="/tags/MySQL/">MySQL</a></div><div class="post-nav"><a class="pre" href="/2019/01/16/2019/begin-nodejs/">NodeJS 入门笔记</a><a class="next" href="/2018/12/27/2018/upload-file-to-gcp-storage-from-python3/">使用 Python 上传文件到 Google Cloud Storage</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://jalan.space/2019/01/05/2019/b-tree-and-b-plus-tree/';
+    this.page.identifier = '2019/01/05/2019/b-tree-and-b-plus-tree/';
+    this.page.title = 'B-Tree 与 B+Tree';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//JalanJiang.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//JalanJiang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://JalanJiang.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"><input type="hidden" name="sitesearch" value="http://jalan.space"></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Web屠龙刀/">Web屠龙刀</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/云原生应用/">云原生应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/少年人的冲动/">少年人的冲动</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/技多不压身/">技多不压身</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/磨刀石/">磨刀石</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/跨过这道坎/">跨过这道坎</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/JavaScript/" style="font-size: 15px;">JavaScript</a> <a href="/tags/jekyll/" style="font-size: 15px;">jekyll</a> <a href="/tags/影评/" style="font-size: 15px;">影评</a> <a href="/tags/meitu/" style="font-size: 15px;">meitu</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/图像处理/" style="font-size: 15px;">图像处理</a> <a href="/tags/matlab/" style="font-size: 15px;">matlab</a> <a href="/tags/Bootstrap/" style="font-size: 15px;">Bootstrap</a> <a href="/tags/Nginx/" style="font-size: 15px;">Nginx</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/生活啊/" style="font-size: 15px;">生活啊</a> <a href="/tags/Laravel/" style="font-size: 15px;">Laravel</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/算法/" style="font-size: 15px;">算法</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/网络爬虫/" style="font-size: 15px;">网络爬虫</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Kubernetes/" style="font-size: 15px;">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/GCP/" style="font-size: 15px;">GCP</a> <a href="/tags/Go/" style="font-size: 15px;">Go</a> <a href="/tags/NodeJS/" style="font-size: 15px;">NodeJS</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/DevOps/" style="font-size: 15px;">DevOps</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/02/14/2019/python-config-file/">Python configparser 模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/05/2019/redis-rdb-aof/">Redis 持久化</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/05/2019/python-queue/">Python 实现队列的几种方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/02/2019/white-snake/">《白蛇：缘起》观后感</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/01/2019/redis-rehash/">Redis 字典与 rehash</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/29/2019/begin-go/">Go 语言入门笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/26/2019/use-circleci-to-deploy/">Github + CircleCI + GKE 部署应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/16/2019/begin-nodejs/">NodeJS 入门笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/05/2019/b-tree-and-b-plus-tree/">B-Tree 与 B+Tree</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/27/2018/upload-file-to-gcp-storage-from-python3/">使用 Python 上传文件到 Google Cloud Storage</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//JalanJiang.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://blog.w2fzu.com/" title="西二在线" target="_blank">西二在线</a><ul></ul><a href="http://www.hongweipeng.com/" title="栖迟於一丘" target="_blank">栖迟於一丘</a><ul></ul><a href="http://shixiong.name/" title="Daemon" target="_blank">Daemon</a><ul></ul><a href="http://csming1995.github.io/" title="Csming's world" target="_blank">Csming's world</a><ul></ul><a href="https://xushenglee.github.io/" title="Xusheng's Blog" target="_blank">Xusheng's Blog</a><ul></ul><a href="https://mychiaki.github.io/" title="Chiaki" target="_blank">Chiaki</a><ul></ul><a href="http://www.ruphi.cn/" title="ruphi" target="_blank">ruphi</a><ul></ul><a href="http://lizimeow.cn/" title="栗子膜法师" target="_blank">栗子膜法师</a><ul></ul><a href="https://evaaaaaaaxiao.github.io/" title="Eva.X" target="_blank">Eva.X</a><ul></ul><a href="https://yiming.blog/" title="蔡一鸣博客" target="_blank">蔡一鸣博客</a><ul></ul><a href="http://gagalee.ink/" title="mymmon" target="_blank">mymmon</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">忘归.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.2/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

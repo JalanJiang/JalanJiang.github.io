@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="江佳扬 | 刘璐璐的匆匆过客 | PHP | Python | 技术博客"><title>Linux常用命令之 —— 文件查找与文件列表 | 忘归</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = 'https://hm.baidu.com/hm.js?' + 'c47c7dbbbbb8b1bd7729048f358cd896';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Linux常用命令之 —— 文件查找与文件列表</h1><a id="logo" href="/.">忘归</a><p class="description">底色悲凉，自在如风。</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/cat/"><i class="fa fa-heart"> 喵</i></a><a href="/history/"><i class="fa fa-calendar"> 老来多健忘</i></a><a href="/read/"><i class="fa fa-book"> 不如多读书</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Linux常用命令之 —— 文件查找与文件列表</h1><div class="post-meta">Mar 21, 2018<span> | </span><span class="category"><a href="/categories/Web屠龙刀/">Web屠龙刀</a></span></div><a class="disqus-comment-count" data-disqus-identifier="2018/03/21/2018/2018-03-21-linux-common-commands-find/" href="/2018/03/21/2018/2018-03-21-linux-common-commands-find/#disqus_thread"></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#列出当前目录与子目录的所有文件与文件夹"><span class="toc-number">1.</span> <span class="toc-text">列出当前目录与子目录的所有文件与文件夹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#根据文件名或正则进行搜索"><span class="toc-number">2.</span> <span class="toc-text">根据文件名或正则进行搜索</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#name"><span class="toc-number">2.1.</span> <span class="toc-text">-name</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#path"><span class="toc-number">2.2.</span> <span class="toc-text">-path</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#regex"><span class="toc-number">2.3.</span> <span class="toc-text">-regex</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#否定参数"><span class="toc-number">3.</span> <span class="toc-text">否定参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于目录深度搜索"><span class="toc-number">4.</span> <span class="toc-text">基于目录深度搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#根据文件类型搜索"><span class="toc-number">5.</span> <span class="toc-text">根据文件类型搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#根据文件时间进行搜索"><span class="toc-number">6.</span> <span class="toc-text">根据文件时间进行搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于文件大小搜索"><span class="toc-number">7.</span> <span class="toc-text">基于文件大小搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除匹配的文件"><span class="toc-number">8.</span> <span class="toc-text">删除匹配的文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于文件权限和所有权的匹配"><span class="toc-number">9.</span> <span class="toc-text">基于文件权限和所有权的匹配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用-find-执行命令或动作"><span class="toc-number">10.</span> <span class="toc-text">利用 find 执行命令或动作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#让-find-跳过特定目录"><span class="toc-number">11.</span> <span class="toc-text">让 find 跳过特定目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">12.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="post-content"><h2 id="列出当前目录与子目录的所有文件与文件夹"><a href="#列出当前目录与子目录的所有文件与文件夹" class="headerlink" title="列出当前目录与子目录的所有文件与文件夹"></a>列出当前目录与子目录的所有文件与文件夹</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">find</span> base_path</span><br></pre></td></tr></table></figure>
+<p><code>base_path</code> 可以是任意位置，<code>find</code> 会从该位置开始向下查找。</p>
+<figure class="highlight golo"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打印未见和目录的列表</span></span><br><span class="line"><span class="keyword">find</span> . -<span class="keyword">print</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>.</code> 指当前目录</li>
+<li><code>..</code> 指父级目录</li>
+<li><code>-print</code> 指明打印出匹配文件的文件名（路径），并使用 <code>\n</code> 作为分隔</li>
+<li><code>-print0</code> 指明使用 <code>\0</code> 作为匹配的文件名之间的定界符</li>
+</ul>
+<h2 id="根据文件名或正则进行搜索"><a href="#根据文件名或正则进行搜索" class="headerlink" title="根据文件名或正则进行搜索"></a>根据文件名或正则进行搜索</h2><h3 id="name"><a href="#name" class="headerlink" title="-name"></a>-name</h3><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">find</span> /<span class="built_in">home</span> -name <span class="string">"*.txt"</span> -<span class="built_in">print</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>-name</code>：指定了文件名所必须匹配的字符串</li>
+<li><code>-iname</code>：忽略文件名大小写</li>
+</ul>
+<p>匹配多个条件中的一个可以加入 OR 条件。</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . <span class="string">\(</span> -name <span class="string">"*.txt"</span> -o -name <span class="string">"*.pdf"</span> <span class="string">\)</span> -<span class="built_in">print</span></span><br></pre></td></tr></table></figure>
+<h3 id="path"><a href="#path" class="headerlink" title="-path"></a>-path</h3><p>将文件路径作为一个整体进行匹配。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">find</span> /home<span class="built_in">/users </span>-path <span class="string">"*/slynux/*"</span> -print</span><br></pre></td></tr></table></figure>
+<h3 id="regex"><a href="#regex" class="headerlink" title="-regex"></a>-regex</h3><p><code>-regex</code> 与 <code>-path</code> 类似，<code>-regex</code> 是基于正则表达式来匹配文件路径的。</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -regex ".*<span class="symbol">\(</span><span class="symbol">\.</span>py<span class="symbol">\|</span><span class="symbol">\.</span>sh<span class="symbol">\)</span>$"</span><br></pre></td></tr></table></figure>
+<p><code>-iregex</code> 则忽略大小写。</p>
+<h2 id="否定参数"><a href="#否定参数" class="headerlink" title="否定参数"></a>否定参数</h2><p>使用 <code>!</code> 否定参数的含义。</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">find</span> . ! -name <span class="string">"*.txt"</span> -<span class="built_in">print</span></span><br></pre></td></tr></table></figure>
+<h2 id="基于目录深度搜索"><a href="#基于目录深度搜索" class="headerlink" title="基于目录深度搜索"></a>基于目录深度搜索</h2><ul>
+<li><code>-maxdepth</code>：指定搜索的最大深度</li>
+<li><code>-mindepth</code>：指定搜索的最小深度</li>
+</ul>
+<figure class="highlight golo"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 最大搜索深度为1层（在当前目录搜索）</span></span><br><span class="line"><span class="keyword">find</span> . -maxdepth <span class="number">1</span> -name <span class="string">"f*"</span> -<span class="keyword">print</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight golo"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 最小深度为2层，从第2个子目录开始搜索</span></span><br><span class="line"><span class="keyword">find</span> . -mindepth <span class="number">2</span> -name <span class="string">"f*"</span> -<span class="keyword">print</span></span><br></pre></td></tr></table></figure>
+<h2 id="根据文件类型搜索"><a href="#根据文件类型搜索" class="headerlink" title="根据文件类型搜索"></a>根据文件类型搜索</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 搜索目录文件</span></span><br><span class="line">find . -<span class="built_in">type</span> d -<span class="built_in">print</span></span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>文件类型</th>
+<th>类型参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>普通文件</td>
+<td>f</td>
+</tr>
+<tr>
+<td>符号链接</td>
+<td>l</td>
+</tr>
+<tr>
+<td>目录</td>
+<td>d</td>
+</tr>
+<tr>
+<td>字符设备</td>
+<td>c</td>
+</tr>
+<tr>
+<td>块设备</td>
+<td>b</td>
+</tr>
+<tr>
+<td>套接字</td>
+<td>s</td>
+</tr>
+<tr>
+<td>FIFO</td>
+<td>p</td>
+</tr>
+</tbody>
+</table>
+<h2 id="根据文件时间进行搜索"><a href="#根据文件时间进行搜索" class="headerlink" title="根据文件时间进行搜索"></a>根据文件时间进行搜索</h2><p>Unix/Linux 文件系统中每个文件都有三种时间戳。如下所示：</p>
+<ul>
+<li>访问时间 <code>-atime</code>：用户最近一次访问文件的时间</li>
+<li>修改时间 <code>-mtime</code>：文件内容最后一次被修改的时间</li>
+<li>变化时间 <code>-ctime</code>：文件元数据（例如权限或所有权）最后一次改变的时间</li>
+</ul>
+<p>将 <code>-atime</code> <code>-mtime</code> <code>-ctime</code> 作为 <code>find</code> 的时间选项，用整数值指定，单位是天。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">find</span> . -type f -atime -7 -<span class="builtin-name">print</span> #最近7天被访问过的所有文件</span><br><span class="line"><span class="builtin-name">find</span> . -type f -atime 7 -<span class="builtin-name">print</span> #恰好在7天前被访问的所有文件</span><br><span class="line"><span class="builtin-name">find</span> . -type f 0atime +7 -<span class="builtin-name">print</span> #打印出访问时间超过7天的所有文件</span><br></pre></td></tr></table></figure>
+<p><code>-amin</code> <code>-mmin</code> <code>-cmin</code> 的参数以分钟作为计量单位。</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -<span class="built_in">type</span> f -<span class="built_in">amin</span> +<span class="number">7</span> -<span class="keyword">print</span> <span class="meta">#访问时间超过7分钟的所有文件</span></span><br></pre></td></tr></table></figure>
+<p><code>-newer</code> 可以指定一个用于比较时间戳的参考文件。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 找出比 file.txt 修改时间更近的所有文件</span></span><br><span class="line"><span class="builtin-name">find</span> .<span class="built_in"> type </span>-f -newer file.txt -print</span><br></pre></td></tr></table></figure>
+<h2 id="基于文件大小搜索"><a href="#基于文件大小搜索" class="headerlink" title="基于文件大小搜索"></a>基于文件大小搜索</h2><figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># 找出大于2k的文件</span></span><br><span class="line"><span class="title">find</span> . -<span class="class"><span class="keyword">type</span> f -size +2k</span></span><br></pre></td></tr></table></figure>
+<p>其他文件大小单元：</p>
+<ul>
+<li>b 块（512字节）</li>
+<li>c 字节</li>
+<li>w 字</li>
+<li>k 1024字节</li>
+<li>M 1024K字节</li>
+<li>G 1024M字节</li>
+</ul>
+<h2 id="删除匹配的文件"><a href="#删除匹配的文件" class="headerlink" title="删除匹配的文件"></a>删除匹配的文件</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">find</span> .<span class="built_in"> type </span>-f -name <span class="string">"*.swp"</span> -delete</span><br></pre></td></tr></table></figure>
+<h2 id="基于文件权限和所有权的匹配"><a href="#基于文件权限和所有权的匹配" class="headerlink" title="基于文件权限和所有权的匹配"></a>基于文件权限和所有权的匹配</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打印出权限为664的文件</span></span><br><span class="line"><span class="builtin-name">find</span> .<span class="built_in"> type </span>-f -perm 664 -print</span><br></pre></td></tr></table></figure>
+<h2 id="利用-find-执行命令或动作"><a href="#利用-find-执行命令或动作" class="headerlink" title="利用 find 执行命令或动作"></a>利用 find 执行命令或动作</h2><p><code>find</code> 命令可以借助选项 <code>-exec</code> 与其他命名进行结合。</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -<span class="keyword">type</span> f -<span class="keyword">user</span> <span class="title">root</span> -exec chown slynux &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+<p><code>{}</code>：与 <code>-exec</code> 搭配使用的特殊字符，对于一个匹配的文件，<code>{}</code> 都会被替换成相应的文件名。上述操作的替换结果为：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">chown</span> slynux file1</span><br><span class="line"><span class="keyword">chown</span> slynux file2</span><br></pre></td></tr></table></figure>
+<h2 id="让-find-跳过特定目录"><a href="#让-find-跳过特定目录" class="headerlink" title="让 find 跳过特定目录"></a>让 find 跳过特定目录</h2><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find deve;/source_path <span class="string">\(</span> -name <span class="string">".git"</span> -prune <span class="string">\)</span> -o <span class="string">\(</span> -type -f -<span class="built_in">print</span> <span class="string">\)</span></span><br></pre></td></tr></table></figure>
+<p><code>\( -name &quot;.git&quot; -prune \)</code> 用于排除（放在第一个语句块中）。<code>\( -type -f -print \)</code> 指明需要执行的动作（放在第二个语句块中）。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>《Linux Shell 脚本攻略（第2版）》</li>
+</ul>
+</div><div class="tags"><a href="/tags/Shell/">Shell</a></div><div class="post-nav"><a class="pre" href="/2018/03/21/2018/2018-03-21-linux-common-commands-cat/">Linux常用命令之 —— 用cat进行拼接</a><a class="next" href="/2018/03/19/2018/2018-03-19-php-redis-lock/">PHP环境下处理并发访问问题之——Redis锁</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://jalan.space/2018/03/21/2018/2018-03-21-linux-common-commands-find/';
+    this.page.identifier = '2018/03/21/2018/2018-03-21-linux-common-commands-find/';
+    this.page.title = 'Linux常用命令之 —— 文件查找与文件列表';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//JalanJiang.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//JalanJiang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://JalanJiang.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"><input type="hidden" name="sitesearch" value="http://jalan.space"></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Web屠龙刀/">Web屠龙刀</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/云原生应用/">云原生应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/少年人的冲动/">少年人的冲动</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/技多不压身/">技多不压身</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/磨刀石/">磨刀石</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/跨过这道坎/">跨过这道坎</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/JavaScript/" style="font-size: 15px;">JavaScript</a> <a href="/tags/jekyll/" style="font-size: 15px;">jekyll</a> <a href="/tags/影评/" style="font-size: 15px;">影评</a> <a href="/tags/meitu/" style="font-size: 15px;">meitu</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/图像处理/" style="font-size: 15px;">图像处理</a> <a href="/tags/matlab/" style="font-size: 15px;">matlab</a> <a href="/tags/Bootstrap/" style="font-size: 15px;">Bootstrap</a> <a href="/tags/Nginx/" style="font-size: 15px;">Nginx</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/生活啊/" style="font-size: 15px;">生活啊</a> <a href="/tags/Laravel/" style="font-size: 15px;">Laravel</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/算法/" style="font-size: 15px;">算法</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/网络爬虫/" style="font-size: 15px;">网络爬虫</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Kubernetes/" style="font-size: 15px;">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/GCP/" style="font-size: 15px;">GCP</a> <a href="/tags/Go/" style="font-size: 15px;">Go</a> <a href="/tags/NodeJS/" style="font-size: 15px;">NodeJS</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/DevOps/" style="font-size: 15px;">DevOps</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/02/14/2019/python-config-file/">Python configparser 模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/05/2019/redis-rdb-aof/">Redis 持久化</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/05/2019/python-queue/">Python 实现队列的几种方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/02/2019/white-snake/">《白蛇：缘起》观后感</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/01/2019/redis-rehash/">Redis 字典与 rehash</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/29/2019/begin-go/">Go 语言入门笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/26/2019/use-circleci-to-deploy/">Github + CircleCI + GKE 部署应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/16/2019/begin-nodejs/">NodeJS 入门笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/05/2019/b-tree-and-b-plus-tree/">B-Tree 与 B+Tree</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/27/2018/upload-file-to-gcp-storage-from-python3/">使用 Python 上传文件到 Google Cloud Storage</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//JalanJiang.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://blog.w2fzu.com/" title="西二在线" target="_blank">西二在线</a><ul></ul><a href="http://www.hongweipeng.com/" title="栖迟於一丘" target="_blank">栖迟於一丘</a><ul></ul><a href="http://shixiong.name/" title="Daemon" target="_blank">Daemon</a><ul></ul><a href="http://csming1995.github.io/" title="Csming's world" target="_blank">Csming's world</a><ul></ul><a href="https://xushenglee.github.io/" title="Xusheng's Blog" target="_blank">Xusheng's Blog</a><ul></ul><a href="https://mychiaki.github.io/" title="Chiaki" target="_blank">Chiaki</a><ul></ul><a href="http://www.ruphi.cn/" title="ruphi" target="_blank">ruphi</a><ul></ul><a href="http://lizimeow.cn/" title="栗子膜法师" target="_blank">栗子膜法师</a><ul></ul><a href="https://evaaaaaaaxiao.github.io/" title="Eva.X" target="_blank">Eva.X</a><ul></ul><a href="https://yiming.blog/" title="蔡一鸣博客" target="_blank">蔡一鸣博客</a><ul></ul><a href="http://gagalee.ink/" title="mymmon" target="_blank">mymmon</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">忘归.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.2/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

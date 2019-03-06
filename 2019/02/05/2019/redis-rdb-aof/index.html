@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="江佳扬 | 刘璐璐的匆匆过客 | PHP | Python | 技术博客"><title>Redis 持久化 | 忘归</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = 'https://hm.baidu.com/hm.js?' + 'c47c7dbbbbb8b1bd7729048f358cd896';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Redis 持久化</h1><a id="logo" href="/.">忘归</a><p class="description">底色悲凉，自在如风。</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/cat/"><i class="fa fa-heart"> 喵</i></a><a href="/history/"><i class="fa fa-calendar"> 老来多健忘</i></a><a href="/read/"><i class="fa fa-book"> 不如多读书</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Redis 持久化</h1><div class="post-meta">Feb 5, 2019<span> | </span><span class="category"><a href="/categories/技多不压身/">技多不压身</a></span></div><a class="disqus-comment-count" data-disqus-identifier="2019/02/05/2019/redis-rdb-aof/" href="/2019/02/05/2019/redis-rdb-aof/#disqus_thread"></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#持久化"><span class="toc-number">1.</span> <span class="toc-text">持久化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RDB"><span class="toc-number">2.</span> <span class="toc-text">RDB</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建"><span class="toc-number">2.1.</span> <span class="toc-text">创建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SAVE"><span class="toc-number">2.1.1.</span> <span class="toc-text">SAVE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BGSAVE"><span class="toc-number">2.1.2.</span> <span class="toc-text">BGSAVE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#载入"><span class="toc-number">2.2.</span> <span class="toc-text">载入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自动间隔性保存"><span class="toc-number">2.3.</span> <span class="toc-text">自动间隔性保存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#设置保存条件"><span class="toc-number">2.3.1.</span> <span class="toc-text">设置保存条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#saveparams"><span class="toc-number">2.3.2.</span> <span class="toc-text">saveparams</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dirty"><span class="toc-number">2.3.3.</span> <span class="toc-text">dirty</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lastsave"><span class="toc-number">2.3.4.</span> <span class="toc-text">lastsave</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#检查保存条件是否满足"><span class="toc-number">2.3.5.</span> <span class="toc-text">检查保存条件是否满足</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AOF"><span class="toc-number">3.</span> <span class="toc-text">AOF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AOF-持久化实现"><span class="toc-number">3.1.</span> <span class="toc-text">AOF 持久化实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#命令追加"><span class="toc-number">3.1.1.</span> <span class="toc-text">命令追加</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件写入与同步"><span class="toc-number">3.1.2.</span> <span class="toc-text">文件写入与同步</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#为何需要同步？"><span class="toc-number">3.1.2.1.</span> <span class="toc-text">为何需要同步？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#载入与数据还原"><span class="toc-number">3.2.</span> <span class="toc-text">载入与数据还原</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AOF-重写"><span class="toc-number">3.3.</span> <span class="toc-text">AOF 重写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-number">3.3.1.</span> <span class="toc-text">实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AOF-后台重写"><span class="toc-number">3.3.2.</span> <span class="toc-text">AOF 后台重写</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="post-content"><h1 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h1><ul>
+<li>Redis 是内存数据库，数据库状态都存储在内存里</li>
+<li>一旦服务器进程退出，服务器中的数据库状态会消失不见</li>
+<li>为了保证数据在断电后不会丢失，需要将内存中的数据持久化到硬盘上</li>
+</ul>
+<h1 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h1><ul>
+<li>RDB 文件是一个经过压缩的二进制文件</li>
+<li>RDB 文件保存在硬盘里</li>
+<li>通过保存数据库中的键值对来记录数据库状态</li>
+</ul>
+<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><p>有两个 Redis 命令可以用于生成 RDB 文件：</p>
+<ul>
+<li>SAVE</li>
+<li>BGSAVE</li>
+</ul>
+<p>创建 RDB 的实际工作由 <code>rdb.c/rdbSave</code> 函数完成，SAVE 命令和 BGSAVE 命令调用方式不同。</p>
+<h3 id="SAVE"><a href="#SAVE" class="headerlink" title="SAVE"></a>SAVE</h3><ul>
+<li>会阻塞 Redis 服务器进程</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">SAVE</span><span class="params">()</span></span><span class="symbol">:</span></span><br><span class="line">    <span class="comment"># 创建 RDB 文件</span></span><br><span class="line">    rdbSave()</span><br></pre></td></tr></table></figure>
+<h3 id="BGSAVE"><a href="#BGSAVE" class="headerlink" title="BGSAVE"></a>BGSAVE</h3><ul>
+<li>会派生出一个子进程，负责创建 RDB 文件</li>
+<li>服务器进程（父进程）继续处理命令请求</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">BGSAVE</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 创建子进程</span></span><br><span class="line">    pid = fork()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> pid == <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># 子进程负责创建 RDB 文件</span></span><br><span class="line">        rdbSave()</span><br><span class="line">        <span class="comment"># 完成之后向父进程发送信号</span></span><br><span class="line">        signal_parent()</span><br><span class="line">    <span class="keyword">elif</span> pid &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># 父进程继续处理命令请求，并通过轮训等待子进程的信号</span></span><br><span class="line">        handle_request_and_wait_signal()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        handle_fork_error()</span><br></pre></td></tr></table></figure>
+<h2 id="载入"><a href="#载入" class="headerlink" title="载入"></a>载入</h2><ul>
+<li>载入工作在服务器启动时自动执行</li>
+<li>服务器在载入 RDB 文件期间，会一直处于阻塞状态，直到载入工作完成为止</li>
+</ul>
+<h2 id="自动间隔性保存"><a href="#自动间隔性保存" class="headerlink" title="自动间隔性保存"></a>自动间隔性保存</h2><p>Redis 允许用户通过设置服务器配置的 save 选项，让服务器每隔一段时间自动执行一次 BGSAVE 命令。</p>
+<h3 id="设置保存条件"><a href="#设置保存条件" class="headerlink" title="设置保存条件"></a>设置保存条件</h3><p>若提供如下配置：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">save <span class="number">900</span> <span class="number">1</span></span><br><span class="line">save <span class="number">300</span> <span class="number">10</span></span><br></pre></td></tr></table></figure>
+<p>只要满足以下条件中的一个，BGSAVE 命令就会被执行：</p>
+<ul>
+<li>服务器在 900 秒之内，对数据库进行了至少 1 次修改</li>
+<li>服务器在 300 秒之内，对数据库进行了至少 10 次修改</li>
+</ul>
+<h3 id="saveparams"><a href="#saveparams" class="headerlink" title="saveparams"></a>saveparams</h3><p>服务器程序会根据 save 选项所设置的保存条件，设置服务器状态 redisServer 结构的 <code>saveparams</code> 属性。</p>
+<ul>
+<li><code>saveparams</code> 属性是一个数组</li>
+<li>数组中的每一个元素都是一个 <code>saveparam</code> 结构</li>
+<li>每个 <code>saveparam</code> 结构都保存了一个 <code>save</code> 选项设置的保存条件</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">saveparam</span> &#123;</span></span><br><span class="line">    <span class="comment">// 秒数</span></span><br><span class="line">    <span class="keyword">time_t</span> seconds;</span><br><span class="line">    <span class="comment">// 修改数</span></span><br><span class="line">    <span class="keyword">int</span> changes;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="dirty"><a href="#dirty" class="headerlink" title="dirty"></a>dirty</h3><p><code>dirty</code> 计数器记录距离上一次成功执行 SAVE 命令或 BGSAVE 命令之后，服务器对数据库状态进行了多少次修改（包括写入、删除、更新等操作）</p>
+<h3 id="lastsave"><a href="#lastsave" class="headerlink" title="lastsave"></a>lastsave</h3><p>是一个 UNINX 时间戳，记录了服务器上一次成功执行 SAVE 命令或者 BGSAVE 命令的时间。</p>
+<h3 id="检查保存条件是否满足"><a href="#检查保存条件是否满足" class="headerlink" title="检查保存条件是否满足"></a>检查保存条件是否满足</h3><p>服务器周期性操作函数 <code>serverCron</code> （该函数对正在运行的服务器进行维护）默认每隔 100 毫秒就会执行一次，其中一项工作就是检查 save 选项所设置的保存条件是否已经满足，满足的话就执行 BGSAVE 命令。</p>
+<p>伪代码如下：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">serverCron</span><span class="params">()</span></span><span class="symbol">:</span></span><br><span class="line">    <span class="comment"># ....</span></span><br><span class="line">    <span class="comment"># 遍历所有保存条件</span></span><br><span class="line">    <span class="keyword">for</span> saveparam <span class="keyword">in</span> server.<span class="symbol">saveparams:</span></span><br><span class="line">        <span class="comment"># 计算距离上次执行保存操作有多少秒</span></span><br><span class="line">        save_interval = unixtime_now() - server.lastsave</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 如果数据库状态的修改次数超过条件所设置的次数</span></span><br><span class="line">        <span class="comment"># 如果距离上次保存的时间超过条件所设置的时间</span></span><br><span class="line">        <span class="keyword">if</span> server.dirty &gt;= saveparam.changes <span class="keyword">and</span> save_interval &gt; saveparam.<span class="symbol">seconds:</span></span><br><span class="line">            BGSAVE()</span><br></pre></td></tr></table></figure>
+<h1 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h1><ul>
+<li>通过保存 Redis 服务器所执行的写命令来记录数据库状态</li>
+<li>写入 AOF 文件的所有命令都是以 Redis 的<strong>命令请求协议格式</strong>保存的</li>
+</ul>
+<h2 id="AOF-持久化实现"><a href="#AOF-持久化实现" class="headerlink" title="AOF 持久化实现"></a>AOF 持久化实现</h2><h3 id="命令追加"><a href="#命令追加" class="headerlink" title="命令追加"></a>命令追加</h3><p>若 AOF 持久化功能处于打开状态，服务器在执行完一个命令后，会以协议格式将被执行的写命令追加到服务器状态的 <code>aof_buf</code> 缓冲区的末尾。</p>
+<h3 id="文件写入与同步"><a href="#文件写入与同步" class="headerlink" title="文件写入与同步"></a>文件写入与同步</h3><ul>
+<li>服务器每次结束一个事件循环之前，都会调用 <code>flushAppendOnlyFile</code> 函数</li>
+<li><code>flushAppendOnlyFile</code> 函数会考虑是否需要将 <code>aof_buf</code> 缓冲区中的内容写入和保存到 AOF 文件里</li>
+<li><code>flushAppendOnlyFile</code> 函数执行以下工作：<ul>
+<li>WRITE：根据条件，将 aof_buf 中的缓存写入到 AOF 文件</li>
+<li>SAVE：根据条件，调用 fsync 或 fdatasync 函数，将 AOF 文件保存到磁盘中</li>
+</ul>
+</li>
+<li><code>flushAppendOnlyFile</code> 函数的行为由服务器配置的 <code>appendfsync</code> 选项的值来决定</li>
+</ul>
+<p><code>appendfsync</code> 选项的值具体如下：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>同步频率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>always</td>
+<td>每个写命令都同步（效率低，但最安全）</td>
+</tr>
+<tr>
+<td>everysec</td>
+<td>每秒同步一次</td>
+</tr>
+<tr>
+<td>no</td>
+<td>不进行同步，何时同步由操作系统来决定</td>
+</tr>
+</tbody>
+</table>
+<h4 id="为何需要同步？"><a href="#为何需要同步？" class="headerlink" title="为何需要同步？"></a>为何需要同步？</h4><p>对文件进行写入并不会马上将内容同步到磁盘上，而是先存储到缓冲区，然后由操作系统决定什么时候同步到磁盘。</p>
+<p>如果计算机停机，则保存在缓冲区的内容将会丢失。</p>
+<h2 id="载入与数据还原"><a href="#载入与数据还原" class="headerlink" title="载入与数据还原"></a>载入与数据还原</h2><ol>
+<li>创建一个不带网络连接的伪客户端</li>
+<li>从 AOF 文件中分析并读取出一条写命令</li>
+<li>使用伪客户端执行被读出的写命令</li>
+<li>一直执行步骤 2 和 3，直到 AOF 文件中的所有写命令都被处理完毕为止</li>
+</ol>
+<h2 id="AOF-重写"><a href="#AOF-重写" class="headerlink" title="AOF 重写"></a>AOF 重写</h2><ul>
+<li>为了解决 AOF 文件体积膨胀的问题</li>
+<li>通过重写创建一个新的 AOF 文件来替代现有的 AOF 文件，新的 AOF 文件不会包含任何浪费空间的冗余命令</li>
+</ul>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><ul>
+<li>不需要对现有的 AOF 文件进行任何操作</li>
+<li>从数据库中直接读取键现在的值</li>
+<li>用一条命令记录键值对，从而代替之前记录这个键值对的多条命令</li>
+</ul>
+<h3 id="AOF-后台重写"><a href="#AOF-后台重写" class="headerlink" title="AOF 后台重写"></a>AOF 后台重写</h3><p>为不阻塞父进程，Redis 将 AOF 重写程序放到子进程里执行。</p>
+<p>在子进程执行 AOF 重写期间，服务器进程需要执行三个工作：</p>
+<ol>
+<li>执行客户端发来的命令</li>
+<li>将执行后的写命令追加到 AOF 缓冲区</li>
+<li>将执行后的写命令追加到 AOF 重写缓冲区</li>
+</ol>
+<p>这样一来可保证：</p>
+<ul>
+<li>AOF 缓冲区的内容会被写入和同步到 AOF 文件，对现有 AOF 文件的处理工作会如常进行</li>
+<li>从创建重写子进程开始，所有写命令也会被记录到 AOF 重写缓冲区里，保证重写后的 AOF 文件与当前数据库状态一致</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li>《Redis 设计与实现》</li>
+</ul>
+</div><div class="tags"><a href="/tags/Redis/">Redis</a></div><div class="post-nav"><a class="pre" href="/2019/02/14/2019/python-config-file/">Python configparser 模块</a><a class="next" href="/2019/02/05/2019/python-queue/">Python 实现队列的几种方式</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://jalan.space/2019/02/05/2019/redis-rdb-aof/';
+    this.page.identifier = '2019/02/05/2019/redis-rdb-aof/';
+    this.page.title = 'Redis 持久化';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//JalanJiang.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//JalanJiang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://JalanJiang.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"><input type="hidden" name="sitesearch" value="http://jalan.space"></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Web屠龙刀/">Web屠龙刀</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/云原生应用/">云原生应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/少年人的冲动/">少年人的冲动</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/技多不压身/">技多不压身</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/磨刀石/">磨刀石</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/跨过这道坎/">跨过这道坎</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/JavaScript/" style="font-size: 15px;">JavaScript</a> <a href="/tags/jekyll/" style="font-size: 15px;">jekyll</a> <a href="/tags/影评/" style="font-size: 15px;">影评</a> <a href="/tags/meitu/" style="font-size: 15px;">meitu</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/图像处理/" style="font-size: 15px;">图像处理</a> <a href="/tags/matlab/" style="font-size: 15px;">matlab</a> <a href="/tags/Bootstrap/" style="font-size: 15px;">Bootstrap</a> <a href="/tags/Nginx/" style="font-size: 15px;">Nginx</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/生活啊/" style="font-size: 15px;">生活啊</a> <a href="/tags/Laravel/" style="font-size: 15px;">Laravel</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/算法/" style="font-size: 15px;">算法</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/网络爬虫/" style="font-size: 15px;">网络爬虫</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Kubernetes/" style="font-size: 15px;">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/GCP/" style="font-size: 15px;">GCP</a> <a href="/tags/Go/" style="font-size: 15px;">Go</a> <a href="/tags/NodeJS/" style="font-size: 15px;">NodeJS</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/DevOps/" style="font-size: 15px;">DevOps</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/02/14/2019/python-config-file/">Python configparser 模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/05/2019/redis-rdb-aof/">Redis 持久化</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/05/2019/python-queue/">Python 实现队列的几种方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/02/2019/white-snake/">《白蛇：缘起》观后感</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/01/2019/redis-rehash/">Redis 字典与 rehash</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/29/2019/begin-go/">Go 语言入门笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/26/2019/use-circleci-to-deploy/">Github + CircleCI + GKE 部署应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/16/2019/begin-nodejs/">NodeJS 入门笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/05/2019/b-tree-and-b-plus-tree/">B-Tree 与 B+Tree</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/27/2018/upload-file-to-gcp-storage-from-python3/">使用 Python 上传文件到 Google Cloud Storage</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//JalanJiang.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://blog.w2fzu.com/" title="西二在线" target="_blank">西二在线</a><ul></ul><a href="http://www.hongweipeng.com/" title="栖迟於一丘" target="_blank">栖迟於一丘</a><ul></ul><a href="http://shixiong.name/" title="Daemon" target="_blank">Daemon</a><ul></ul><a href="http://csming1995.github.io/" title="Csming's world" target="_blank">Csming's world</a><ul></ul><a href="https://xushenglee.github.io/" title="Xusheng's Blog" target="_blank">Xusheng's Blog</a><ul></ul><a href="https://mychiaki.github.io/" title="Chiaki" target="_blank">Chiaki</a><ul></ul><a href="http://www.ruphi.cn/" title="ruphi" target="_blank">ruphi</a><ul></ul><a href="http://lizimeow.cn/" title="栗子膜法师" target="_blank">栗子膜法师</a><ul></ul><a href="https://evaaaaaaaxiao.github.io/" title="Eva.X" target="_blank">Eva.X</a><ul></ul><a href="https://yiming.blog/" title="蔡一鸣博客" target="_blank">蔡一鸣博客</a><ul></ul><a href="http://gagalee.ink/" title="mymmon" target="_blank">mymmon</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">忘归.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.2/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

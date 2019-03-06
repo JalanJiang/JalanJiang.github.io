@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="江佳扬 | 刘璐璐的匆匆过客 | PHP | Python | 技术博客"><title>OS X 10.11下PHP扩展的添加 | 忘归</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = 'https://hm.baidu.com/hm.js?' + 'c47c7dbbbbb8b1bd7729048f358cd896';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">OS X 10.11下PHP扩展的添加</h1><a id="logo" href="/.">忘归</a><p class="description">底色悲凉，自在如风。</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/cat/"><i class="fa fa-heart"> 喵</i></a><a href="/history/"><i class="fa fa-calendar"> 老来多健忘</i></a><a href="/read/"><i class="fa fa-book"> 不如多读书</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">OS X 10.11下PHP扩展的添加</h1><div class="post-meta">Jan 21, 2017<span> | </span><span class="category"><a href="/categories/磨刀石/">磨刀石</a></span></div><a class="disqus-comment-count" data-disqus-identifier="2017/01/21/2017-01-21-php-add-extensions/" href="/2017/01/21/2017-01-21-php-add-extensions/#disqus_thread"></a><div class="post-content"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在<code>PHP</code>编程中要使用到<code>Socket</code>通信，但本地<code>PHP</code>环境中的<code>Socket</code>扩展尚未安装。</p>
+<p>在安装的过程中我也遇到了一些列问题，借此机会稍做记录，也方便之后查找。</p>
+<p>开发环境：<code>OS X 10.11</code> ＋ <code>NPM</code>。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="1-打开Socket扩展，发现报错"><a href="#1-打开Socket扩展，发现报错" class="headerlink" title="1 打开Socket扩展，发现报错"></a>1 打开Socket扩展，发现报错</h2><p>使用<code>Socket</code>之前，需要打开<code>PHP</code>中的<code>Socket</code>扩展。即：在<code>php.ini</code>文件，去掉这行代码前的注释：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">extension</span>=php_sockets.dll</span><br></pre></td></tr></table></figure>
+<p>修改<code>php.ini</code>文件后再加载配置，却发现报错：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">20</span>-Jan<span class="number">-2017</span> <span class="number">17</span>:<span class="number">46</span>:<span class="number">03</span>] <span class="string">NOTICE:</span> PHP <span class="string">message:</span> PHP <span class="string">Warning:</span>  PHP <span class="string">Startup:</span> Unable to load dynamic library <span class="string">'/usr/lib/php/extensions/no-debug-non-zts-20121212/php_sockets.dll'</span> - dlopen(<span class="regexp">/usr/</span>lib<span class="regexp">/php/</span>extensions<span class="regexp">/no-debug-non-zts-20121212/</span>php_sockets.dll, <span class="number">9</span>): image not found <span class="keyword">in</span> Unknown on line <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>这说明我的本地环境还未安装<code>Socket</code>扩展。</p>
+<h2 id="2-在PHP源代码包中寻找Socket扩展"><a href="#2-在PHP源代码包中寻找Socket扩展" class="headerlink" title="2 在PHP源代码包中寻找Socket扩展"></a>2 在PHP源代码包中寻找Socket扩展</h2><p>我的源代码包目录在<code>/usr/include/php/</code>，先进入该目录：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>cd /usr/<span class="keyword">include</span>/php/</span><br></pre></td></tr></table></figure>
+<p>再进入<code>ext</code>目录：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>cd ext</span><br></pre></td></tr></table></figure>
+<p>查看<code>ext</code>目录下的文件，找到<code>sockets</code>文件夹，进入该文件夹：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>cd sockets</span><br></pre></td></tr></table></figure>
+<p>然而我本地的源码包<code>Socket</code>扩展貌似不全，只有包含一个<code>php_sockets.h</code>头文件。无奈之下，只好前往<a href="http://www.php.net/releases/" target="_blank" rel="noopener">php.net</a>下载一个与我本地<code>PHP</code>版本相同的源码包进行安装。</p>
+<h2 id="3-寻找phpize"><a href="#3-寻找phpize" class="headerlink" title="3 寻找phpize"></a>3 寻找phpize</h2><p><code>phpize</code>工具一般在<code>PHP</code>安装目录下，如果找不到也可以使用<code>find</code>命令来寻找：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>sudo find / -iname <span class="string">"phpize"</span></span><br></pre></td></tr></table></figure>
+<p>我的<code>phpize</code>所在位置为：<code>/usr/bin/phpize</code>。</p>
+<h2 id="4-执行phpize工具"><a href="#4-执行phpize工具" class="headerlink" title="4 执行phpize工具"></a>4 执行phpize工具</h2><p>进入所下载的<code>PHP</code>源码包的<code>/ext/sockets/</code>目录，执行<code>phpize</code>工具：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>/usr/bin/phpize</span><br></pre></td></tr></table></figure>
+<p>我本地执行<code>phpize</code>后报错如下：</p>
+<blockquote>
+<p>Cannot find autoconf. Please check your autoconf installation</p>
+</blockquote>
+<p>这是因为<code>autoconf</code>尚未安装，可以借助<code>Homebrew</code>安装<code>autoconf</code>：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>brew install autoconf</span><br></pre></td></tr></table></figure>
+<p>如果还为安装<code>Homebrew</code>可以借助如下命令安装：</p>
+<figure class="highlight julia"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ruby -<span class="literal">e</span> <span class="string">"<span class="subst">$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)</span>"</span></span><br></pre></td></tr></table></figure>
+<p>执行<code>phpize</code>工具成功后，在目录下会生成对应的<code>configure</code>文件。</p>
+<h2 id="5-通过configure进行配置"><a href="#5-通过configure进行配置" class="headerlink" title="5 通过configure进行配置"></a>5 通过configure进行配置</h2><p>成功生成<code>configure</code>文件后，可通过<code>configure</code>进行配置。执行如下命令：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>./configure --prefix=<span class="regexp">/usr/local</span><span class="regexp">/php --with-php-config=/usr</span><span class="regexp">/bin/php</span>-config --enable-sockets</span><br></pre></td></tr></table></figure>
+<p><code>--with-php-config</code>所跟随的参数是本地<code>php-config</code>所在位置。</p>
+<p>再执行：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">make</span> &amp;&amp; <span class="built_in">make</span> install</span><br></pre></td></tr></table></figure>
+<p>我执行该命令并未成功，发生报错：</p>
+<blockquote>
+<p>cp: /usr/lib/php/extensions/no-debug-non-zts-20121212/#INST@3994#:Operation not permitted</p>
+</blockquote>
+<p>这是因为<code>Mac</code>的<code>OS X 10.11</code>版本使用<code>Rootless</code>机制，降低了<code>root</code>用户的权限，致使系统文件夹不可操作。可以参照《<a href="http://www.pc6.com/edu/86809.html" target="_blank" rel="noopener">苹果OSX 10.11关闭rootless内核保护教程 Mac关闭rootless教程</a>》将<code>Rootless</code>暂时关闭。</p>
+<p>然而缺少的扩展千千万，每次都需要选择关闭<code>Rootless</code>，太过于麻烦。于是我选择抛弃<code>OS X</code>自带的<code>PHP</code>，使用<code>Homebrew</code>安装自己所需的<code>PHP</code>版本。</p>
+<h2 id="6-使用Homebrew安装PHP"><a href="#6-使用Homebrew安装PHP" class="headerlink" title="6 使用Homebrew安装PHP"></a>6 使用Homebrew安装PHP</h2><p>在<code>OS X</code>下安装<code>Homebrew</code>的方法已在《<a href="http://jalan.space/2017/01/12/mac-os-nginx/#homebrew">Mac下Nginx的安装和配置</a>》中提到，不再重复赘述。</p>
+<p>关于<code>Homebrew</code>安装<code>PHP</code>在《<a href="https://segmentfault.com/a/1190000000606752" target="_blank" rel="noopener">全新安装Mac OSX 开发者环境 同时使用homebrew搭建 PHP，Nginx ，MySQL，Redis，Memcache … … (LNMP开发环境)</a>》这篇文章页描述得十分清楚了，我在此记录一下我在安装的过程中踩的一些坑。</p>
+<h3 id="6-1-环境变量的变更"><a href="#6-1-环境变量的变更" class="headerlink" title="6.1 环境变量的变更"></a>6.1 环境变量的变更</h3><p>由于<code>OS X</code>中自带了<code>PHP</code>，所以我们用<code>Homebrew</code>安装了其它<code>PHP</code>版本后需要修改系统的环境变量，指定<code>PHP</code>的解析路径，由此来替代系统中自带的<code>PHP</code>。</p>
+<p>因为对<code>OS X</code>系统还较为生疏，在查找资料的过程中有教程指引需要在<code>~/.bashrc</code>文件中添加一行：<code>export PATH=&quot;$(brew --prefix php56)/bin:$PATH&quot;</code>。</p>
+<p>根据该教程修改<code>PATH</code>后，<code>source</code>了一下<code>~/.bashrc</code>，再重新打开<code>php-fpm</code>，然而解析出的<code>PHP</code>依然是系统自带的版本。</p>
+<p>发生这一错误是有两个原因：</p>
+<ol>
+<li><code>export PATH=&quot;$(brew --prefix php56)/bin:$PATH&quot;</code>仅指定了<code>PHP</code>的解析路径，由于我们大开的是<code>php-fpm</code>，需再添加一句<code>export PATH=&quot;$(brew --prefix php55)/sbin:$PATH&quot;</code>来指定对应的<code>php-fpm</code>的解析路径；</li>
+<li>因为我的系统中已经存在<code>~/.bash_profile</code>文件，所以将不再读取<code>~/.bashrc</code>文件，因此所有在<code>~/.bashrc</code>添加的配置信息都是无效的；</li>
+</ol>
+<h4 id="Mac-OS-X-环境变量文件加载顺序"><a href="#Mac-OS-X-环境变量文件加载顺序" class="headerlink" title="Mac OS X 环境变量文件加载顺序"></a>Mac OS X 环境变量文件加载顺序</h4><p><code>Mac</code>系统的环境变量，加载顺序为：</p>
+<p><code>/etc/profile</code> &gt; <code>/etc/paths</code> &gt; <code>~/.bash_profile</code> &gt; <code>~/.bash_login</code> &gt; <code>~/.profile</code> &gt; <code>~/.bashrc</code></p>
+<p>若<code>~/.bash_profile</code>文件存在，则不再读取后面几个文件。</p>
+<h3 id="6-2-是否需要动态修改扩展配置？"><a href="#6-2-是否需要动态修改扩展配置？" class="headerlink" title="6.2 是否需要动态修改扩展配置？"></a>6.2 是否需要动态修改扩展配置？</h3><p>在修改<code>php.ini</code>中的扩展配置前，先使用<code>php -m</code>命令<code>Show compiled in modules</code>。若列表中包含了所要添加的扩展名称，就无需在<code>php.ini</code>中打开扩展了。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li><a href="https://segmentfault.com/q/1010000005643816/a-1020000005646074" target="_blank" rel="noopener">《PHP安装扩展make install报错》</a></li>
+<li><a href="http://www.phperz.com/article/15/0102/42077.html" target="_blank" rel="noopener">《mac下phpize报错Cannot find autoconf. Please check your autoconf installation解决方法》</a></li>
+<li><a href="http://blog.csdn.net/mecho/article/details/9046589" target="_blank" rel="noopener">《 CentOS 配置PHP支持socket扩展》</a></li>
+<li>《<a href="http://www.pc6.com/edu/86809.html" target="_blank" rel="noopener">苹果OSX 10.11关闭rootless内核保护教程 Mac关闭rootless教程</a>》</li>
+</ol>
+</div><div class="tags"><a href="/tags/PHP/">PHP</a></div><div class="post-nav"><a class="pre" href="/2017/01/22/2017-01-22-shell-sed-replace-text/">Shell脚本之——文本文件中的替换操作</a><a class="next" href="/2017/01/12/2017-01-13-mac-os-nginx/">Mac下Nginx的安装和配置</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://jalan.space/2017/01/21/2017-01-21-php-add-extensions/';
+    this.page.identifier = '2017/01/21/2017-01-21-php-add-extensions/';
+    this.page.title = 'OS X 10.11下PHP扩展的添加';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//JalanJiang.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//JalanJiang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://JalanJiang.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"><input type="hidden" name="sitesearch" value="http://jalan.space"></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Web屠龙刀/">Web屠龙刀</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/云原生应用/">云原生应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/少年人的冲动/">少年人的冲动</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/技多不压身/">技多不压身</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/磨刀石/">磨刀石</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/跨过这道坎/">跨过这道坎</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/JavaScript/" style="font-size: 15px;">JavaScript</a> <a href="/tags/jekyll/" style="font-size: 15px;">jekyll</a> <a href="/tags/影评/" style="font-size: 15px;">影评</a> <a href="/tags/meitu/" style="font-size: 15px;">meitu</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/图像处理/" style="font-size: 15px;">图像处理</a> <a href="/tags/matlab/" style="font-size: 15px;">matlab</a> <a href="/tags/Bootstrap/" style="font-size: 15px;">Bootstrap</a> <a href="/tags/Nginx/" style="font-size: 15px;">Nginx</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/生活啊/" style="font-size: 15px;">生活啊</a> <a href="/tags/Laravel/" style="font-size: 15px;">Laravel</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/算法/" style="font-size: 15px;">算法</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/网络爬虫/" style="font-size: 15px;">网络爬虫</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Kubernetes/" style="font-size: 15px;">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/GCP/" style="font-size: 15px;">GCP</a> <a href="/tags/Go/" style="font-size: 15px;">Go</a> <a href="/tags/NodeJS/" style="font-size: 15px;">NodeJS</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/DevOps/" style="font-size: 15px;">DevOps</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/02/14/2019/python-config-file/">Python configparser 模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/05/2019/redis-rdb-aof/">Redis 持久化</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/05/2019/python-queue/">Python 实现队列的几种方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/02/2019/white-snake/">《白蛇：缘起》观后感</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/01/2019/redis-rehash/">Redis 字典与 rehash</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/29/2019/begin-go/">Go 语言入门笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/26/2019/use-circleci-to-deploy/">Github + CircleCI + GKE 部署应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/16/2019/begin-nodejs/">NodeJS 入门笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/05/2019/b-tree-and-b-plus-tree/">B-Tree 与 B+Tree</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/27/2018/upload-file-to-gcp-storage-from-python3/">使用 Python 上传文件到 Google Cloud Storage</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//JalanJiang.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://blog.w2fzu.com/" title="西二在线" target="_blank">西二在线</a><ul></ul><a href="http://www.hongweipeng.com/" title="栖迟於一丘" target="_blank">栖迟於一丘</a><ul></ul><a href="http://shixiong.name/" title="Daemon" target="_blank">Daemon</a><ul></ul><a href="http://csming1995.github.io/" title="Csming's world" target="_blank">Csming's world</a><ul></ul><a href="https://xushenglee.github.io/" title="Xusheng's Blog" target="_blank">Xusheng's Blog</a><ul></ul><a href="https://mychiaki.github.io/" title="Chiaki" target="_blank">Chiaki</a><ul></ul><a href="http://www.ruphi.cn/" title="ruphi" target="_blank">ruphi</a><ul></ul><a href="http://lizimeow.cn/" title="栗子膜法师" target="_blank">栗子膜法师</a><ul></ul><a href="https://evaaaaaaaxiao.github.io/" title="Eva.X" target="_blank">Eva.X</a><ul></ul><a href="https://yiming.blog/" title="蔡一鸣博客" target="_blank">蔡一鸣博客</a><ul></ul><a href="http://gagalee.ink/" title="mymmon" target="_blank">mymmon</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">忘归.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.2/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

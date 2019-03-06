@@ -1,0 +1,240 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="江佳扬 | 刘璐璐的匆匆过客 | PHP | Python | 技术博客"><title>《机器学习基石》笔记——第一讲：Learning Problem | 忘归</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = 'https://hm.baidu.com/hm.js?' + 'c47c7dbbbbb8b1bd7729048f358cd896';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">《机器学习基石》笔记——第一讲：Learning Problem</h1><a id="logo" href="/.">忘归</a><p class="description">底色悲凉，自在如风。</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/cat/"><i class="fa fa-heart"> 喵</i></a><a href="/history/"><i class="fa fa-calendar"> 老来多健忘</i></a><a href="/read/"><i class="fa fa-book"> 不如多读书</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">《机器学习基石》笔记——第一讲：Learning Problem</h1><div class="post-meta">Feb 13, 2016<span> | </span><span class="category"><a href="/categories/技多不压身/">技多不压身</a></span></div><a class="disqus-comment-count" data-disqus-identifier="2016/02/13/2016-02-13-machine-learning-fundations-one/" href="/2016/02/13/2016-02-13-machine-learning-fundations-one/#disqus_thread"></a><div class="post-content"><h1 id="导语"><a href="#导语" class="headerlink" title="导语"></a>导语</h1><p>这门课是在著名的MOOC(Massive Online Open Course 大型在线公开课)Coursera上的一门关于机器学习领域的课程，由国立台湾大学的林轩田老师讲授。《机器学习基石》共8周课程，是整个机器学习课程的上半部分，主要分为四大部分讲授：</p>
+<ul>
+<li>When can Machine Learn?           在何时可以使用机器学习？</li>
+<li>Why can Machine Learn?            为什么机器可以学习？</li>
+<li>How can Machine Laarn?            机器可以怎样学习？</li>
+<li>How can Machine Learn Better?        怎样能使机器更好地学习？</li>
+</ul>
+<p>大二寒假曾对人脸识别算法做过小研究，上学期也接触了《人工智能》课程，都涉及到机器学习的一些知识。因此，想趁这个寒假的机会对这一领域再做一些了解。这也是我第一次学习MOOC课程，希望最终可以顺利完成~</p>
+<p>目前已经听讲到第二周的课程，现在此整理一下第一周的课堂笔记。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="1、Course-Introduction"><a href="#1、Course-Introduction" class="headerlink" title="1、Course Introduction"></a>1、Course Introduction</h2><p>这门课程是：</p>
+<blockquote>
+<p>foundation oriented and story-like</p>
+</blockquote>
+<p>林轩田老师将从基础点切入、像讲故事一样授课。但并不意味着这门课十分容易。</p>
+<blockquote>
+<p>基石不是基础，而是必须要先学会的东西。</p>
+</blockquote>
+<h2 id="2、What-is-Machine-Learning"><a href="#2、What-is-Machine-Learning" class="headerlink" title="2、What is Machine Learning?"></a>2、What is Machine Learning?</h2><h3 id="2-1-什么是学习？"><a href="#2-1-什么是学习？" class="headerlink" title="2.1 什么是学习？"></a>2.1 什么是学习？</h3><p>学习是<strong>人或动物通过观察思考获得一定技巧的过程</strong>。</p>
+<blockquote>
+<p>With experience accumulated from observations.<br><img src="/img/in-post/machine-learning-fundations/one/what-is-learning.png" alt="what-is-learning"></p>
+</blockquote>
+<h3 id="2-2-什么是机器学习？"><a href="#2-2-什么是机器学习？" class="headerlink" title="2.2 什么是机器学习？"></a>2.2 什么是机器学习？</h3><p>机器学习是<strong>计算机通过资料和计算获得技巧的过程</strong>。</p>
+<p>也就是说，我们把“学习”这一过程的主体——“人”，替换成“计算机”，那么这样的学习就是“机器学习”。</p>
+<blockquote>
+<p>With experience accumulated/computed from data.<br><img src="/img/in-post/machine-learning-fundations/one/what-is-machine-learning.png" alt="what-is-machine-learning"></p>
+</blockquote>
+<h3 id="2-3-什么是技巧？"><a href="#2-3-什么是技巧？" class="headerlink" title="2.3 什么是技巧？"></a>2.3 什么是技巧？</h3><p>技巧是<strong>某种表现的增进</strong>。</p>
+<blockquote>
+<p>Improve some performance measure.<br><img src="/img/in-post/machine-learning-fundations/one/what-is-skill.png" alt="what-is-skill"></p>
+</blockquote>
+<h3 id="2-4-机器学习的应用方向？"><a href="#2-4-机器学习的应用方向？" class="headerlink" title="2.4 机器学习的应用方向？"></a>2.4 机器学习的应用方向？</h3><p>机器学习可能会有如下方向的应用：</p>
+<p><strong>1.When human cannot program the system manually.</strong></p>
+<ul>
+<li>当人们面对未知领域，不知晓如何设定规则时，需要机器通过学习和环境互动来获得更好的表现。<br>例如：探测火星的机器人。</li>
+</ul>
+<p><strong>2.When human cannot define the solution easily.</strong></p>
+<ul>
+<li>当人们不懂如何写出规则时。例如：声音识别。</li>
+</ul>
+<p><strong>3.When needing rapid decisions that human cannot do.</strong></p>
+<ul>
+<li>当需要人们无法做出的快速抉择时。例如：high-frequency trading.</li>
+</ul>
+<p><strong>4.When needing to be user-oriented in a massive scale.</strong></p>
+<ul>
+<li>当需要对用户进行个性化设计时。例如：consumer-targeted marketing.</li>
+</ul>
+<h3 id="2-5-何时适合使用机器学习？"><a href="#2-5-何时适合使用机器学习？" class="headerlink" title="2.5 何时适合使用机器学习？"></a>2.5 何时适合使用机器学习？</h3><p>机器学习的<strong>三个关键</strong>：</p>
+<p><strong>1.exits some ‘underlying pattern’ to be learned.</strong></p>
+<ul>
+<li>存在一个可增进的表现，可以让我们对其进行提高。</li>
+</ul>
+<p><strong>2.but no programmable(easy) definition.</strong></p>
+<ul>
+<li>不知道如何定义规则/不容易定义规则</li>
+</ul>
+<p><strong>3.somehow there is data about the pattern.</strong></p>
+<ul>
+<li>拥有可用的资料</li>
+</ul>
+<h2 id="3、Applications-of-Machine-Learning"><a href="#3、Applications-of-Machine-Learning" class="headerlink" title="3、Applications of Machine Learning?"></a>3、Applications of Machine Learning?</h2><p>林轩田老师从食、衣、住、行、育、乐六个领域介绍了机器学习的应用，算是对机器学习应用的一个初步了解。教育和娱乐领域的例子十分Cool，我确实也从中受到了启发。</p>
+<h3 id="3-1-Food"><a href="#3-1-Food" class="headerlink" title="3.1 Food"></a>3.1 Food</h3><p>从社交网络获取餐厅的信息：干净与否？是否好吃？</p>
+<ul>
+<li>Data: Twitter data( words + location ) </li>
+<li>Skill: tell food poisoning likeliness of restaurant properly</li>
+</ul>
+<h3 id="3-2-Clothing"><a href="#3-2-Clothing" class="headerlink" title="3.2 Clothing"></a>3.2 Clothing</h3><p>推荐顾客好看的衣服穿搭</p>
+<ul>
+<li>Data: sales figures + client surveys</li>
+<li>Skill: give good fashion recommendations to clients</li>
+</ul>
+<h3 id="3-3-Housing"><a href="#3-3-Housing" class="headerlink" title="3.3 Housing"></a>3.3 Housing</h3><p>计算房子的能源消耗。通过已盖过房子的特征学习、预测。</p>
+<ul>
+<li>Data: characteristics of buildings and their energy load</li>
+<li>Skill: predict energy load of other building closely</li>
+</ul>
+<h3 id="3-4-Transportation"><a href="#3-4-Transportation" class="headerlink" title="3.4 Transportation"></a>3.4 Transportation</h3><p>辨别信号灯、交通号等。</p>
+<ul>
+<li>Data: some traffic sign images and meanings</li>
+<li>Skill: recognize traffic signs accurately</li>
+</ul>
+<h3 id="3-5-Education"><a href="#3-5-Education" class="headerlink" title="3.5 Education"></a>3.5 Education</h3><p>从学生答题的历史纪录判断学生的学习程度，下道题是否会答对？</p>
+<ul>
+<li>Data: students’ records on quizzes on a Math tutoring system</li>
+<li>Skill: predict whether a student can give a correct answer to another quiz question</li>
+<li>How: Answer correctly = [recent <strong>strength</strong> of student&gt;<strong>difficulty</strong> of question]</li>
+<li>Data: Give ML 9 million records from 3000 students. ML determines (reverse-engineers) strength and difficulty automatically.</li>
+</ul>
+<h3 id="3-6-Entertainment"><a href="#3-6-Entertainment" class="headerlink" title="3.6 Entertainment"></a>3.6 Entertainment</h3><p>推荐给使用者他们喜欢的电影。</p>
+<ul>
+<li>Data: how many users have rated some movies</li>
+<li>Skill: predict how a user would rate an unrated movie</li>
+<li>Pattern: <strong>Rating  &lt;– viewer/movie factors</strong></li>
+</ul>
+<h2 id="4、Components-of-Machine-Learning-重点"><a href="#4、Components-of-Machine-Learning-重点" class="headerlink" title="4、Components of Machine Learning(重点)"></a>4、Components of Machine Learning(重点)</h2><p>机器学习的组成是这一讲的重点，之后的课程也将在这一小节的基础上展开。</p>
+<h3 id="4-1-机器学习的理论应用符号"><a href="#4-1-机器学习的理论应用符号" class="headerlink" title="4.1 机器学习的理论应用符号"></a>4.1 机器学习的理论应用符号</h3><p>先从一个例子开始，了解一下机器学习的理论应用符号。</p>
+<p><strong>举例</strong>：银行判断是否要给办理信用卡的顾客下发信用卡？</p>
+<ol>
+<li><p><strong>输入</strong>（Input）: x∈<em>X</em>（代表银行所拥有的用户信息）；</p>
+</li>
+<li><p><strong>输出</strong>（Output）: y∈<em>Y</em>（代表办理信用卡后的结果：好或坏）；</p>
+</li>
+<li><p><strong>未知函数/目标函数</strong>（Unknown pattern to be learned/target function）:f: <em>X</em>–&gt;<em>Y</em>(代表理想的信用卡发放公式) ；</p>
+</li>
+<li><p><strong>资料</strong>（Data），即训练样本（training examples） : D = {(x1, y1), (x2, y2), …, (xN,yN)} （代表存在银行中的n笔资料）；</p>
+</li>
+<li><p><strong>假说</strong>（Hypothesis），即希望能被更好改进的技能（skill with hopefully good performance）:<br>g: <em>X</em>–&gt;<em>Y</em>(‘learned’ formula to be used)。我们希望函数g表现的很好。机器学习最终得到g，用g来衡量是否给未来的顾客信用卡。</p>
+</li>
+</ol>
+<h3 id="4-2-机器学习流程"><a href="#4-2-机器学习流程" class="headerlink" title="4.2 机器学习流程"></a>4.2 机器学习流程</h3><p>用一张简单的图来表示机器学习的流程：</p>
+<blockquote>
+<p><img src="/img/in-post/machine-learning-fundations/one/how-g-come.png" alt="how-g-come"></p>
+</blockquote>
+<p>从上图可以看出，机器学习就是从我们<strong>未知的公式f</strong>中得到大量的<strong>资料</strong>（Data），再在这些资料的基础上，得到一个<strong>近似于f的g</strong>。</p>
+<p>虽然我们不知道有关的规则（pattern）f，但是我们能利用所拥有资料（Data），通过Machine Learning来总结出g。</p>
+<hr>
+<p>但对于未知的目标函数f，如何得出一个与之相像的g？</p>
+<p>我们用一张更为详细的图来说明:</p>
+<blockquote>
+<p><img src="/img/in-post/machine-learning-fundations/one/how-g-come-2.png" alt="how-g-come-2"></p>
+</blockquote>
+<p>在上图中我们将简略图中的“ML”详细定义为“Learning algorithm（机器学习算法）”，简称A；并引入一个新项<em>H</em>。</p>
+<p><strong>关于<em>H</em>（Hypothesis Set）：</strong></p>
+<ul>
+<li><p><em>H</em>称做“假设的集合”（Hypothesis Set）,可以包含好的假设、坏的假设；</p>
+</li>
+<li><p>例如：h1: 月薪 &gt; 8,000; h2: 欠债 &gt; 100,000……</p>
+</li>
+</ul>
+<p>此时，<em>A</em>的作用就是<strong>从<em>H</em>中挑选</strong>出最接近目标函数f的g。</p>
+<h3 id="4-3-机器学习模型（Learning-Model）的定义"><a href="#4-3-机器学习模型（Learning-Model）的定义" class="headerlink" title="4.3 机器学习模型（Learning Model）的定义"></a>4.3 机器学习模型（Learning Model）的定义</h3><p><strong>机器学习模型 = 算法（<em>A</em>） + 假设空间（<em>H</em>）</strong></p>
+<blockquote>
+<p>Learning model = <em>A</em> and <em>H</em> </p>
+</blockquote>
+<h2 id="5、Machine-Learning-and-Other-Fields"><a href="#5、Machine-Learning-and-Other-Fields" class="headerlink" title="5、Machine Learning and Other Fields"></a>5、Machine Learning and Other Fields</h2><h3 id="5-1-Machine-Learning-amp-Data-Mining"><a href="#5-1-Machine-Learning-amp-Data-Mining" class="headerlink" title="5.1 Machine Learning &amp; Data Mining"></a>5.1 Machine Learning &amp; Data Mining</h3><p>机器学习与资料勘探</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Machine Learning(ML)</th>
+<th style="text-align:center">Data Mining(DM)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">使用资料产生假设，希望最终得到的假设g可以和目标函数f相似</td>
+<td style="text-align:center">用资料发现一些有趣/有用的事（在意的不是预测）</td>
+</tr>
+</tbody>
+</table>
+<p>如果资料勘探得到的结果中“有趣的事”和机器学习的目标函数f相似，那么机器学习和资料勘探就没有什么不同了。因此，这两个领域是密不可分的。</p>
+<h3 id="5-2-Machine-Learning-amp-Artificial-Intelligence"><a href="#5-2-Machine-Learning-amp-Artificial-Intelligence" class="headerlink" title="5.2 Machine Learning &amp; Artificial Intelligence"></a>5.2 Machine Learning &amp; Artificial Intelligence</h3><p>机器学习和人工智能</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Machine Learning(ML)</th>
+<th style="text-align:center">Artificial Intelligence(AI)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">使用资料产生假设，希望最终得到的假设g可以和目标函数f相似</td>
+<td style="text-align:center">用计算机完成某些能够体现“智能”的行为</td>
+</tr>
+</tbody>
+</table>
+<p>然而，要使得g ≈ f（计算机会预测）显然是一件十分智能的事。所以，<strong>机器学习是实现人工智能的一种方法</strong>。 </p>
+<h3 id="5-3-Machine-Learning-amp-Statistics"><a href="#5-3-Machine-Learning-amp-Statistics" class="headerlink" title="5.3 Machine Learning &amp; Statistics"></a>5.3 Machine Learning &amp; Statistics</h3><p>机器学习和统计</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Machine Learning(ML)</th>
+<th style="text-align:center">Statistics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">使用资料产生假设，希望最终得到的假设g可以和目标函数f相似</td>
+<td style="text-align:center">用数据推论未知的结果（如:丢硬币正反面的概率）</td>
+</tr>
+</tbody>
+</table>
+<p>而在机器学习中，g是推论的结果，f是未知的事情。所以，<strong>统计是实现机器学习的一种方法</strong>。统计学的许多工具也都可以用于机器学习。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>通过这一周的课程，可以给机器学习一个更准确的定义：</p>
+<p><strong>通过数据来计算得到一个假设g使它来接近未知的目标函数f。</strong></p>
+<p>正如林轩田老师所说的：</p>
+<blockquote>
+<p>机器学习是教计算机钓鱼而不是给计算机鱼吃。</p>
+</blockquote>
+</div><div class="tags"><a href="/tags/机器学习/">机器学习</a></div><div class="post-nav"><a class="pre" href="/2016/04/01/2016-04-05-leetcode-notebook/">LeetCode Notebook</a><a class="next" href="/2016/02/05/2016-02-06-analog-login/">从HTTP请求谈谈模拟登录教务处</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://jalan.space/2016/02/13/2016-02-13-machine-learning-fundations-one/';
+    this.page.identifier = '2016/02/13/2016-02-13-machine-learning-fundations-one/';
+    this.page.title = '《机器学习基石》笔记——第一讲：Learning Problem';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//JalanJiang.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//JalanJiang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://JalanJiang.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"><input type="hidden" name="sitesearch" value="http://jalan.space"></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Web屠龙刀/">Web屠龙刀</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/云原生应用/">云原生应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/少年人的冲动/">少年人的冲动</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/技多不压身/">技多不压身</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/磨刀石/">磨刀石</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/跨过这道坎/">跨过这道坎</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/JavaScript/" style="font-size: 15px;">JavaScript</a> <a href="/tags/jekyll/" style="font-size: 15px;">jekyll</a> <a href="/tags/影评/" style="font-size: 15px;">影评</a> <a href="/tags/meitu/" style="font-size: 15px;">meitu</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/图像处理/" style="font-size: 15px;">图像处理</a> <a href="/tags/matlab/" style="font-size: 15px;">matlab</a> <a href="/tags/Bootstrap/" style="font-size: 15px;">Bootstrap</a> <a href="/tags/Nginx/" style="font-size: 15px;">Nginx</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/生活啊/" style="font-size: 15px;">生活啊</a> <a href="/tags/Laravel/" style="font-size: 15px;">Laravel</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/算法/" style="font-size: 15px;">算法</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/网络爬虫/" style="font-size: 15px;">网络爬虫</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Kubernetes/" style="font-size: 15px;">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/GCP/" style="font-size: 15px;">GCP</a> <a href="/tags/Go/" style="font-size: 15px;">Go</a> <a href="/tags/NodeJS/" style="font-size: 15px;">NodeJS</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/DevOps/" style="font-size: 15px;">DevOps</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/02/14/2019/python-config-file/">Python configparser 模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/05/2019/redis-rdb-aof/">Redis 持久化</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/05/2019/python-queue/">Python 实现队列的几种方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/02/2019/white-snake/">《白蛇：缘起》观后感</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/01/2019/redis-rehash/">Redis 字典与 rehash</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/29/2019/begin-go/">Go 语言入门笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/26/2019/use-circleci-to-deploy/">Github + CircleCI + GKE 部署应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/16/2019/begin-nodejs/">NodeJS 入门笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/05/2019/b-tree-and-b-plus-tree/">B-Tree 与 B+Tree</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/27/2018/upload-file-to-gcp-storage-from-python3/">使用 Python 上传文件到 Google Cloud Storage</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//JalanJiang.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://blog.w2fzu.com/" title="西二在线" target="_blank">西二在线</a><ul></ul><a href="http://www.hongweipeng.com/" title="栖迟於一丘" target="_blank">栖迟於一丘</a><ul></ul><a href="http://shixiong.name/" title="Daemon" target="_blank">Daemon</a><ul></ul><a href="http://csming1995.github.io/" title="Csming's world" target="_blank">Csming's world</a><ul></ul><a href="https://xushenglee.github.io/" title="Xusheng's Blog" target="_blank">Xusheng's Blog</a><ul></ul><a href="https://mychiaki.github.io/" title="Chiaki" target="_blank">Chiaki</a><ul></ul><a href="http://www.ruphi.cn/" title="ruphi" target="_blank">ruphi</a><ul></ul><a href="http://lizimeow.cn/" title="栗子膜法师" target="_blank">栗子膜法师</a><ul></ul><a href="https://evaaaaaaaxiao.github.io/" title="Eva.X" target="_blank">Eva.X</a><ul></ul><a href="https://yiming.blog/" title="蔡一鸣博客" target="_blank">蔡一鸣博客</a><ul></ul><a href="http://gagalee.ink/" title="mymmon" target="_blank">mymmon</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">忘归.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.2/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
