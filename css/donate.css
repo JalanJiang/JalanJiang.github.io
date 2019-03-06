@@ -271,22 +271,3 @@ a{
 		transform: rotateZ(40deg) scale(0.6,0.6);
 	}
 }
-
-#ps{
-	color: #dd0000;
-	text-align: center;
-	width: 100%;
-}
-
-.yc{
-	position: absolute;
-	z-index: 1;
-	float: left;
-}
-
-#donate-text {
-	text-align: center;
-	font-size: 15px;
-	line-height: 1.77;
-	color: #444;
-}
