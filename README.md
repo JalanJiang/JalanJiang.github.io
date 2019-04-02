@@ -1,5 +1,9 @@
 <p align="center"><img src="https://www.easyicon.net/api/resizeApi.php?id=1141877&size=128"></p>
 
+[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
+[![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/zh_CN)
+[![HitCount](http://hits.dwyl.io/JalanJiang/JalanJiang/JalanJiang.github.io.svg)](http://hits.dwyl.io/JalanJiang/JalanJiang/JalanJiang.github.io)
+
 ## 忘归
 
 > 人生底色悲凉，但愿自在如风。
