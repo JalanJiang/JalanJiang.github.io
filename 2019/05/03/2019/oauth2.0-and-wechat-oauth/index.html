@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="江佳扬 | 刘璐璐的匆匆过客 | PHP | Python | 技术博客"><title>谈谈 OAuth 2.0 与微信授权登录 | 忘归</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = 'https://hm.baidu.com/hm.js?' + 'c47c7dbbbbb8b1bd7729048f358cd896';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">谈谈 OAuth 2.0 与微信授权登录</h1><a id="logo" href="/.">忘归</a><p class="description">底色悲凉，自在如风。</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/cat/"><i class="fa fa-heart"> 喵</i></a><a href="/history/"><i class="fa fa-calendar"> 老来多健忘</i></a><a href="/books/"><i class="fa fa-book"> 不如多读书</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">谈谈 OAuth 2.0 与微信授权登录</h1><div class="post-meta">May 3, 2019<span> | </span><span class="category"><a href="/categories/Web屠龙刀/">Web屠龙刀</a></span></div><a class="disqus-comment-count" data-disqus-identifier="2019/05/03/2019/oauth2.0-and-wechat-oauth/" href="/2019/05/03/2019/oauth2.0-and-wechat-oauth/#disqus_thread"></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#OAuth-2-0"><span class="toc-number">1.</span> <span class="toc-text">OAuth 2.0</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#应用场景"><span class="toc-number">1.1.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#核心思想"><span class="toc-number">1.2.</span> <span class="toc-text">核心思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行流程"><span class="toc-number">1.3.</span> <span class="toc-text">运行流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#授权模式"><span class="toc-number">1.4.</span> <span class="toc-text">授权模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#授权码模式"><span class="toc-number">1.5.</span> <span class="toc-text">授权码模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#客户端申请认证-URI"><span class="toc-number">1.5.1.</span> <span class="toc-text">客户端申请认证 URI</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#服务器回应客户端的-URI"><span class="toc-number">1.5.2.</span> <span class="toc-text">服务器回应客户端的 URI</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#申请令牌的请求"><span class="toc-number">1.5.3.</span> <span class="toc-text">申请令牌的请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#来自认证服务器的-HTTP-回复"><span class="toc-number">1.5.4.</span> <span class="toc-text">来自认证服务器的 HTTP 回复</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#微信授权"><span class="toc-number">2.</span> <span class="toc-text">微信授权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#服务端-API"><span class="toc-number">2.1.</span> <span class="toc-text">服务端 API</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#授权接口"><span class="toc-number">2.1.1.</span> <span class="toc-text">授权接口</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#接口描述"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">接口描述</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#接收参数"><span class="toc-number">2.1.1.2.</span> <span class="toc-text">接收参数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#接口返回值"><span class="toc-number">2.1.1.3.</span> <span class="toc-text">接口返回值</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#授权回调接口"><span class="toc-number">2.1.2.</span> <span class="toc-text">授权回调接口</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#接口描述-1"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">接口描述</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#接收参数-1"><span class="toc-number">2.1.2.2.</span> <span class="toc-text">接收参数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#接口返回值-1"><span class="toc-number">2.1.2.3.</span> <span class="toc-text">接口返回值</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">3.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="post-content"><blockquote>
+<p>此篇文章同时发布在知乎专栏 <a href="https://zhuanlan.zhihu.com/c_1099371474774818816" target="_blank" rel="noopener">前端后端客户端</a>，专栏专注于前端、后端、客户端开发的技术分享与探讨，欢迎关注。</p>
+</blockquote>
+<h2 id="OAuth-2-0"><a href="#OAuth-2-0" class="headerlink" title="OAuth 2.0"></a>OAuth 2.0</h2><ul>
+<li><a href="https://en.wikipedia.org/wiki/OAuth" target="_blank" rel="noopener">OAuth</a> 是一种关于授权（authorization）的开放网络标准</li>
+<li><a href="https://en.wikipedia.org/wiki/OAuth" target="_blank" rel="noopener">OAuth</a> 目前的版本是 2.0</li>
+</ul>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>以微信举例。</p>
+<p>假设我们的项目有一个微信公众号服务。当用户进入我们的业务页面时，我们想获得用户的微信账号基本信息，从而对用户的一些行为进行记录。</p>
+<p>若要获取用户的微信账号信息，就需要用户的同意，即获得<strong>用户授权</strong>。只有用户同意了，微信才能允许我们读取用户的基本信息。那么要如何获得用户授权呢？</p>
+<p>如果没有 OAuth 2.0，传统的做法是用户把微信账号信息给我们，然后我们登录微信号来获取用户的基本信息。这听起来就十分傻*，也存在许多安全隐患。</p>
+<ol>
+<li>业务方为了后续的业务需求，会记录用户的账号密码，非常不安全</li>
+<li>除了获取用户的基本信息，业务方还能获得该账号拥有的其他权限，比如乱给别人发消息</li>
+<li>只有用户修改了密码才能回收此授权</li>
+</ol>
+<p><a href="https://en.wikipedia.org/wiki/OAuth" target="_blank" rel="noopener">OAuth</a> 就是为了解决上述问题而诞生的。</p>
+<h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><ul>
+<li>在“客户端”与“服务提供商”之间设置了一个授权层（authorization layer）</li>
+<li>“客户端”无法直接登录“服务提供商”，但可以登录此“授权层”</li>
+<li>登录“授权层”时使用令牌 Token，该令牌与账号密码不同，拥有特定的权限范围与授权时间</li>
+</ul>
+<h3 id="运行流程"><a href="#运行流程" class="headerlink" title="运行流程"></a>运行流程</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">+--------+                               +---------------+</span><br><span class="line">|        |--(A)- Authorization Request -&gt;|  <span class="built_in"> Resource </span>   |</span><br><span class="line">|        |                               |     Owner     |</span><br><span class="line">|        |&lt;-(B)-- Authorization Grant ---|               |</span><br><span class="line">|        |                               +---------------+</span><br><span class="line">|        |</span><br><span class="line">|        |                               +---------------+</span><br><span class="line">|        |--(C)-- Authorization Grant --&gt;| Authorization |</span><br><span class="line">|<span class="built_in"> Client </span>|                               |    <span class="built_in"> Server </span>   |</span><br><span class="line">|        |&lt;-(D)----- Access Token -------|               |</span><br><span class="line">|        |                               +---------------+</span><br><span class="line">|        |</span><br><span class="line">|        |                               +---------------+</span><br><span class="line">|        |--(E)----- Access Token ------&gt;|   <span class="built_in"> Resource </span>  |</span><br><span class="line">|        |                               |    <span class="built_in"> Server </span>   |</span><br><span class="line">|        |&lt;-(F)--- Protected<span class="built_in"> Resource </span>---|               |</span><br><span class="line">+--------+                               +---------------+</span><br></pre></td></tr></table></figure>
+<ul>
+<li>（A）用户打开客户端以后，客户端要求用户给予授权</li>
+<li>（B）<strong>用户同意给予客户端授权</strong>。（核心步骤）</li>
+<li>（C）客户端使用上一步获得的授权，向认证服务器申请令牌</li>
+<li>（D）认证服务器对客户端进行认证以后，确认无误，同意发放令牌</li>
+<li>（E）客户端使用令牌，向资源服务器申请获取资源</li>
+<li>（F）资源服务器确认令牌无误，同意向客户端开放资源</li>
+</ul>
+<h3 id="授权模式"><a href="#授权模式" class="headerlink" title="授权模式"></a>授权模式</h3><p>OAuth 2.0 定义了以下 4 种授权模式：</p>
+<ol>
+<li>授权码模式（authorization code）</li>
+<li>简化模式（implicit）</li>
+<li>密码模式（resource owner password credentials）</li>
+<li>客户端模式（client credentials）</li>
+</ol>
+<p>微信使用的是授权码模式（authorization code），因此我们重点介绍一下该模式。</p>
+<h3 id="授权码模式"><a href="#授权码模式" class="headerlink" title="授权码模式"></a>授权码模式</h3><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">+----------+</span><br><span class="line">|<span class="string"> Resource </span>|</span><br><span class="line">|<span class="string">   Owner  </span>|</span><br><span class="line">|<span class="string">          </span>|</span><br><span class="line">+----------+</span><br><span class="line">     ^</span><br><span class="line">     |</span><br><span class="line"><span class="string">    (B)</span></span><br><span class="line"><span class="string">+----</span>|<span class="string">-----+          Client Identifier      +---------------+</span></span><br><span class="line">|<span class="string">         -+----(A)-- &amp; Redirection URI ----&gt;</span>|<span class="string">               </span>|</span><br><span class="line">|<span class="string">  User-   </span>|<span class="string">                                 </span>|<span class="string"> Authorization </span>|</span><br><span class="line">|<span class="string">  Agent  -+----(B)-- User authenticates ---&gt;</span>|<span class="string">     Server    </span>|</span><br><span class="line">|<span class="string">          </span>|<span class="string">                                 </span>|<span class="string">               </span>|</span><br><span class="line">|<span class="string">         -+----(C)-- Authorization Code ---&lt;</span>|<span class="string">               </span>|</span><br><span class="line">+-|<span class="string">----</span>|<span class="string">---+                                 +---------------+</span></span><br><span class="line"><span class="string">  </span>|<span class="string">    </span>|<span class="string">                                         ^      v</span></span><br><span class="line"><span class="string"> (A)  (C)                                        </span>|<span class="string">      </span>|</span><br><span class="line">  |<span class="string">    </span>|<span class="string">                                         </span>|<span class="string">      </span>|</span><br><span class="line">  ^    v                                         |<span class="string">      </span>|</span><br><span class="line">+---------+                                      |<span class="string">      </span>|</span><br><span class="line">|<span class="string">         </span>|<span class="string">&gt;---(D)-- Authorization Code ---------'      </span>|</span><br><span class="line">|<span class="string">  Client </span>|<span class="string">          &amp; Redirection URI                  </span>|</span><br><span class="line">|<span class="string">         </span>|<span class="string">                                             </span>|</span><br><span class="line">|<span class="string">         </span>|<span class="string">&lt;---(E)----- Access Token -------------------'</span></span><br><span class="line"><span class="string">+---------+       (w/ Optional Refresh Token)</span></span><br></pre></td></tr></table></figure>
+<p>步骤如下：</p>
+<ul>
+<li>（A）用户访问客户端，后者将前者导向认证服务器</li>
+<li>（B）用户选择是否给予客户端授权</li>
+<li>（C）假设用户给予授权，认证服务器将用户导向客户端事先指定的“重定向 URI”（redirection URI），同时附上一个授权码</li>
+<li>（D）客户端收到授权码，附上早先的“重定向 URI”，向认证服务器申请令牌。这一步是在客户端的后台的服务器上完成的，对用户不可见</li>
+<li>（E）认证服务器核对了授权码和重定向 URI，确认无误后，向客户端发送访问令牌（access token）和更新令牌（refresh token）</li>
+</ul>
+<h4 id="客户端申请认证-URI"><a href="#客户端申请认证-URI" class="headerlink" title="客户端申请认证 URI"></a>客户端申请认证 URI</h4><p>A 步骤中，客户端申请认证的 URI，需要包含以下参数：</p>
+<ul>
+<li>response_type：表示授权类型，必选项，此处的值固定为 <code>code</code></li>
+<li>client_id：表示客户端的 ID，必选项</li>
+<li>redirect_uri：表示重定向 URI，可选项</li>
+<li>scope：表示申请的权限范围，可选项</li>
+<li>state：表示客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值</li>
+</ul>
+<p>举个例子，微信的认证 URI 如下：</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&amp;redirect_uri=REDIRECT_URI&amp;response_type=code&amp;scope=SCOPE&amp;<span class="keyword">state</span>=STATE<span class="comment">#wechat_redirect</span></span><br></pre></td></tr></table></figure>
+<h4 id="服务器回应客户端的-URI"><a href="#服务器回应客户端的-URI" class="headerlink" title="服务器回应客户端的 URI"></a>服务器回应客户端的 URI</h4><p>C 步骤中，服务器回应客户端的URI，包含以下参数：</p>
+<ul>
+<li>code：表示授权码，必选项。该码的有效期应该很短，通常设为 10 分钟，客户端只能使用该码一次，否则会被授权服务器拒绝。该码与客户端 ID 和重定向 URI，是一一对应关系</li>
+<li>state：如果客户端的请求中包含这个参数，认证服务器的回应也必须一模一样包含这个参数</li>
+</ul>
+<p>如果用户同意授权将会跳转到这个 URI：</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redirect_uri/?code=CODE&amp;<span class="keyword">state</span>=STATE。</span><br></pre></td></tr></table></figure>
+<h4 id="申请令牌的请求"><a href="#申请令牌的请求" class="headerlink" title="申请令牌的请求"></a>申请令牌的请求</h4><p>D 步骤中，客户端向认证服务器申请令牌的 HTTP 请求，包含以下参数：</p>
+<ul>
+<li>grant_type：表示使用的授权模式，必选项，此处的值固定为 <code>authorization_code</code></li>
+<li>code：表示上一步获得的授权码，必选项</li>
+<li>redirect_uri：表示重定向 URI，必选项，且必须与A步骤中的该参数值保持一致</li>
+<li>client_id：表示客户端 ID，必选项</li>
+</ul>
+<p>看一下微信的：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:<span class="regexp">//</span>api.weixin.qq.com<span class="regexp">/sns/</span>oauth2<span class="regexp">/access_token?appid=APPID&amp;secret=SECRET&amp;code=CODE&amp;grant_type=authorization_code</span></span><br></pre></td></tr></table></figure>
+<h4 id="来自认证服务器的-HTTP-回复"><a href="#来自认证服务器的-HTTP-回复" class="headerlink" title="来自认证服务器的 HTTP 回复"></a>来自认证服务器的 HTTP 回复</h4><p>E 步骤中，认证服务器发送的 HTTP 回复，包含以下参数：</p>
+<ul>
+<li>access_token：表示访问令牌，必选项</li>
+<li>token_type：表示令牌类型，该值大小写不敏感，必选项，可以是 bearer 类 型或 mac 类型</li>
+<li>expires_in：表示过期时间，单位为秒。如果省略该参数，必须其他方式设置过期时间</li>
+<li>refresh_token：表示更新令牌，用来获取下一次的访问令牌，可选项</li>
+<li>scope：表示权限范围，如果与客户端申请的范围一致，此项可省略</li>
+</ul>
+<p>看一下这部分微信的返回：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"access_token"</span>:<span class="string">"ACCESS_TOKEN"</span>,</span><br><span class="line">    <span class="attr">"expires_in"</span>:<span class="number">7200</span>,</span><br><span class="line">    <span class="attr">"refresh_token"</span>:<span class="string">"REFRESH_TOKEN"</span>,</span><br><span class="line">    <span class="attr">"openid"</span>:<span class="string">"OPENID"</span>,</span><br><span class="line">    <span class="attr">"scope"</span>:<span class="string">"SCOPE"</span> </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="微信授权"><a href="#微信授权" class="headerlink" title="微信授权"></a>微信授权</h2><p>上面介绍了 OAuth 2.0 的原理和基本流程，以及每个步骤中的具体请求参数与这些步骤中微信的用户授权示例。下面就具体来看看在微信授权的过程中服务端具体需要提供哪些接口。</p>
+<p>先附上微信官方文档：<a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1421140842" target="_blank" rel="noopener">微信网页授权</a>。</p>
+<h3 id="服务端-API"><a href="#服务端-API" class="headerlink" title="服务端 API"></a>服务端 API</h3><h4 id="授权接口"><a href="#授权接口" class="headerlink" title="授权接口"></a>授权接口</h4><h5 id="接口描述"><a href="#接口描述" class="headerlink" title="接口描述"></a>接口描述</h5><p>用户同意授权后，用于从服务提供商获取 code。请求微信的 <a href="https://mp.weixin.qq.com/wiki?action=doc&amp;id=mp1421140842&amp;t=0.49802501506292396#0" target="_blank" rel="noopener">用户同意授权，获取code</a> 接口。</p>
+<h5 id="接收参数"><a href="#接收参数" class="headerlink" title="接收参数"></a>接收参数</h5><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>target_uri</td>
+<td>string</td>
+<td>最终要跳转到的业务页面地址</td>
+</tr>
+</tbody>
+</table>
+<h5 id="接口返回值"><a href="#接口返回值" class="headerlink" title="接口返回值"></a>接口返回值</h5><p>无返回值，获取 code 后跳转到授权回调接口地址。</p>
+<h4 id="授权回调接口"><a href="#授权回调接口" class="headerlink" title="授权回调接口"></a>授权回调接口</h4><h5 id="接口描述-1"><a href="#接口描述-1" class="headerlink" title="接口描述"></a>接口描述</h5><p>上述授权接口获取到 code 后将跳转到该接口。</p>
+<p>该接口目的：</p>
+<ol>
+<li>通过 code 获取用户 access_token：<a href="https://mp.weixin.qq.com/wiki?action=doc&amp;id=mp1421140842&amp;t=0.49802501506292396#1" target="_blank" rel="noopener">通过code换取网页授权access_token</a></li>
+<li>使用 access_token 拉取用户数据：<a href="https://mp.weixin.qq.com/wiki?action=doc&amp;id=mp1421140842&amp;t=0.49802501506292396#3" target="_blank" rel="noopener">拉取用户信息(需scope为 snsapi_userinfo)</a></li>
+<li>根据业务需求，对用户数据进行操作，例如：入库、更新用户数据等</li>
+<li>跳转到目标业务页 <code>target_uri</code></li>
+</ol>
+<h5 id="接收参数-1"><a href="#接收参数-1" class="headerlink" title="接收参数"></a>接收参数</h5><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>授权码</td>
+</tr>
+<tr>
+<td>target_uri</td>
+<td>string</td>
+<td>最终要跳转到的业务页面地址</td>
+</tr>
+</tbody>
+</table>
+<h5 id="接口返回值-1"><a href="#接口返回值-1" class="headerlink" title="接口返回值"></a>接口返回值</h5><p>无返回值，将重定向到目标业务页 <code>target_uri</code>。</p>
+<hr>
+<p>差不多先这样吧，后面会补上相关接口代码~</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>阮一峰的网络日志：<a href="https://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" target="_blank" rel="noopener">理解OAuth 2.0</a></li>
+<li><a href="http://www.rfcreader.com/#rfc6749" target="_blank" rel="noopener">RFC 6749</a></li>
+</ul>
+</div><div class="tags"><a href="/tags/OAuth/">OAuth</a><a href="/tags/WeChat/">WeChat</a></div><div class="post-nav"><a class="next" href="/2019/04/29/2019/begin-vue/">Vue 入门笔记</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://jalan.space/2019/05/03/2019/oauth2.0-and-wechat-oauth/';
+    this.page.identifier = '2019/05/03/2019/oauth2.0-and-wechat-oauth/';
+    this.page.title = '谈谈 OAuth 2.0 与微信授权登录';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//jalanspace.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//jalanspace.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://jalanspace.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"><input type="hidden" name="sitesearch" value="http://jalan.space"></form></div><div class="widget"><div class="widget-title"><i class="fa fa-hand-peace-o"> 我的笔记</i></div><ul></ul><a href="/leetcode-notebook" title="Leetcode 刷题本" target="_blank">Leetcode 刷题本</a><ul></ul><a href="/shell-notes" title="Linux Shell 脚本攻略" target="_blank">Linux Shell 脚本攻略</a><ul></ul><a href="/notes_on_docker" title="Docker 学习笔记" target="_blank">Docker 学习笔记</a><ul></ul><a href="/php-patterns-notes" title="深入 PHP 面向对象、模式与实践" target="_blank">深入 PHP 面向对象、模式与实践</a><ul></ul><a href="/laravel5.6-notes" title="Laravel5.6" target="_blank">Laravel5.6</a></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Web屠龙刀/">Web屠龙刀</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/云原生应用/">云原生应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/少年人的冲动/">少年人的冲动</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/技多不压身/">技多不压身</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/磨刀石/">磨刀石</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/跨过这道坎/">跨过这道坎</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/网络爬虫/" style="font-size: 15px;">网络爬虫</a> <a href="/tags/jekyll/" style="font-size: 15px;">jekyll</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/影评/" style="font-size: 15px;">影评</a> <a href="/tags/meitu/" style="font-size: 15px;">meitu</a> <a href="/tags/Bootstrap/" style="font-size: 15px;">Bootstrap</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/图像处理/" style="font-size: 15px;">图像处理</a> <a href="/tags/matlab/" style="font-size: 15px;">matlab</a> <a href="/tags/Nginx/" style="font-size: 15px;">Nginx</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Laravel/" style="font-size: 15px;">Laravel</a> <a href="/tags/生活啊/" style="font-size: 15px;">生活啊</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/算法/" style="font-size: 15px;">算法</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/JavaScript/" style="font-size: 15px;">JavaScript</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Kubernetes/" style="font-size: 15px;">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/GCP/" style="font-size: 15px;">GCP</a> <a href="/tags/Go/" style="font-size: 15px;">Go</a> <a href="/tags/NodeJS/" style="font-size: 15px;">NodeJS</a> <a href="/tags/Git/" style="font-size: 15px;">Git</a> <a href="/tags/操作系统/" style="font-size: 15px;">操作系统</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/DevOps/" style="font-size: 15px;">DevOps</a> <a href="/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/OAuth/" style="font-size: 15px;">OAuth</a> <a href="/tags/WeChat/" style="font-size: 15px;">WeChat</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/05/03/2019/oauth2.0-and-wechat-oauth/">谈谈 OAuth 2.0 与微信授权登录</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/29/2019/begin-vue/">Vue 入门笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/24/2019/git-commit-message/">Git Commit message 编写规范与那些年我写过的奇怪 message</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/13/2019/hun-percent/">《灵能百分百》：不愿意的话，就算逃跑也没有关系</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/10/2019/phpstorm-xdebug-postman/">PhpStorm + Xdebug + Postman 调试环境配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/06/2019/go-gin-validate/">Gin 框架构建 RESTFul API 之请求参数验证</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/04/2019/php-autoload/">谈谈 PHP 的自动加载机制与 Laravel 中的具体实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/31/2019/30-seconds-of-php-code/">30 seconds of php code 阅读</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/25/2019/python-pillow/">用 Python Pillow 画一个卤蛋头</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/23/2019/cgi-php/">CGI、FastCGI、PHP-CGI 与 PHP-FPM</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//jalanspace.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://blog.w2fzu.com/" title="西二在线" target="_blank">西二在线</a><ul></ul><a href="http://www.hongweipeng.com/" title="栖迟於一丘" target="_blank">栖迟於一丘</a><ul></ul><a href="http://shixiong.name/" title="Daemon" target="_blank">Daemon</a><ul></ul><a href="http://csming1995.github.io/" title="Csming's world" target="_blank">Csming's world</a><ul></ul><a href="https://xushenglee.github.io/" title="Xusheng's Blog" target="_blank">Xusheng's Blog</a><ul></ul><a href="https://mychiaki.github.io/" title="Chiaki" target="_blank">Chiaki</a><ul></ul><a href="http://www.ruphi.cn/" title="ruphi" target="_blank">ruphi</a><ul></ul><a href="http://lizimeow.cn/" title="栗子膜法师" target="_blank">栗子膜法师</a><ul></ul><a href="https://evaaaaaaaxiao.github.io/" title="Eva.X" target="_blank">Eva.X</a><ul></ul><a href="https://yiming.blog/" title="蔡一鸣博客" target="_blank">蔡一鸣博客</a><ul></ul><a href="http://gagalee.ink/" title="185大总攻嘎嘎大人" target="_blank">185大总攻嘎嘎大人</a><ul></ul><a href="https://woodenrobot.me/" title="WoodenRobot's Blog" target="_blank">WoodenRobot's Blog</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">忘归.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.2/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
