@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jalan.space/"/>
-  <updated>2019-05-08T16:07:45.295Z</updated>
+  <updated>2019-05-09T14:23:53.503Z</updated>
   <id>http://jalan.space/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>日志规范总结</title>
+    <link href="http://jalan.space/2019/05/09/2019/logging-best-pratices/"/>
+    <id>http://jalan.space/2019/05/09/2019/logging-best-pratices/</id>
+    <published>2019-05-09T14:13:00.000Z</published>
+    <updated>2019-05-09T14:23:53.503Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>此篇文章同时发布在知乎专栏 <a href="https://zhuanlan.zhihu.com/c_1099371474774818816" target="_blank" rel="noopener">前端后端客户端</a>，专栏专注于前端、后端、客户端开发的技术分享与探讨，欢迎关注。</p></blockquote><p>最近在帮团队整理一系列开发规范，发现日志规范这块内容大家之前一直都没有重视过。打日志永远看心情，没有特别规定什么样的信息该记录日志，什么样的信息不该记录。</p><p>然而，日志记录的好坏直接关系到系统出现问题时定位的速度。同时，我们可以通过对日志的观察和分析，提前发现系统可能的风险，避免线上事故的发生。对于服务端开发人员来说，线上日志的监控尤其重要，能够帮助我们第一时间发现线上问题并及时解决。</p><p>碰巧这周也翻译了一篇 <a href="http://jalan.space/weekly-translation/other/follow-these-logging-best-practices-to-get-the-most-out-of-application-level-logging-slides.html">日志记录的最佳实践</a>，作者在文章的最后分享了技术分享的 PPT，大家可以按需食用。</p><p>下面对日志规范做一下总结。</p><h2 id="日志记录总则"><a href="#日志记录总则" class="headerlink" title="日志记录总则"></a>日志记录总则</h2><ol><li>日志中不要记录无用信息，防止无用日志淹没重要信息</li><li>要明确不同日志的用途，对日志内容进行分类</li><li>日志信息要准确全面，努力做到仅凭日志就可以定位问题</li><li>日志格式要统一规范</li><li>日志要不断优化、完善</li></ol><h2 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h2><p>遵循 <a href="https://tools.ietf.org/html/rfc5424" target="_blank" rel="noopener">RFC 5424</a>，将日志级别分为以下 8 种等级：</p><table><thead><tr><th>Numerical Code</th><th>Serverity</th></tr></thead><tbody><tr><td>0</td><td>Emergency: system is unusable</td></tr><tr><td>1</td><td>Alert: action must be taken immediately</td></tr><tr><td>2</td><td>Critical: critical conditions</td></tr><tr><td>3</td><td>Error: error conditions</td></tr><tr><td>4</td><td>Warning: warning conditions</td></tr><tr><td>5</td><td>Notice: normal but significant condition</td></tr><tr><td>6</td><td>Informational: informational messages</td></tr><tr><td>7</td><td>Debug: debug-level messages</td></tr></tbody></table><p>各级日志等级信息记录内容如下：</p><h3 id="Emergency"><a href="#Emergency" class="headerlink" title="Emergency"></a>Emergency</h3><ul><li>导致系统不可用的事故，属于最严重的日志级别，因此该日志级别必须慎用</li><li>通常情况下，<strong>一个进程的声明周期中应该只记录一次 Emergency 级别的日志</strong></li></ul><h3 id="Alert"><a href="#Alert" class="headerlink" title="Alert"></a>Alert</h3><ul><li>必须马上处理的问题，紧急程度低于 Emergency</li><li>Alert 错误发生时，已经影响了用户的正常访问</li><li>与 Emergency 的区别是，Alert 状态下系统依旧是可用的。例如：DB / Cache 无法连接。</li></ul><h3 id="Critical"><a href="#Critical" class="headerlink" title="Critical"></a>Critical</h3><p>紧急情况，程序组件不可用，需要立刻进行修复。例如：用户注册逻辑模块不能发送邮件。</p><h3 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h3><ul><li>运行时出现的错误，不必要立即进行修复</li><li>错误不影响整个逻辑的运行，但需要记录并做检测。</li></ul><h3 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h3><ul><li>可能影响系统功能，需要提醒的重要事件</li><li>该日志标示系统可能出现问题，也可能没有（比如网络波动）。对于那些目前还不是错误，然而不及时处理也会变为错误的情况，也可以记为 Warning 日志。例如一个存储系统的磁盘使用量超过阀值，或者系统中某个用户的存储配额快用完等等</li><li>对于 Warining 级别的日志，虽然不需要马上处理，但也需要及时查看并处理</li></ul><h3 id="Notice"><a href="#Notice" class="headerlink" title="Notice"></a>Notice</h3><ul><li>不影响正常功能，但需要注意的消息</li><li>执行过程中较 Infomational 级别更为重要的信息。</li></ul><h3 id="Infomational"><a href="#Infomational" class="headerlink" title="Infomational"></a>Infomational</h3><ul><li>用于记录系统正常运行情况下的一般信息，强调应用程序的运行过程。例如：某个子模块的初始化、某个请求的成功执行等</li><li>通过查看 Infomational 级别的日志，可以很快对系统中出现的 0~5 级别的错误进行定位</li></ul><h3 id="Debug"><a href="#Debug" class="headerlink" title="Debug"></a>Debug</h3><p>帮助开发、测试、运维人员对系统进行诊断的信息。</p><h2 id="日志分类"><a href="#日志分类" class="headerlink" title="日志分类"></a>日志分类</h2><p>日志从功能来说，可分为诊断日志、统计日志、审计日志。</p><h3 id="诊断日志"><a href="#诊断日志" class="headerlink" title="诊断日志"></a>诊断日志</h3><ul><li>请求入口和出口</li><li>外部服务调用和返回</li><li>资源消耗操作: 打开文件等</li><li>容错行为： 譬如云硬盘的副本修复操作</li><li>程序异常： 譬如数据库无法连接</li><li>后台操作：清理程序</li><li>启动、关闭、配置加载</li><li>抛出异常时，不记录日志</li></ul><h3 id="统计日志"><a href="#统计日志" class="headerlink" title="统计日志"></a>统计日志</h3><ul><li>用户访问统计</li><li>计费日志（如记录用户使用的网络资源或磁盘占用，格式较为严格，便于统计）</li></ul><h3 id="审计日志"><a href="#审计日志" class="headerlink" title="审计日志"></a>审计日志</h3><ul><li>管理操作</li></ul><h2 id="日志格式规范"><a href="#日志格式规范" class="headerlink" title="日志格式规范"></a>日志格式规范</h2><ul><li>统一字段命名：对于不同请求中的同一含义的字段，只能有一个名字</li><li>统一字段风格：例如字段一律使用 <code>xxx_yyy</code> 的下划线命名风格</li><li>统一日志层级风格</li><li>统一字段顺序：例如统一使用 <code>请求ID/服务名/请求参数/响应数据/响应时间</code> 作为日志字段顺序</li><li>每个请求需要加入请求 ID <code>request_id</code></li></ul><h2 id="日志中记录什么"><a href="#日志中记录什么" class="headerlink" title="日志中记录什么"></a>日志中记录什么</h2><h3 id="推荐记录的日志内容"><a href="#推荐记录的日志内容" class="headerlink" title="推荐记录的日志内容"></a>推荐记录的日志内容</h3><ul><li>在系统启动或初始化时记录重要的系统初始化参数</li><li>记录系统运行过程中的所有的错误</li><li>记录系统运行过程中的所有的警告</li><li>在持久化数据修改时记录修改前和修改后的值</li><li>记录系统各主要模块之间的请求和响应</li><li>重要的状态变化</li><li>系统中一些长期执行的任务的执行进度</li></ul><h3 id="不推荐记录的日志内容"><a href="#不推荐记录的日志内容" class="headerlink" title="不推荐记录的日志内容"></a>不推荐记录的日志内容</h3><ul><li>函数入口信息：除非该函数入口表示了一个重要事件的开始，或者将该信息记入 DEBUG 级别日志</li><li>文件内容或者一大段消息的内容：如果实在需要记录，则可以截取其中一些重要的信息来记入日志</li><li>“良性”错误：有时候虽然出现了错误，然而错误处理的流程可以正确解决这种情况，例如插入数据库时有重复的记录，尽管是个错误，然而错误处理流程可以对这种情况进行处理</li></ul><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul><li>没有绝对正确/错误的日志记录方式，适合个人/团队的才是最好的</li><li>好的习惯尽早养成，受益终身</li></ul><blockquote><p>If a dog is a man’s best friend, logs are software engineer’s best friend.</p></blockquote><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><a href="https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels" target="_blank" rel="noopener">stackoverflow: When to use the different log levels </a></li><li><a href="https://zhuanlan.zhihu.com/p/27363484" target="_blank" rel="noopener">最佳日志实践（v2.0）</a></li><li><a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md" target="_blank" rel="noopener">Logger Interface</a></li><li><a href="https://blog.goquxiao.com/posts/2014/03/18/ri-zhi-gui-fan-shi-jian/" target="_blank" rel="noopener">日志规范实践</a></li><li><a href="https://juejin.im/post/5abba33cf265da239b417fb4" target="_blank" rel="noopener">SeasLog 之企业级日志行为规范发布</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      If a dog is a man’s best friend, logs are software engineer’s best friend.
+    
+    </summary>
+    
+      <category term="磨刀石" scheme="http://jalan.space/categories/%E7%A3%A8%E5%88%80%E7%9F%B3/"/>
+    
+    
+      <category term="开发规范" scheme="http://jalan.space/tags/%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/"/>
+    
+  </entry>
   
   <entry>
     <title>Composer 使用姿势与 Lumen 升级指南</title>
@@ -444,35 +466,13 @@
       <category term="技多不压身" scheme="http://jalan.space/categories/%E6%8A%80%E5%A4%9A%E4%B8%8D%E5%8E%8B%E8%BA%AB/"/>
     
     
-      <category term="NodeJS" scheme="http://jalan.space/tags/NodeJS/"/>
-    
       <category term="Kubernetes" scheme="http://jalan.space/tags/Kubernetes/"/>
     
       <category term="GCP" scheme="http://jalan.space/tags/GCP/"/>
     
-      <category term="DevOps" scheme="http://jalan.space/tags/DevOps/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>NodeJS 入门笔记</title>
-    <link href="http://jalan.space/2019/01/16/2019/begin-nodejs/"/>
-    <id>http://jalan.space/2019/01/16/2019/begin-nodejs/</id>
-    <published>2019-01-16T15:33:00.000Z</published>
-    <updated>2019-03-05T17:56:25.096Z</updated>
-    
-    <content type="html"><![CDATA[<p>打算用 NodeJS 来撸一个小应用，走起！</p><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Node.js 就是运行在服务端的 JavaScript。</p><ul><li>基于 Chrome V8 引擎的 JavaScript 运行环境</li><li>事件驱动</li><li>非阻塞式 I/O 的模型</li></ul><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>macOS：</p><ol><li><a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">官网</a> 下载包安装</li><li><code>brew install node</code></li></ol><p><code>node -v</code> 查看是否安装成功。</p><h2 id="Hello-world"><a href="#Hello-world" class="headerlink" title="Hello, world"></a>Hello, world</h2><p>创建一个 <code>hello.js</code>：</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, world!"</span>);</span><br></pre></td></tr></table></figure><p>在终端运行：</p><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="keyword">node</span> <span class="title">hello</span>.js</span><br></pre></td></tr></table></figure><h2 id="Restify"><a href="#Restify" class="headerlink" title="Restify"></a>Restify</h2><p>Restify 是一个基于 NodeJS 的 REST 应用框架，支持服务器端和客户端。Restify 比起 Express 更专注于 REST 服务。</p><h3 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm <span class="keyword">install</span> restify</span><br></pre></td></tr></table></figure><h3 id="创建服务"><a href="#创建服务" class="headerlink" title="创建服务"></a>创建服务</h3><p>创建 <code>app.js</code></p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> restify = <span class="built_in">require</span>(<span class="string">'restify'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义响应方法</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">respond</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">    res.send(<span class="string">'hello'</span> + req.params.name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建服务</span></span><br><span class="line"><span class="keyword">var</span> server = restify.createServer();</span><br><span class="line">server.get(<span class="string">'/hello/:name'</span>, respond);</span><br><span class="line">server.head(<span class="string">'/hello/:name'</span>, respond);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听 3900 接口</span></span><br><span class="line">server.listen(<span class="number">3900</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'%s listening at %s'</span>, server.name, server.url);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><p>运行应用</p><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">▶ node app.js</span><br><span class="line">restify listening at <span class="link">http://</span>[<span class="string">::</span>]:3900</span><br></pre></td></tr></table></figure><p>访问接口</p><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">▶ curl <span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">3900</span>/hello/world</span><br><span class="line"><span class="string">"hello world"</span></span><br></pre></td></tr></table></figure><h2 id="jwt"><a href="#jwt" class="headerlink" title="jwt"></a>jwt</h2><p>Github：<a href="https://github.com/auth0/node-jsonwebtoken" target="_blank" rel="noopener">jsonwebtoken</a></p><h3 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h3><p><code>sign</code> 方法报错：</p><figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Error: </span>Expected "payload" to be a plain object.</span><br></pre></td></tr></table></figure><p>原因：直接将 mongoDB 查询结果对象 mongoosejs Object 作为参数传递，mongoosejs Object 并非序列化参数，需要使用 <code>toJSON()</code> 进行转换。</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成 token 并设置用户 token 缓存</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">setToken</span>(<span class="params">user</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// token 生成</span></span><br><span class="line">    <span class="keyword">var</span> accessToken = jwt.sign(user.toJSON(), config.secret, &#123;</span><br><span class="line">        expiresIn: <span class="number">1200</span></span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> accessToken;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><a href="http://blog.fens.me/nodejs-restify/" target="_blank" rel="noopener">restify构建REST服务</a></li><li><a href="http://www.runoob.com/nodejs/nodejs-tutorial.html" target="_blank" rel="noopener">Node.js 教程</a></li><li><a href="https://www.ibm.com/developerworks/cn/web/wa-lo-use-restify-develop-rest-api/index.html?ca=drs-&amp;utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="noopener">1</a></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      PHP 才不是最好的语言呢哼
-    
-    </summary>
-    
-      <category term="Web屠龙刀" scheme="http://jalan.space/categories/Web%E5%B1%A0%E9%BE%99%E5%88%80/"/>
-    
-    
       <category term="NodeJS" scheme="http://jalan.space/tags/NodeJS/"/>
+    
+      <category term="DevOps" scheme="http://jalan.space/tags/DevOps/"/>
     
   </entry>
   
