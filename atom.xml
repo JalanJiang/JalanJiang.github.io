@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jalan.space/"/>
-  <updated>2019-05-15T14:07:39.555Z</updated>
+  <updated>2019-05-15T15:51:10.068Z</updated>
   <id>http://jalan.space/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>假装 Poker2 是 HHKB 的键位调整</title>
+    <link href="http://jalan.space/2019/05/15/2019/change-poker2-hhkb/"/>
+    <id>http://jalan.space/2019/05/15/2019/change-poker2-hhkb/</id>
+    <published>2019-05-15T15:16:00.000Z</published>
+    <updated>2019-05-15T15:51:10.068Z</updated>
+    
+    <content type="html"><![CDATA[<p>因为搬了新家，换了大桌子，MacBook Pro + 电脑支架 + 显示器都齐全了，于是把在柜子里吃灰的 Poker2 拿出来装上准备瘫在椅子上写代码。</p><p>然鹅在公司已经习惯 HHKB 键位的后，Poker2 的键位已经无法正常适应了。果然我已经被 HHKB 驯化了啊……</p><p>为了不让吃灰的键盘作废，我打算改一改 Poker2 的键位，假装它是一块四位数的 HHKB。</p><h2 id="键盘修改器"><a href="#键盘修改器" class="headerlink" title="键盘修改器"></a>键盘修改器</h2><p>首先是准备工作。虽然 Poker2 支持键位编程，但是我这么懒的人，还是直接下个键盘键位修改器吧。</p><p>我下载的是 <a href="https://pqrs.org/" target="_blank" rel="noopener">Karabiner</a>。</p><h2 id="键位替换"><a href="#键位替换" class="headerlink" title="键位替换"></a>键位替换</h2><p><a href="https://pqrs.org/" target="_blank" rel="noopener">Karabiner</a> 支持多种键位映射方式。我这边用到的是简单键位映射和复杂键位映射。</p><h3 id="简单映射"><a href="#简单映射" class="headerlink" title="简单映射"></a>简单映射</h3><p>简单映射即键位的直接替换。我对如下键位做了映射：</p><p><img src="/img/in-post/chang-poker2-hhkb/simple.png" alt=""></p><h3 id="复杂映射"><a href="#复杂映射" class="headerlink" title="复杂映射"></a>复杂映射</h3><p>可以从 <a href="https://github.com/pqrs-org/KE-complex_modifications" target="_blank" rel="noopener">KE-complex_modifications</a> 导入你需要的键位。</p><p>只有方向键的选择涉及到复杂键位。最后选了 <code>Change fn + p/l/;/&#39; to arrow keys</code> 作为方向键。</p><hr><p>至此，改造完成。虽然个别按键的大小和距离还略有区别，但基本可以正常使用了~</p>]]></content>
+    
+    <summary type="html">
+    
+      买不起键盘的话调调就好了
+    
+    </summary>
+    
+      <category term="少年人的冲动" scheme="http://jalan.space/categories/%E5%B0%91%E5%B9%B4%E4%BA%BA%E7%9A%84%E5%86%B2%E5%8A%A8/"/>
+    
+    
+      <category term="生活啊" scheme="http://jalan.space/tags/%E7%94%9F%E6%B4%BB%E5%95%8A/"/>
+    
+  </entry>
   
   <entry>
     <title>在 Laravel 中使用子查询</title>
@@ -449,28 +471,6 @@
     
     
       <category term="Redis" scheme="http://jalan.space/tags/Redis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go 语言入门笔记</title>
-    <link href="http://jalan.space/2019/01/29/2019/begin-go/"/>
-    <id>http://jalan.space/2019/01/29/2019/begin-go/</id>
-    <published>2019-01-29T07:29:00.000Z</published>
-    <updated>2019-03-05T17:56:25.096Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="https://raw.githubusercontent.com/studygolang/gctt-images/master/Learning-Go-s-Concurrency-Through-Illustrations/go.jpeg" alt=""></p><p>工作需要入手了 Go 语言，开发使用的是 <a href="https://github.com/gin-gonic/gin" target="_blank" rel="noopener">Gin Web Framework</a>。</p><p>入手后发现语法和 PHP/Python/JavaScript 之流还是有很大区别的，下面对学习资料及入门笔记做简单整理。</p><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ul><li>Go（又称 Golang ），由 Google 开发</li><li>是一种 <a href="https://segmentfault.com/a/1190000012372372" target="_blank" rel="noopener">静态强类型</a>、<a href="https://www.cnblogs.com/zy1987/p/3784753.html" target="_blank" rel="noopener">编译型</a>、并发型，并具有垃圾回收功能的编程语言</li><li>语法接近 C 语言，但对于变量的声明有所不同</li></ul><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>MacOS 下：</p><p>直接前往 <a href="https://golang.org/dl/" target="_blank" rel="noopener">官网</a> 下载 <code>.pkg</code> 完成安装。</p><h3 id="workspace"><a href="#workspace" class="headerlink" title="workspace"></a>workspace</h3><p>用于放置一个 go 程序员的所有 go 代码和依赖。</p><h4 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h4><ul><li>src：go源码文件</li><li>pkg：package object（编译出的二进制文件）</li><li>bin：可执行文件（编译出的二进制文件）</li></ul><h3 id="GOPATH"><a href="#GOPATH" class="headerlink" title="GOPATH"></a>GOPATH</h3><p>workspace 的路径，默认为 <code>$HOME/go</code>。</p><h4 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h4><p>直接安装 <code>.pkg</code> 文件未设置 GOPATH，需要手动设置一下：</p><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">export</span> <span class="attribute">GOPATH</span>=<span class="variable">$HOME</span>/go</span><br></pre></td></tr></table></figure><p>加入环境变量：</p><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">export</span> <span class="attribute">PATH</span>=<span class="variable">$PATH</span>:$(go env GOPATH)/bin</span><br></pre></td></tr></table></figure><h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello, World"></a>Hello, World</h2><h3 id="入口"><a href="#入口" class="headerlink" title="入口"></a>入口</h3><p>程序入口为：<code>main.main</code>。</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="hello-go"><a href="#hello-go" class="headerlink" title="hello.go"></a>hello.go</h3><p>创建新项目：<code>/Users/jjy/go/src/exampleProject</code>，新建文件 <code>hello.go</code>：</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">"Hello, world!"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p>在 <code>/Users/jjy/go/src/exampleProject</code> 下执行 <code>go install</code>，之后会在 <code>$GOPATH/bin</code> 目录下生成编译后的二进制程序。</p><h3 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">▶ /Users/jjy/<span class="keyword">go</span>/bin/exampleProject</span><br><span class="line">Hello, world!</span><br></pre></td></tr></table></figure><h2 id="一些特性"><a href="#一些特性" class="headerlink" title="一些特性"></a>一些特性</h2><ul><li>函数多返回值</li><li><a href="https://studygolang.com/articles/13875" target="_blank" rel="noopener">并发编程</a></li><li><a href="http://www.runoob.com/go/go-error-handling.html" target="_blank" rel="noopener">错误处理</a></li></ul><h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><ul><li><a href="https://go-zh.org/doc/" target="_blank" rel="noopener">官方文档</a></li><li><a href="https://cyent.github.io/golang/method/overview/" target="_blank" rel="noopener">Go语言学习 - cyent笔记</a></li><li><a href="https://github.com/avelino/awesome-go" target="_blank" rel="noopener">awesome-go</a></li><li><a href="https://github.com/Unknwon/the-way-to-go_ZH_CN" target="_blank" rel="noopener">Go 入门指南</a></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      JavaScript 才不是最好的语言呢哼
-    
-    </summary>
-    
-      <category term="Web屠龙刀" scheme="http://jalan.space/categories/Web%E5%B1%A0%E9%BE%99%E5%88%80/"/>
-    
-    
-      <category term="Go" scheme="http://jalan.space/tags/Go/"/>
     
   </entry>
   
