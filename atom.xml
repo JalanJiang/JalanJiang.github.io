@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jalan.space/"/>
-  <updated>2019-05-18T17:19:13.529Z</updated>
+  <updated>2019-05-28T13:32:14.783Z</updated>
   <id>http://jalan.space/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用 git upstream 从其他远程仓库同步分支</title>
+    <link href="http://jalan.space/2019/05/28/2019/git-upstream/"/>
+    <id>http://jalan.space/2019/05/28/2019/git-upstream/</id>
+    <published>2019-05-28T13:27:00.000Z</published>
+    <updated>2019-05-28T13:32:14.783Z</updated>
+    
+    <content type="html"><![CDATA[<p>有的时候我们会遇到这样的场景，需要从其他仓库合并某个分支到现有仓库中。</p><p>之前实现这个需求我用了一个很智障的做法：把这个仓库需要的分支 copy 一份到本地仓库的临时分支上，然后进行 merge。</p><p>其实只要把想要同步的远程仓库设置为本地仓库的 upstream，就可以很方便地进行同步操作了。</p><h2 id="什么是-upstream？"><a href="#什么是-upstream？" class="headerlink" title="什么是 upstream？"></a>什么是 upstream？</h2><p><img src="/img/in-post/git-upstream.png" alt=""></p><p>当你从 Github 上 clone 一个别人的 Repo 到本地，因为你不是 Repo 的成员，所以无法向 Repo 推送代码，此时对于本地仓库来说这个 Repo 就是 upstream。</p><p>当你把这个 Repo fork 后，再 clone 到本地，此时你 fork 到自己仓库的 Repo 就是本地仓库的 origin。</p><blockquote><p>When a repo is cloned, it has a default remote called origin that points to your fork on GitHub, not the original repo it was forked from.</p></blockquote><blockquote><p>To keep track of the original repo, you need to add another remote named upstream</p></blockquote><blockquote><p>git remote add upstream git://github.com/user/repo_name.git</p></blockquote><p>所以我们可以通过设置 upstream 来获取远程 Repo 的最新代码。</p><h2 id="如何使用？"><a href="#如何使用？" class="headerlink" title="如何使用？"></a>如何使用？</h2><h3 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote <span class="built_in">add</span> upstream http<span class="variable">s:</span>//github.<span class="keyword">com</span>/octocat/Spoon-Knife.git</span><br></pre></td></tr></table></figure><h3 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h3><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v </span><br><span class="line"></span><br><span class="line">origin<span class="string">ssh:</span><span class="comment">//xxx (fetch)</span></span><br><span class="line">origin<span class="string">ssh:</span><span class="comment">//xxx (push)</span></span><br><span class="line">upstream<span class="string">ssh:</span><span class="comment">//yyy (fetch)</span></span><br><span class="line">upstream<span class="string">ssh:</span><span class="comment">//yyy (push)</span></span><br></pre></td></tr></table></figure><h3 id="取消"><a href="#取消" class="headerlink" title="取消"></a>取消</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git branch --<span class="built_in">unset</span>-upstream</span></span><br></pre></td></tr></table></figure><h3 id="拉取"><a href="#拉取" class="headerlink" title="拉取"></a>拉取</h3><p>覆盖本地的 master。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git fetch upstream</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git checkout master</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git rebase upstream/master</span></span><br></pre></td></tr></table></figure><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><a href="http://wiki.jikexueyuan.com/project/github-basics/fork-synced.html" target="_blank" rel="noopener">同步你的 Fork 仓库</a></li><li><a href="https://higoge.github.io/2015/07/06/git-remote03/" target="_blank" rel="noopener">Git远程03：分支的upstream</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      实时同步其他远程仓库
+    
+    </summary>
+    
+      <category term="磨刀石" scheme="http://jalan.space/categories/%E7%A3%A8%E5%88%80%E7%9F%B3/"/>
+    
+    
+      <category term="Git" scheme="http://jalan.space/tags/Git/"/>
+    
+  </entry>
   
   <entry>
     <title>二分查找中 mid 值的计算方法</title>
@@ -449,28 +471,6 @@
     
     
       <category term="Python" scheme="http://jalan.space/tags/Python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>《白蛇：缘起》：前世锁珠钗，此生断桥缘</title>
-    <link href="http://jalan.space/2019/02/02/2019/white-snake/"/>
-    <id>http://jalan.space/2019/02/02/2019/white-snake/</id>
-    <published>2019-02-02T13:53:00.000Z</published>
-    <updated>2019-05-02T14:54:43.435Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="/img/in-post/white-snake/snake.jpeg" alt=""></p><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>离在电影院里看《大鱼海棠》已经过去两年多了，那时写了一篇 <a href="/2016/07/07/2016-07-09-big-fish-and-chinese-flowering-crabapple/">《大鱼·海棠》——没有想象中的那么好</a>，觉得剧情与制作上都不如《大圣归来》来得惊艳。</p><p>今天约了老郑，想起前段时间在微博上看到了《白蛇：缘起》的动画宣传，果断入手两张票奔赴金逸。</p><p>两个人忐忑地坐在儿童厅里，本以为会有一堆熊孩子叽叽喳喳，直到看到 “十八禁” 的画面后恍然：这绝对不是一部儿童向的动画。</p><h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h3 id="剧情"><a href="#剧情" class="headerlink" title="剧情"></a>剧情</h3><p>《白娘子传奇》已是家喻户晓的故事，这部电影带上这个大 IP 讲起许仙和白娘子前世的故事，可谓 “旧瓶装新酒”。</p><p>而这 “新酒” 啊，真香。</p><blockquote><p>我们好奇为什么白素贞那么义无反顾地爱一个人，所以就想知道前面到底发生什么事情，这个切入点非常有意思，这既是白蛇爱情的缘起，也是电影故事的缘起。</p></blockquote><h3 id="人物"><a href="#人物" class="headerlink" title="人物"></a>人物</h3><p><img src="/img/in-post/white-snake/xuan.jpeg" alt=""></p><p>大爱许宣，不知情的以为是福建人叫了许仙的名字。</p><p>少年人阿宣，这一世不再是文弱书生了，他成了山野间的少年，善良活泼，勇敢坚毅，甚至颇有几分 “逍遥” 的味道。</p><p>不仅仅是身份的不同，他也完全打破了传说中对许仙的所有设定。</p><p>坚毅勇敢，从不认命。即便人妖殊途，他还是毅然决然地放弃了人的身份，主动变成最弱最无能的小妖，只为了和白蛇在一起。这哪是著名渣男许仙呢？</p><blockquote><p>如果不在一起，我现在就后悔。</p></blockquote><p>白素贞那么义无反顾地爱一个人，或许就是因为许仙前世的付出吧。</p><h3 id="制作"><a href="#制作" class="headerlink" title="制作"></a>制作</h3><p><img src="/img/in-post/white-snake/river.jpeg" alt=""></p><p>四个字：<strong>精致柔和</strong>！</p><p>特别是山水城镇的全景描绘，现代画风与中国传统水墨画风的交融十分惊艳。</p><p>片中有来有回的打斗场景也让人目不暇接，充满观赏性。（打斗场面比爱情线好看多了）</p><p>虽然人物表情还是略显僵硬，但是小白真是太好看了，prprprpr……</p><h3 id="音乐"><a href="#音乐" class="headerlink" title="音乐"></a>音乐</h3><p>老船夫摇桨驱舟时突然唱出一句<a href="https://music.163.com/song?id=201487&amp;userid=53623203" target="_blank" rel="noopener">《渡情》</a> 让人会心一笑。</p><p>许宣嘲笑他唱的歌太老，自己清唱起一首<a href="https://music.163.com/song?id=1342466454&amp;userid=53623203" target="_blank" rel="noopener">《何须问》</a>来。</p><p>《何须问》这首歌的歌词是这样的：</p><blockquote><p>君不见东流水<br>来时无踪迹 一去无穷已<br>君不见城上日<br>今暝没山去 明朝复更出<br>何须问 浮生情<br>原知浮生是梦中<br>何须问 浮生情<br>只此浮生是梦中<br>只此浮生是梦中</p></blockquote><p>歌词出自几处：</p><blockquote><p>君不见东流水，一去无穷已。<br>—— 唐·贺兰进明《行路难五首》</p></blockquote><blockquote><p>来是无迹去无踪，去与来时是一同。何须更问浮生事，只此浮生是梦中。<br>——唐·鸟窠道林禅师</p></blockquote><blockquote><p>君不见城上日，今暝没尽去，明朝复更出。<br>——南北朝·鲍照《拟行路难十八首》</p></blockquote><p>无论是画风、人物建模还是曲调歌词，都是中国古典的味道。</p><p>而影片末尾小白再遇许仙时又放起了 <a href="https://music.163.com/song?id=201489&amp;userid=53623203" target="_blank" rel="noopener">《前世今生》</a>，令人莞尔。</p><h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><p>电影散场后吃了烧烤喝了小酒，八九点钟带着微微的醉意在福州夜晚的街道上一个人走着，有几分难得的轻松。</p><p>想到 “缘起” 的今生如此艰辛，而来世又要斗秃驴法海，且逃不过雷峰塔一劫，看来又是艰难的一世。</p><p>而我连来世都没有，想想真是轻松快活呢。</p>]]></content>
-    
-    <summary type="html">
-    
-      《白蛇：缘起》观后感
-    
-    </summary>
-    
-      <category term="少年人的冲动" scheme="http://jalan.space/categories/%E5%B0%91%E5%B9%B4%E4%BA%BA%E7%9A%84%E5%86%B2%E5%8A%A8/"/>
-    
-    
-      <category term="影评" scheme="http://jalan.space/tags/%E5%BD%B1%E8%AF%84/"/>
     
   </entry>
   
