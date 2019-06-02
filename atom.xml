@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jalan.space/"/>
-  <updated>2019-05-28T13:32:14.783Z</updated>
+  <updated>2019-06-02T13:08:05.605Z</updated>
   <id>http://jalan.space/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>如何使用搬瓦工搭建 Shadowsocks 服务器</title>
+    <link href="http://jalan.space/2019/06/02/2019/build-bandwagonhost-ss/"/>
+    <id>http://jalan.space/2019/06/02/2019/build-bandwagonhost-ss/</id>
+    <published>2019-06-02T12:02:00.000Z</published>
+    <updated>2019-06-02T13:08:05.605Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="/img/in-post/shadowsocks/freedom.jpeg" alt=""></p><p>这几天因为没有梯子被迫使用百度搜索非常难过，程序员果然离不开墙外调查啊……于是打算花费一笔小钱搞一个自己的梯子。</p><h2 id="什么是-Shadowsocks？"><a href="#什么是-Shadowsocks？" class="headerlink" title="什么是 Shadowsocks？"></a>什么是 Shadowsocks？</h2><p>首先附上 <a href="https://github.com/shadowsocks" target="_blank" rel="noopener">Github 仓库</a>。</p><p>Shadowsocks（简称SS）是一种基于 <a href="https://zh.wikipedia.org/wiki/SOCKS#SOCK5" target="_blank" rel="noopener">Socks5</a> 代理方式的加密<strong>传输协议</strong>。现在较为广泛地用来突破 <a href="https://zh.wikipedia.org/wiki/%E9%98%B2%E7%81%AB%E9%95%BF%E5%9F%8E" target="_blank" rel="noopener">GFW</a>。</p><h3 id="运行原理"><a href="#运行原理" class="headerlink" title="运行原理"></a>运行原理</h3><ul><li>使用特定的中转服务器完成数据传输<ol><li>用户就可以通过特定软件连接代理服务器</li><li>代理服务器获取网站内容并回传给用户</li></ol></li><li>为防止流量被识别和拦截<ul><li>服务器和客户端软件会要求提供密码和加密方式</li><li>数据传输期间会对传入和传出流量进行加密</li></ul></li></ul><h3 id="代理流程"><a href="#代理流程" class="headerlink" title="代理流程"></a>代理流程</h3><p><img src="/img/in-post/shadowsocks/shadowsocks.png" alt=""></p><p>其中：</p><ul><li>本机运行 <code>local.py</code>，默认监听 1080 端口，该端口代理浏览器请求</li><li>服务器运行 <code>server.py</code></li></ul><ol><li>例如此时要访问 Google，浏览器与 <code>localhost:1080</code> 进行一次 sock5 协议通信</li><li>完成通信后 <code>local</code> 知道要访问 Google</li><li><code>local</code> 将请求加密，并通过 TCP 协议发往海外服务器</li><li>海外服务器接收请求进行解密，访问 Google</li><li>海外服务器把请求后的结果返回给 <code>local</code></li><li><code>local</code> 进行解密后返回给浏览器</li></ol><h2 id="购买服务器"><a href="#购买服务器" class="headerlink" title="购买服务器"></a>购买服务器</h2><p>看了一圈各种 VPS 供应商，相比较来说还是搬瓦工性价比更高些，于是最后还是选择了搬瓦工。</p><ul><li><a href="https://bwh88.net/index.php" target="_blank" rel="noopener">搬瓦工官网</a></li><li><a href="https://www.bandwagonhost.net/" target="_blank" rel="noopener">搬瓦工中文网</a>，有各种教程和优惠券</li></ul><p>购买服务器没啥好说的，根据自己的需求进行选择。<a href="https://www.bandwagonhost.net/" target="_blank" rel="noopener">搬瓦工中文网</a> 也有服务器配置的推荐。</p><p>我购买的是 49.9 刀一年的套餐，平均下来一个月也就 27 软妹币左右。<a href="https://csming1995.github.io/" target="_blank" rel="noopener">csming</a> 给了大力赞助，感恩！</p><p>搬瓦工的支付支持 Alipay，所以也不需要找人代付什么的，很方便。</p><h2 id="安装-Shadowsocks"><a href="#安装-Shadowsocks" class="headerlink" title="安装 Shadowsocks"></a>安装 Shadowsocks</h2><p>搬瓦工已经把一键安装 SS 的按钮隐藏起来了，所以我们需要通过命令行手动安装 SS。</p><h3 id="重装系统"><a href="#重装系统" class="headerlink" title="重装系统"></a>重装系统</h3><p>先在 Main controls 中暂停当前正在运行的服务器。</p><p><img src="/img/in-post/shadowsocks/install-os-1.jpg" alt=""></p><p>前往 Install new OS 安装新系统。选择 <code>centos-6-x86-bbr</code> 进行安装。</p><p><img src="/img/in-post/shadowsocks/install-os-2.jpg" alt=""></p><p>等待一段时间，安装完成后会在该页面告知服务器的端口号和密码，记得保存下来。</p><h3 id="登录服务器"><a href="#登录服务器" class="headerlink" title="登录服务器"></a>登录服务器</h3><p>使用 ssh 命令登录服务器。端口和密码在上述的安装完成页面有给到，IP 地址可以在 Main controls 获取。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -p&lt;端口&gt; root@&lt;IP 地址&gt;</span><br></pre></td></tr></table></figure><p>回车后按照提示输入密码即可。</p><p>当然，你也可以使用搬瓦工自带的控制台操作服务器，只是我体验了一下觉得很卡，还是 ssh 更好些。</p><h3 id="命令行安装"><a href="#命令行安装" class="headerlink" title="命令行安装"></a>命令行安装</h3><h4 id="下载-sh-脚本"><a href="#下载-sh-脚本" class="headerlink" title="下载 .sh 脚本"></a>下载 .sh 脚本</h4><p>因为 CentOS 系统是刚安装的新系统，我们先在系统上安装一下 <code>wget</code>：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install wget</span><br></pre></td></tr></table></figure><p>然后下载 shadowsocks.sh：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget — no-check-certificate -O shadowsocks.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks.sh</span><br></pre></td></tr></table></figure><p>下载过程中按照命令行的提示输入 y 进行下载确认。</p><h4 id="赋予脚本可执行权限"><a href="#赋予脚本可执行权限" class="headerlink" title="赋予脚本可执行权限"></a>赋予脚本可执行权限</h4><p>将脚本的权限修改为可执行。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x shadowsocks.sh</span><br></pre></td></tr></table></figure><h4 id="执行脚本"><a href="#执行脚本" class="headerlink" title="执行脚本"></a>执行脚本</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./shadowsocks.sh 2&gt;&amp;1 | tee shadowsocks.log</span><br></pre></td></tr></table></figure><p>执行脚本时系统就在安装 shadowsocks。在这个过程中我们还需要根据命令行提示输入以下信息：</p><ol><li>密码</li><li>默认端口号（使用页面给出的默认端口号就可以了）</li><li>选择加密方式</li></ol><p>完成安装后会展示如下界面：</p><p><img src="/img/in-post/shadowsocks/success.png" alt=""></p><p>Enjoy it!!!</p>]]></content>
+    
+    <summary type="html">
+    
+      自由之翼，墙外调查！
+    
+    </summary>
+    
+      <category term="磨刀石" scheme="http://jalan.space/categories/%E7%A3%A8%E5%88%80%E7%9F%B3/"/>
+    
+    
+      <category term="Shadowsocks" scheme="http://jalan.space/tags/Shadowsocks/"/>
+    
+  </entry>
   
   <entry>
     <title>使用 git upstream 从其他远程仓库同步分支</title>
@@ -449,28 +471,6 @@
     
     
       <category term="Redis" scheme="http://jalan.space/tags/Redis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python 实现队列的几种方式</title>
-    <link href="http://jalan.space/2019/02/05/2019/python-queue/"/>
-    <id>http://jalan.space/2019/02/05/2019/python-queue/</id>
-    <published>2019-02-05T05:52:00.000Z</published>
-    <updated>2019-03-05T17:56:25.096Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="什么是队列"><a href="#什么是队列" class="headerlink" title="什么是队列"></a>什么是队列</h2><ul><li>队列是一种特殊的线性表</li><li>是一种先进先出（FIFO）的数据结构</li><li>只允许在表的前端（front）进行删除操作，而在表的后端（rear）进行插入操作</li><li>进行插入操作的端称为队尾，进行删除操作的端称为队头</li><li>队列中没有元素时，称为空队列</li></ul><h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="借用列表"><a href="#借用列表" class="headerlink" title="借用列表"></a>借用列表</h3><p>利用 <code>list</code> 实现对队列的模拟：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建列表</span></span><br><span class="line">q = []</span><br><span class="line"><span class="comment"># 入队</span></span><br><span class="line">q.append(<span class="string">"a"</span>)</span><br><span class="line"><span class="comment"># 出队</span></span><br><span class="line"><span class="keyword">del</span> q[<span class="number">0</span>]</span><br></pre></td></tr></table></figure><h3 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h3><p>双端队列，即可实现栈，也可实现队列。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建队列</span></span><br><span class="line">d = collections.deque()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 入队</span></span><br><span class="line">d.append(<span class="number">1</span>) <span class="comment">#从队尾</span></span><br><span class="line">d.appendleft(<span class="number">2</span>) <span class="comment">#从队头</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 出队</span></span><br><span class="line">d.pop() <span class="comment">#从队尾</span></span><br><span class="line">d.popleft() <span class="comment">#从队头</span></span><br></pre></td></tr></table></figure><p>详见官方文档：<a href="https://docs.python.org/3/library/collections.html?highlight=collection#deque-objects" target="_blank" rel="noopener">deque objects</a>。</p><h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><h3 id="树的层次遍历"><a href="#树的层次遍历" class="headerlink" title="树的层次遍历"></a>树的层次遍历</h3><p><a href="https://www.nowcoder.com/practice/7fe2212963db4790b57431d9ed259701?tpId=13&amp;tqId=11175&amp;tPage=1&amp;rp=1&amp;ru=/ta/coding-interviews&amp;qru=/ta/coding-interviews/question-ranking" target="_blank" rel="noopener">从上往下打印二叉树</a>，借助队列实现。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, x):</span></span><br><span class="line"><span class="comment">#         self.val = x</span></span><br><span class="line"><span class="comment">#         self.left = None</span></span><br><span class="line"><span class="comment">#         self.right = None</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="comment"># 返回从上到下每个节点值列表，例：[1,2,3]</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">PrintFromTopToBottom</span><span class="params">(self, root)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> root <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line">        <span class="comment"># write code here</span></span><br><span class="line">        queue = []</span><br><span class="line">        res = []</span><br><span class="line">        queue.append(root)</span><br><span class="line">        <span class="keyword">while</span> len(queue) &gt; <span class="number">0</span>:</span><br><span class="line">            q_len = len(queue)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, q_len):</span><br><span class="line">                r = queue[<span class="number">0</span>]</span><br><span class="line">                <span class="keyword">del</span> queue[<span class="number">0</span>]</span><br><span class="line">                <span class="keyword">if</span> r <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                res.append(r.val)</span><br><span class="line">                queue.append(r.left)</span><br><span class="line">                queue.append(r.right)</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      人生苦短，我用 Python
-    
-    </summary>
-    
-      <category term="Web屠龙刀" scheme="http://jalan.space/categories/Web%E5%B1%A0%E9%BE%99%E5%88%80/"/>
-    
-    
-      <category term="Python" scheme="http://jalan.space/tags/Python/"/>
     
   </entry>
   
