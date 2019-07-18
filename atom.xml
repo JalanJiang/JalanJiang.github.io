@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jalan.space/"/>
-  <updated>2019-07-15T13:36:16.330Z</updated>
+  <updated>2019-07-18T14:16:05.643Z</updated>
   <id>http://jalan.space/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>碎碎念</title>
+    <link href="http://jalan.space/2019/07/18/2019/bibi/"/>
+    <id>http://jalan.space/2019/07/18/2019/bibi/</id>
+    <published>2019-07-18T13:41:00.000Z</published>
+    <updated>2019-07-18T14:16:05.643Z</updated>
+    
+    <content type="html"><![CDATA[<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script><div id="hbe-security">  <div class="hbe-input-container">  <input type="password" class="hbe-form-control" id="pass" placeholder="薯条是？" />    <label for="pass">薯条是？</label>    <div class="bottom-line"></div>  </div></div><div id="decryptionError" style="display: none;">Incorrect Password!</div><div id="noContentError" style="display: none;">No content to display!</div><div id="encrypt-blog" style="display:none">U2FsdGVkX1+h6YmjRW0XVdSxHL8TdeNJxj853celTp6cDwQVUDQzQvXEZ6rZ+YG18ihaXQOkGvCKIvG9n3mIv9IPdnlEnMLmf72mT1BrVJD7unQ/+zagq+hqOgUuoC9SyCf6m7sffXi9sKISLIUxD0BErS1mp6aQPUXcfh6G0QBzy7wG7r6mScVubWK2NlYxre4zP03BakvQQ19N3xj35p2gSX7C0BAP8lxRpURQc5tkpKeK8wMLsAbET7ccOL1J0mHh7ugzhE/Vk8x5qyvlGqgHAano0Rxqd67iWBloyUmAt2QR2q2gaA36fyPpoRereuxN+ppca/0pBj/0d2+r5sNkLtSMReEBALOYudtyhr006EX8J/BCLdPZFaj5pVu2pFuNfT12KcmTBE/dDhlEHHH2eGsUugix82fsdIx3Z7j0O62bJFeZoi5XGQOyzdt8S6cwf9danIqziprfiorCmzpSWUlBftzi+I+hI96ZItygoFwSobDxQAzfxXyQZzDNw+Tb5HlnGEye7x3QWKBI9xjj9OQiApnON4xBIufiOjwFRYR6iopMtOQj2mtpaQtBA/4ZSrH0pr9eP8mMY7uR0vEV36YZTF9VQR3UWr7+ykLmozw/N6lYtPciQi6sIti/qzhXhCGBScY1EnTNxOv4m6FZW61Y2oTQIUnalxOOPh9Kv5bTN6nmXzoFlnaeBOYLpVWs81Z68Hb8O4x0Y4XRd3hEUwazXMeDej3UlvSL342smwh+VhUDjQ0pGOZEtozEXOcjzpIrAJEqJdj/GMd63qQRfw4S2E23PGzcc6MCt3+CaOcBtQTSecGROM529iCGsIlWSS/yY6gV1YmLuc1t1A8+aktir/MbGpXUrvFHL75jiwI25YcFv9fFdemzIOFBd5f0kUf5b846KXSQcyQiqA==</div><script src="/lib/crypto-js.js"></script><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
+    
+    <summary type="html">
+    
+      有些东西只能小声 bb
+    
+    </summary>
+    
+      <category term="少年人的冲动" scheme="http://jalan.space/categories/%E5%B0%91%E5%B9%B4%E4%BA%BA%E7%9A%84%E5%86%B2%E5%8A%A8/"/>
+    
+    
+      <category term="生活啊" scheme="http://jalan.space/tags/%E7%94%9F%E6%B4%BB%E5%95%8A/"/>
+    
+  </entry>
   
   <entry>
     <title>从经典算法题看时间复杂度</title>
@@ -447,28 +469,6 @@
     
     
       <category term="PHP" scheme="http://jalan.space/tags/PHP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Gin 框架构建 RESTFul API 之请求参数验证</title>
-    <link href="http://jalan.space/2019/04/06/2019/go-gin-validate/"/>
-    <id>http://jalan.space/2019/04/06/2019/go-gin-validate/</id>
-    <published>2019-04-06T14:59:00.000Z</published>
-    <updated>2019-04-08T14:39:29.654Z</updated>
-    
-    <content type="html"><![CDATA[<p>Gin 使用 <a href="https://github.com/go-playground/validator" target="_blank" rel="noopener">go-playground/validator.v8 </a> 进行验证，详细文档见 <a href="http://godoc.org/gopkg.in/go-playground/validator.v8#hdr-Baked_In_Validators_and_Tags" target="_blank" rel="noopener">package validator</a>。</p><p>假设我们现在有一个用户登录的接口，使用 <code>POST</code> 方法接收 <code>email</code> 和 <code>password</code> 两个参数。</p><h2 id="模型绑定"><a href="#模型绑定" class="headerlink" title="模型绑定"></a>模型绑定</h2><p>通过模型绑定，我们能<strong>将请求体绑定到类型</strong>。</p><h3 id="模型定义"><a href="#模型定义" class="headerlink" title="模型定义"></a>模型定义</h3><p>定义一个名为 <code>LoginForm</code> 的结构体，将 <code>eamil</code> 和 <code>password</code> 两个参数放置其中。</p><figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="type">LoginForm</span> struct &#123;</span><br><span class="line"><span class="type">Email</span> string</span><br><span class="line"><span class="type">Password</span> string</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="标签设置"><a href="#标签设置" class="headerlink" title="标签设置"></a>标签设置</h2><p>对于绑定的字段，我们需要对其设置相应的绑定标签。</p><p>具体的标签列表可查看 <a href="https://godoc.org/gopkg.in/go-playground/validator.v8#hdr-Baked_In_Validators_and_Tags" target="_blank" rel="noopener">官方文档</a>。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type LoginForm <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">Email <span class="built_in">string</span> `form:<span class="string">"email"</span> binding:<span class="string">"required"</span>` <span class="comment">// 绑定表单类型的数据，且字段必须存在</span></span><br><span class="line">Password <span class="built_in">string</span> `form:<span class="string">"password"</span> binding:<span class="string">"required"</span>`</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="绑定方法"><a href="#绑定方法" class="headerlink" title="绑定方法"></a>绑定方法</h2><h3 id="Must-bind"><a href="#Must-bind" class="headerlink" title="Must bind"></a>Must bind</h3><p>一旦绑定失败则直接返回 400 错误。</p><p>相关方法：</p><ul><li><code>Bind</code></li><li><code>BindJSON</code></li><li><code>BindQuery</code></li></ul><h3 id="Should-bind"><a href="#Should-bind" class="headerlink" title="Should bind"></a>Should bind</h3><p>一旦失败，并不会立即响应 400 错误，而是将错误信息返回给上下文环境，开发者需要自行处理。</p><p>相关方法：</p><ul><li><code>ShouldBind</code></li><li><code>ShouldBindJSON</code></li><li><code>ShouldBindQuery</code></li></ul><h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">type <span class="type">LoginForm</span> <span class="class"><span class="keyword">struct</span> </span>&#123;</span><br><span class="line"><span class="type">Email</span> string `form:<span class="string">"email"</span> binding:<span class="string">"required"</span>`</span><br><span class="line"><span class="type">Password</span> string `form:<span class="string">"password"</span> binding:<span class="string">"required"</span>`</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Login</span><span class="params">(<span class="built_in">c</span> *gin.Context)</span></span> &#123;</span><br><span class="line"><span class="keyword">var</span> loginForm <span class="type">LoginForm</span></span><br><span class="line">err := <span class="built_in">c</span>.<span class="type">ShouldBind</span>(&amp;loginForm)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line"><span class="comment">// 相关错误处理</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><a href="https://blog.csdn.net/keytounix/article/details/79336574" target="_blank" rel="noopener">golang实战使用gin+xorm搭建go语言web框架restgo详解5.5 控制器模型绑定</a></li><li><a href="https://segmentfault.com/a/1190000013297705#articleHeader6" target="_blank" rel="noopener">Gin实践 连载三 搭建Blog API’s（二）</a></li><li><a href="https://gin-gonic.com/zh-cn/docs/" target="_blank" rel="noopener">Gin 中文文档</a></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      Model binding and validation
-    
-    </summary>
-    
-      <category term="Web屠龙刀" scheme="http://jalan.space/categories/Web%E5%B1%A0%E9%BE%99%E5%88%80/"/>
-    
-    
-      <category term="Go" scheme="http://jalan.space/tags/Go/"/>
     
   </entry>
   
