@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jalan.space/"/>
-  <updated>2019-07-21T09:02:46.678Z</updated>
+  <updated>2019-07-21T09:07:00.158Z</updated>
   <id>http://jalan.space/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>碎碎念</title>
+    <link href="http://jalan.space/2019/07/21/2019/bibi/"/>
+    <id>http://jalan.space/2019/07/21/2019/bibi/</id>
+    <published>2019-07-21T13:41:00.000Z</published>
+    <updated>2019-07-21T09:07:00.158Z</updated>
+    
+    <content type="html"><![CDATA[<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script><div id="hbe-security">  <div class="hbe-input-container">  <input type="password" class="hbe-form-control" id="pass" placeholder="薯条是？" />    <label for="pass">薯条是？</label>    <div class="bottom-line"></div>  </div></div><div id="decryptionError" style="display: none;">Incorrect Password!</div><div id="noContentError" style="display: none;">No content to display!</div><div id="encrypt-blog" style="display:none">U2FsdGVkX1/QyOpw0GUvJwVrEuphQ7oN/Ae5IJuwCxjECxl4ptPN+NVGxPhiRaR9FczS3B6cxvV6g4GVSsN7udfb34oJvmp8bPoXdb/QbUu5YiReWsZJuQRaQT6RxFXQ06S9u9Kb4ArGTuAzYE1H9q9So9EFmowo3R1XvTGV3gNddSYY2r6P+FUrgSIdRG1TvjSgNqZ3YDVAqdTSPiT6rTt0b1wEcmZgseUxTkFzXbqBN3/O6XhZPv1l5QQ3DtZbHDzMzWHvXP3wkW6Q4IMCPHniAbg51P00xJMcs6Q5rZ1unRHs40hUmUDM/fA+A2B3sOr01ZlvJSRK7azm2KZInlHI6xNGfbhwSAnle0uruuoPym1B7/9B4SeJxAivYFSfbAQq0/besACDgEemNnfgDjvhHS3krCKEaM2RiX+0gWEk6dfstiSU/UlJyT/j8uS9mlJJnH0jFcjFUJUwrIDdKEM90F1DZlN9eufgTiOwprnpjEGaUrVd/8wL7EbET8GNokGSq8IJdA4Km0a3A+G28kXlnLio/e73QQd6bbV/ncsfJ0/zW14AEsNjSWnnLw7vEJ4t2qYxnVFw00KnneBjv4v0UAGEeCsNUK1VSIhnAd+5POx2CF06lDLQEWLrj4jnAEsuHaC9lMcvvmAIE9+9EGWt1igxwx7HLyC3NqzHGVAwokf8bZKL+MGmyOM5yznQRe3OtvPQJlE6bu83VNMRCmP19cT75u1Rij0Y/UQsTRUCIMTlPYybHynJau6ubv1WQTv3rb8UAmRpOUjyUjPAFAONWjQERPCbdAKmLL3UA7zmi8G/FVHZYqhGDtD3d6VO1kFp388gLw+y3pl53im0MEY3xH5p9whn1eyvMGcFT0wi6lBPVkqC4kxfPPxXXRcuZaUQOrm4imDabeRNc+L6Np13Wc8lgTeZU8jeOVA66yjNyth26kMtoGhwTG9efpA/ZdHs7Ep7bDMLXfopFYaizXHYB7MhYsMBaifxF91iYqeCZXUhOA5SJH7ugCv1p1b1WJoGg5ooPAtkCOjvnakdo1V6Ouqe3izBNafsGYvKJ/7KyKrJq0nHc+fS178qRb772Bt49H0FCwBU78Kgb9usCzKA2+RDvDPkP2TEs1jI5WJliuoeEcruYl8cu/k6dGJETfpJB2AHqhVyTaqZviIc173Zf2NBFQC39barQcTojidC7RP6B3BAMPzelj5kQtpLJTCA0giFtSlmXtKfCfX2nDy1dengxz80lZr0Dxhr6z70jX73/FES37wB5egyjGiZkYzzIkvRLkjui6KA891D+5nawseSWT8on3nJppajJtRKkxdLASB7s1hfjlDbQoY8JD9A4PrcEkPSZinwEOgwrZ44ZcFiyVDEvUwxMPPQiKZF/Etwsfx4YaCqbQEsMPcv</div><script src="/lib/crypto-js.js"></script><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
+    
+    <summary type="html">
+    
+      有些东西只能小声 bb
+    
+    </summary>
+    
+      <category term="少年人的冲动" scheme="http://jalan.space/categories/%E5%B0%91%E5%B9%B4%E4%BA%BA%E7%9A%84%E5%86%B2%E5%8A%A8/"/>
+    
+    
+      <category term="生活啊" scheme="http://jalan.space/tags/%E7%94%9F%E6%B4%BB%E5%95%8A/"/>
+    
+  </entry>
   
   <entry>
     <title>Cookie Cutter？—— ReplicationController 中的 Pod 模板</title>
@@ -35,28 +57,6 @@
     
     
       <category term="Kubernetes" scheme="http://jalan.space/tags/Kubernetes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>碎碎念</title>
-    <link href="http://jalan.space/2019/07/18/2019/bibi/"/>
-    <id>http://jalan.space/2019/07/18/2019/bibi/</id>
-    <published>2019-07-18T13:41:00.000Z</published>
-    <updated>2019-07-18T14:16:05.643Z</updated>
-    
-    <content type="html"><![CDATA[<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script><div id="hbe-security">  <div class="hbe-input-container">  <input type="password" class="hbe-form-control" id="pass" placeholder="薯条是？" />    <label for="pass">薯条是？</label>    <div class="bottom-line"></div>  </div></div><div id="decryptionError" style="display: none;">Incorrect Password!</div><div id="noContentError" style="display: none;">No content to display!</div><div id="encrypt-blog" style="display:none">U2FsdGVkX1+46557xMHQMDNuJcW6w1WfLHHMEs9QQpZr4WIHBIO2NNwqGmWLGhO744VzZK6Q6aOmcqQzkEYOKuNYkLXykVN+W1KeDwcgYtSqc42uxPIVB7GeLxGI2kw7C5aPe2A62ME2nt2XulQRLvgtztnNQus8K6kKOx7Y8KHyJpS6qEJg6Qz19J1snvFOrv6CO2FoxRjdXrWs2lQ/vHyptOrqkmilUSE+EXjxtGSrFfGC6BdM3sEBptlNSzMHfkfOCg5DqTHSJBVoXEvGr/SDYAdSdrYOhk7L+K2U/9ZY+UAVOrz8OM8r0+2fz7j+FTYQ1VpbQoxm8xjV3RFTaP68dLvfsqm5EWnlk8N3u7J9zpAb3B7AtPmt7ZdT6fxKLeUBNv22iSx3xuLSyrfjvPsFW7FUjmGodf4ntPbOqMWSnNlwhHDyIh2YklKZ9SuF7WbX96Uh2BJxZcnJ9qtEfPg1KIdy9I/5xTCGbEqSR8wDfrpjfx1MSXw2jcbbn3oMcIgR72QeW66NlKUM12Y8SWES0HGDKwYlCukoXXicExPqYsLiq68FPQOwK3S1ZVxOspKsi1jvbEHzT8BhAyAFR284ja71/XkWm9yQ0+7W54SYYAXMayT3+vO2A8LbW3sF9hdk+lRBy5UOxA64Idx7an5eFfK7ZNGf13ZSIKjE/ac65S4nULZVaaUZIk2YB37l1if3bufmNg0UmUW/pnxj7Eomtna2oJnoC3D+z0AmMLlTdyicho0osoVInKkyj/dmJOiZirkWxS/TUj+aT8GmULFVr3vgzGegCRlqE87ugHUWbnj+UNop8xuzV4OA80rZBWkRsAxYcnQoYTjBbR6Ocla15MjIFVEgngaIqojiuy5ECnnmnVTkIFiYwSBjquhsiCVb3/nbV1t2tHCcQ+Cs6A==</div><script src="/lib/crypto-js.js"></script><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
-    
-    <summary type="html">
-    
-      有些东西只能小声 bb
-    
-    </summary>
-    
-      <category term="少年人的冲动" scheme="http://jalan.space/categories/%E5%B0%91%E5%B9%B4%E4%BA%BA%E7%9A%84%E5%86%B2%E5%8A%A8/"/>
-    
-    
-      <category term="生活啊" scheme="http://jalan.space/tags/%E7%94%9F%E6%B4%BB%E5%95%8A/"/>
     
   </entry>
   
@@ -144,9 +144,9 @@
       <category term="技多不压身" scheme="http://jalan.space/categories/%E6%8A%80%E5%A4%9A%E4%B8%8D%E5%8E%8B%E8%BA%AB/"/>
     
     
-      <category term="Git" scheme="http://jalan.space/tags/Git/"/>
-    
       <category term="docsify" scheme="http://jalan.space/tags/docsify/"/>
+    
+      <category term="Git" scheme="http://jalan.space/tags/Git/"/>
     
   </entry>
   
