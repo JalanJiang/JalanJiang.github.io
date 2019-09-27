@@ -232,7 +232,9 @@ div {
     .post .post-content pre code {
       padding: 0 2em; }
     .post .post-content p {
-      margin: 0 0 1.234em; }
+      margin: 0 0 1.234em;
+      word-break: break-word;
+      overflow-wrap: break-word; }
       .post .post-content p code {
         display: inline-block;
         margin: 0 5px;
@@ -279,6 +281,25 @@ div {
         word-break: normal; }
         .post .post-content ul a:hover, .post .post-content ol a:hover {
           text-decoration: underline; }
+    .post .post-content .tagcloud {
+      margin: 0 0 30px 0; }
+      .post .post-content .tagcloud a {
+        padding: 0px 5px;
+        margin: 3px;
+        display: inline-block;
+        border: 1px solid #808080;
+        border-radius: 999em;
+        color: #aaa; }
+        .post .post-content .tagcloud a:hover {
+          color: #fff;
+          border: 1px solid #808080;
+          background: #808080; }
+    .post .post-content .one-tag-list {
+      margin: 30px 0; }
+      .post .post-content .one-tag-list .tag-name .tag-text {
+        margin-left: 5px;
+        font-size: 16px;
+        font-weight: bold; }
   .post .tags {
     padding-bottom: 1em; }
     .post .tags a {
@@ -889,6 +910,15 @@ figure.highlight,
 .highlight.c .code .built_in {
   color: #0086b3; }
 
+.highlight.clj .code .builtin-name {
+  color: #df5000; }
+
+.highlight.clj .code .name {
+  color: #795da3; }
+
+.highlight.clj .code .number {
+  color: #0086b3; }
+
 .highlight.cs .code .preprocessor,
 .highlight.cs .code .preprocessor .keyword {
   color: #333; }
@@ -1165,6 +1195,12 @@ figure.highlight,
 .highlight.less .selector-class,
 .highlight.less .selector-tag {
   color: #795da3; }
+
+.highlight.lisp .code .name {
+  color: #df5000; }
+
+.highlight.lisp .code .number {
+  color: #0086b3; }
 
 .highlight.scss .tag,
 .highlight.scss .at_rule,
