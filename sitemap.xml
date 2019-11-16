@@ -4,7 +4,7 @@
   <url>
     <loc>http://jalan.space/2019/11/16/2019/go-character-string-range/</loc>
     
-    <lastmod>2019-11-16T15:58:41.588Z</lastmod>
+    <lastmod>2019-11-16T16:00:26.240Z</lastmod>
     
   </url>
   
@@ -387,14 +387,14 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/history/index.html</loc>
+    <loc>http://jalan.space/2019/01/26/2019/use-circleci-to-deploy/</loc>
     
     <lastmod>2019-03-05T17:56:25.097Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://jalan.space/2019/01/26/2019/use-circleci-to-deploy/</loc>
+    <loc>http://jalan.space/history/index.html</loc>
     
     <lastmod>2019-03-05T17:56:25.097Z</lastmod>
     
@@ -408,7 +408,7 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2018/11/10/2018/venom/</loc>
+    <loc>http://jalan.space/2019/02/14/2019/python-config-file/</loc>
     
     <lastmod>2019-03-05T17:56:25.096Z</lastmod>
     
@@ -422,21 +422,7 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2019/02/14/2019/python-config-file/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.096Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://jalan.space/2019/01/16/2019/begin-nodejs/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.096Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2019/01/29/2019/begin-go/</loc>
     
     <lastmod>2019-03-05T17:56:25.096Z</lastmod>
     
@@ -450,6 +436,20 @@
   </url>
   
   <url>
+    <loc>http://jalan.space/2018/11/10/2018/venom/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.096Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2019/01/29/2019/begin-go/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.096Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://jalan.space/2019/02/05/2019/python-queue/</loc>
     
     <lastmod>2019-03-05T17:56:25.096Z</lastmod>
@@ -457,56 +457,7 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2018/11/07/2018/python-redis/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2018/12/12/2018/mongo/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://jalan.space/2018/08/25/2018/kubectl/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2018/07/13/2018/php-write-file-error/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2018/07/10/2018/the-use-of-mysqldump/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2018/11/01/2018/run-in-the-background-in-linux/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2018/12/23/2018/php-gc/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2018/06/19/2018/php-asynchronous-methods/</loc>
     
     <lastmod>2019-03-05T17:56:25.095Z</lastmod>
     
@@ -520,7 +471,56 @@
   </url>
   
   <url>
+    <loc>http://jalan.space/2018/12/12/2018/mongo/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://jalan.space/2018/10/17/2018/love-yourself/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2018/07/13/2018/php-write-file-error/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2018/06/19/2018/php-asynchronous-methods/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2018/11/07/2018/python-redis/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2018/12/23/2018/php-gc/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2018/11/01/2018/run-in-the-background-in-linux/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.095Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2018/07/10/2018/the-use-of-mysqldump/</loc>
     
     <lastmod>2019-03-05T17:56:25.095Z</lastmod>
     
@@ -541,6 +541,13 @@
   </url>
   
   <url>
+    <loc>http://jalan.space/2018/09/27/2018/add-laravel-log-to-elk/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.094Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://jalan.space/2018/09/09/2018/applestore-in-app-purchase/</loc>
     
     <lastmod>2019-03-05T17:56:25.094Z</lastmod>
@@ -555,21 +562,7 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2018/09/27/2018/add-laravel-log-to-elk/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.094Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://jalan.space/2018/11/21/2018/crontab/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.094Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2018/04/22/2018/2018-04-22-gitbook-and-git-pages/</loc>
     
     <lastmod>2019-03-05T17:56:25.094Z</lastmod>
     
@@ -583,28 +576,14 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2018/03/26/2018/2018-03-26-mysql-tens-of-millions-of-data/</loc>
+    <loc>http://jalan.space/2018/04/22/2018/2018-04-22-gitbook-and-git-pages/</loc>
     
-    <lastmod>2019-03-05T17:56:25.093Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2018/03/19/2018/2018-03-19-php-redis-lock/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.093Z</lastmod>
+    <lastmod>2019-03-05T17:56:25.094Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://jalan.space/2018/03/21/2018/2018-03-21-linux-common-commands-find/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.093Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2018/03/27/2018/2018-03-26-linux-common-commands-xargs/</loc>
+    <loc>http://jalan.space/2018/04/02/2018/2018-04-02-linux-common-commands-rsync/</loc>
     
     <lastmod>2019-03-05T17:56:25.093Z</lastmod>
     
@@ -618,7 +597,28 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2018/04/02/2018/2018-04-02-linux-common-commands-rsync/</loc>
+    <loc>http://jalan.space/2018/03/19/2018/2018-03-19-php-redis-lock/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.093Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2018/03/27/2018/2018-03-26-linux-common-commands-xargs/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.093Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2018/03/21/2018/2018-03-21-linux-common-commands-find/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.093Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2018/04/19/2018/2018-04-19-llinux-common-commands-pratice/</loc>
     
     <lastmod>2019-03-05T17:56:25.093Z</lastmod>
     
@@ -639,23 +639,9 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2018/04/19/2018/2018-04-19-llinux-common-commands-pratice/</loc>
+    <loc>http://jalan.space/2018/03/26/2018/2018-03-26-mysql-tens-of-millions-of-data/</loc>
     
     <lastmod>2019-03-05T17:56:25.093Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2018/01/17/2018/2018-01-17-sorting-json-data/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.092Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2018/01/06/2018/2018-01-06-mount-disk-in-mac-osx/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.092Z</lastmod>
     
   </url>
   
@@ -674,7 +660,21 @@
   </url>
   
   <url>
+    <loc>http://jalan.space/2018/01/07/2018/2018-01-07-python-urlib-beautifulsoup/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.092Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://jalan.space/2018/01/05/2018/2018-01-05-python-mysqlclient-install-error/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.092Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2018/01/06/2018/2018-01-06-mount-disk-in-mac-osx/</loc>
     
     <lastmod>2019-03-05T17:56:25.092Z</lastmod>
     
@@ -702,16 +702,9 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2018/01/07/2018/2018-01-07-python-urlib-beautifulsoup/</loc>
+    <loc>http://jalan.space/2018/01/17/2018/2018-01-17-sorting-json-data/</loc>
     
     <lastmod>2019-03-05T17:56:25.092Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2017/11/29/2017-11-29-the-use-of-redis-in-php-to-save-the-session-posture-and-error-check/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.091Z</lastmod>
     
   </url>
   
@@ -723,7 +716,14 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2017/12/20/2017-12-16-linux-common-disk/</loc>
+    <loc>http://jalan.space/2017/12/05/2017-12-05-winter/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.091Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2017/12/05/2017-12-05-git-uploads-a-local-branch-to-a-remote-branch/</loc>
     
     <lastmod>2019-03-05T17:56:25.091Z</lastmod>
     
@@ -744,14 +744,14 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2017/12/05/2017-12-05-git-uploads-a-local-branch-to-a-remote-branch/</loc>
+    <loc>http://jalan.space/2017/11/29/2017-11-29-the-use-of-redis-in-php-to-save-the-session-posture-and-error-check/</loc>
     
     <lastmod>2019-03-05T17:56:25.091Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://jalan.space/2017/12/05/2017-12-05-winter/</loc>
+    <loc>http://jalan.space/2017/12/20/2017-12-16-linux-common-disk/</loc>
     
     <lastmod>2019-03-05T17:56:25.091Z</lastmod>
     
@@ -772,42 +772,7 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2017/07/21/2017-07-21-php-callback/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.090Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2017/09/07/2017-09-05-SMS-verification-code-and-graphic-verification-code-with-php/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.090Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2017/07/26/2017-07-26-keep-a-record-of-start-work-for-a-month/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.090Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2017/07/24/2017-07-24-php-reflection-api/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.090Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://jalan.space/2017/07/05/2017-07-05-unable-to-run-python-script-with-PHP-exec-when-importing-cv2/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.090Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2017/08/08/2017-07-31-add-watermark-on-pdf-with-php/</loc>
     
     <lastmod>2019-03-05T17:56:25.090Z</lastmod>
     
@@ -821,6 +786,20 @@
   </url>
   
   <url>
+    <loc>http://jalan.space/2017/07/26/2017-07-26-keep-a-record-of-start-work-for-a-month/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.090Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2017/07/21/2017-07-21-php-callback/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.090Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://jalan.space/2017/07/26/2017-07-27-laravel-migrate/</loc>
     
     <lastmod>2019-03-05T17:56:25.090Z</lastmod>
@@ -828,21 +807,35 @@
   </url>
   
   <url>
+    <loc>http://jalan.space/2017/07/24/2017-07-24-php-reflection-api/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.090Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2017/09/07/2017-09-05-SMS-verification-code-and-graphic-verification-code-with-php/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.090Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2017/08/08/2017-07-31-add-watermark-on-pdf-with-php/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.090Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2017/06/27/2017-06-27-digital-image-watermarking-using-3-level-discrete-wavelet-transform/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.089Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://jalan.space/2017/03/14/2017-03-14-python-function/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.089Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2017/02/16/2017-02-16-how-to-use-fineuploader/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.089Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2017/03/16/2017-03-16-python-functional-programming/</loc>
     
     <lastmod>2019-03-05T17:56:25.089Z</lastmod>
     
@@ -863,13 +856,6 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2017/06/27/2017-06-27-digital-image-watermarking-using-3-level-discrete-wavelet-transform/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.089Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://jalan.space/2017/02/16/2017-02-17-use-phpexcel-upload-excel-contains-multiple-worksheets/</loc>
     
     <lastmod>2019-03-05T17:56:25.089Z</lastmod>
@@ -877,14 +863,35 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2017/01/22/2017-01-22-shell-sed-replace-text/</loc>
+    <loc>http://jalan.space/2017/03/16/2017-03-16-python-functional-programming/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.089Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2017/02/16/2017-02-16-how-to-use-fineuploader/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.089Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2017/01/21/2017-01-21-php-add-extensions/</loc>
     
     <lastmod>2019-03-05T17:56:25.088Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://jalan.space/2017/01/21/2017-01-21-php-add-extensions/</loc>
+    <loc>http://jalan.space/2016/08/02/2016-08-02-rst-hyperspectral-unmixing-based-on-local/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.088Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2017/01/22/2017-01-22-shell-sed-replace-text/</loc>
     
     <lastmod>2019-03-05T17:56:25.088Z</lastmod>
     
@@ -899,13 +906,6 @@
   
   <url>
     <loc>http://jalan.space/2016/11/28/2016-11-28-rudiments-of-matlab/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.088Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jalan.space/2016/08/02/2016-08-02-rst-hyperspectral-unmixing-based-on-local/</loc>
     
     <lastmod>2019-03-05T17:56:25.088Z</lastmod>
     
@@ -933,13 +933,6 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2016/07/19/2016-07-19-php-memcache-and-memcached/</loc>
-    
-    <lastmod>2019-03-05T17:56:25.087Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://jalan.space/2016/04/01/2016-04-05-leetcode-notebook/</loc>
     
     <lastmod>2019-03-05T17:56:25.087Z</lastmod>
@@ -961,14 +954,21 @@
   </url>
   
   <url>
-    <loc>http://jalan.space/2016/02/05/2016-02-06-analog-login/</loc>
+    <loc>http://jalan.space/2016/02/13/2016-02-13-machine-learning-fundations-one/</loc>
     
     <lastmod>2019-03-05T17:56:25.087Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://jalan.space/2016/02/13/2016-02-13-machine-learning-fundations-one/</loc>
+    <loc>http://jalan.space/2016/07/19/2016-07-19-php-memcache-and-memcached/</loc>
+    
+    <lastmod>2019-03-05T17:56:25.087Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://jalan.space/2016/02/05/2016-02-06-analog-login/</loc>
     
     <lastmod>2019-03-05T17:56:25.087Z</lastmod>
     
