@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="江佳扬 | 刘璐璐的匆匆过客 | PHP | Python | 技术博客"><title>贪心算法与正确性归纳证明 | 忘归</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.0/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = 'https://hm.baidu.com/hm.js?' + 'c47c7dbbbbb8b1bd7729048f358cd896';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">贪心算法与正确性归纳证明</h1><a id="logo" href="/.">忘归</a><p class="description">底色悲凉，自在如风。</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/cat/"><i class="fa fa-heart"> 喵</i></a><a href="http://www.jalan.space:8081"><i class="fa fa-book"> 时光</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">贪心算法与正确性归纳证明</h1><div class="post-meta">Dec 11, 2019<span> | </span><span class="category"><a href="/categories/技多不压身/">技多不压身</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 1.6k</span><span class="post-meta-item-text"> 字</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-hourglass-half"></i><span class="post-count"> 5</span><span class="post-meta-item-text"> 分钟</span></span></span></div><a class="disqus-comment-count" data-disqus-identifier="2019/12/11/2019/greedy/" href="/2019/12/11/2019/greedy/#disqus_thread"></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#主要思想"><span class="toc-number">1.</span> <span class="toc-text">主要思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#贪心性质"><span class="toc-number">2.</span> <span class="toc-text">贪心性质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#证明方法"><span class="toc-number">3.</span> <span class="toc-text">证明方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数学归纳法"><span class="toc-number">4.</span> <span class="toc-text">数学归纳法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#证明步骤"><span class="toc-number">4.1.</span> <span class="toc-text">证明步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原理"><span class="toc-number">4.2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#举个例子"><span class="toc-number">4.3.</span> <span class="toc-text">举个例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#归纳基础"><span class="toc-number">4.3.1.</span> <span class="toc-text">归纳基础</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#归纳步骤"><span class="toc-number">4.3.2.</span> <span class="toc-text">归纳步骤</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#算法正确性归纳证明"><span class="toc-number">5.</span> <span class="toc-text">算法正确性归纳证明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kruskal-最小生成树"><span class="toc-number">6.</span> <span class="toc-text">Kruskal 最小生成树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主要思想-1"><span class="toc-number">6.1.</span> <span class="toc-text">主要思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正确性证明"><span class="toc-number">6.2.</span> <span class="toc-text">正确性证明</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#叙述命题"><span class="toc-number">6.2.1.</span> <span class="toc-text">叙述命题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#归纳基础-1"><span class="toc-number">6.2.2.</span> <span class="toc-text">归纳基础</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#归纳步骤-1"><span class="toc-number">6.2.3.</span> <span class="toc-text">归纳步骤</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="post-content"><h2 id="主要思想"><a href="#主要思想" class="headerlink" title="主要思想"></a>主要思想</h2><p>贪心算法就是让计算机模拟一个「贪心的人」来做出决策。这个贪心的人是目光短浅的，他每次总是：</p>
+<ul>
+<li>只做出<strong>当前看来最好的选择</strong></li>
+<li><strong>只看眼前的利益，而不考虑做出选择后对未来造成的影响</strong></li>
+</ul>
+<p>并且他一旦做出了选择，就没有办法反悔（不可回溯），所以为了利益最大化，他需要保证绝不能做出错误的选择。</p>
+<p>贪心算法不是从整体最优的角度上考虑问题，而是只在意某种意义上的局部最优解。因此，贪心算法并不能保证在所有情况下都能获得最优解。所以在使用贪心算法时，<strong>我们需要确保自己能证明最优解的正确性</strong>。</p>
+<h2 id="贪心性质"><a href="#贪心性质" class="headerlink" title="贪心性质"></a>贪心性质</h2><p>可以用贪心算法解决的题目需要满足以下性质：</p>
+<ul>
+<li>最优子结构：一个问题的最优解包含其子问题的最优解</li>
+<li>贪心选择性：所求问题的整体最优解可以通过一系列局部最优的选择来到达，即通过贪心选择来达到</li>
+</ul>
+<h2 id="证明方法"><a href="#证明方法" class="headerlink" title="证明方法"></a>证明方法</h2><p><strong>贪心算法最难的部分从不在于问题的求解，而在于正确性的证明</strong>，常用的证明方法有<strong>归纳法</strong>和<strong>交换论证法</strong>。</p>
+<ul>
+<li>归纳法：对算法进行<strong>步数归纳</strong>或<strong>问题规模归纳</strong></li>
+<li>交换论证法：从最优解出发，在保证最优性不变的前提下，从一个最优解进行逐步替换，从而得到贪心策略的解</li>
+</ul>
+<p>因篇幅有限，本篇我们主要说说归纳证明。归纳证明的本质其实就是<a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E5%AD%A6%E5%BD%92%E7%BA%B3%E6%B3%95" title="数学归纳法" target="_blank" rel="noopener">数学归纳法</a>，我们先来复习下数学归纳法吧。</p>
+<h2 id="数学归纳法"><a href="#数学归纳法" class="headerlink" title="数学归纳法"></a>数学归纳法</h2><p>数学归纳法（<em>Mathematical Induction</em>）是一种<a href="https://zh.wikipedia.org/wiki/%E6%95%B8%E5%AD%B8%E8%AD%89%E6%98%8E" title="数学证明" target="_blank" rel="noopener">数学证明</a>方法，通常被用于证明某个给定命题在整个（或者局部）自然数范围内成立。</p>
+<h3 id="证明步骤"><a href="#证明步骤" class="headerlink" title="证明步骤"></a>证明步骤</h3><p>最简单和常见的数学归纳法是证明当 n 等于任意一个自然数时某命题成立。证明分下面两步：</p>
+<ol>
+<li>证明当 <code>n = 1</code> 时，命题成立</li>
+<li>证明如果在 <code>n = m</code>（m 为任意自然数）时命题成立，那么可以推导出 <code>n = m + 1</code> 时命题也成立</li>
+</ol>
+<p><strong>1 为归纳基础，2 为归纳步骤</strong>。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>该方法的原理在于：一旦我们证明了在某个起点值（例如 <code>n = 1</code>）时命题成立，且证明出从一个值到下一个值的过程有效（即 <code>n = m</code> 到 <code>n = m + 1</code>），那么任意值都可以通过反复使用这个方法推导出来。即：</p>
+<p>$$P(1) 为真，$$</p>
+<p>$$且 \forall n, P(n) 为真 \to P(n + 1) 为真$$</p>
+<p>那么：</p>
+<p>$$n = 1, P(1) 为真 \to P(2) 为真$$</p>
+<p>$$n = 2, P(2) 为真 \to P(3) 为真$$</p>
+<p>$$……$$</p>
+<h3 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h3><p>如果我们要证明对于任意自然数，都满足：</p>
+<p>$$1 + 2 + … + n = \frac {n \times (1 + n)}{2}$$</p>
+<h4 id="归纳基础"><a href="#归纳基础" class="headerlink" title="归纳基础"></a>归纳基础</h4><p>找到起始点，即 <code>n = 1</code> 时，此时等式左侧等于 1，右侧等于：</p>
+<p>$$\frac {1 \times (1 + 1)}{2} = \frac {2}{2} = 1$$</p>
+<p>左右两侧相等，因此在 <code>n = 1</code> 时，命题成立。</p>
+<h4 id="归纳步骤"><a href="#归纳步骤" class="headerlink" title="归纳步骤"></a>归纳步骤</h4><p>先假设：对于任意自然数 n 命题均成立。</p>
+<p>那么，当 <code>n = n + 1</code> 时：</p>
+<p>$$1 + 2 + … + (n + 1)$$</p>
+<p>$$= (1 + 2 + … + n) + (n + 1)$$</p>
+<p>$$= \frac {n \times (1 + n)}{2} + (n + 1)$$</p>
+<p>$$= \frac {n \times (1 + n)}{2} + \frac{2 \times (n + 1)}{2}$$</p>
+<p>$$= \frac{(n + 1) \times (n + 2)}{2}$$</p>
+<p>因此，在 <code>n = n + 1</code> 时，命题也成立。证毕。</p>
+<h2 id="算法正确性归纳证明"><a href="#算法正确性归纳证明" class="headerlink" title="算法正确性归纳证明"></a>算法正确性归纳证明</h2><p>归纳证明的证明步骤如下：</p>
+<ol>
+<li>叙述一个有关自然数 <code>n</code> 的命题，该命题断定贪心策略的执行最终将导致最优解，其中自然数 <code>n</code> 可以代表<strong>算法步数</strong>或者<strong>问题规模</strong>。</li>
+<li>证明该问题对所有自然数为真</li>
+</ol>
+<p>其中，步骤二使用数学归纳法证明，即践行归纳基础与归纳步骤。</p>
+<p>下面我们就来看下如何使用归纳法来证明 Kruskal 算法的正确性。</p>
+<h2 id="Kruskal-最小生成树"><a href="#Kruskal-最小生成树" class="headerlink" title="Kruskal 最小生成树"></a>Kruskal 最小生成树</h2><p><a href="https://zh.wikipedia.org/wiki/%E5%85%8B%E9%B2%81%E6%96%AF%E5%85%8B%E5%B0%94%E6%BC%94%E7%AE%97%E6%B3%95" title="Kruskal 算法" target="_blank" rel="noopener">Kruskal 算法</a>是一种常见并且好写的<a href="https://zh.wikipedia.org/wiki/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91" title="最小生成树" target="_blank" rel="noopener">最小生成树</a>算法，由 Kruskal 发明。该算法基于贪心思想，基本思想是<strong>从小到大加入边</strong>。</p>
+<h3 id="主要思想-1"><a href="#主要思想-1" class="headerlink" title="主要思想"></a>主要思想</h3><ol>
+<li>将图的<strong>边按权值大小</strong>从小到大依次选取</li>
+<li>选取权值最小的边 edge，假设构成该边的两个点为 (point1, point2)，如果 point1 和 point2 已在一个连通图中，则舍弃该边；否则讲该边加入最小生成树中</li>
+<li>重复步骤 2，直到构成最小生成树为止</li>
+</ol>
+<p><img src="https://user-gold-cdn.xitu.io/2019/12/11/16ef3131f85db639?w=800&amp;h=800&amp;f=gif&amp;s=196091" alt="图源：维基百科"></p>
+<h3 id="正确性证明"><a href="#正确性证明" class="headerlink" title="正确性证明"></a>正确性证明</h3><h4 id="叙述命题"><a href="#叙述命题" class="headerlink" title="叙述命题"></a>叙述命题</h4><p>首先，给出命题：对于任意 n，该算法对 n 阶图都能得到一棵最小生成树。</p>
+<h4 id="归纳基础-1"><a href="#归纳基础-1" class="headerlink" title="归纳基础"></a>归纳基础</h4><p>当 <code>n = 2</code> 时，此时只有一条边，命题显然为真。</p>
+<h4 id="归纳步骤-1"><a href="#归纳步骤-1" class="headerlink" title="归纳步骤"></a>归纳步骤</h4><p>假设对于 n 个顶点的图，该算法正确，考虑 n + 1 个定点的图 $G$，假设 $G$ 中最小边权为 $e = {i, j}$。</p>
+<p>此时，在图 $G$ 中连接点 $i$ 与点 $j$，得到图 $G’$。</p>
+<p>根据归纳假设，由算法可推出：存在 $G’$ 的最小生成树 $T’$。令 $T = T’ \bigcup {e}$，则 $T$ 是关于 $G$ 的最小生成树。</p>
+<p><strong>反证</strong>：若 $T$ 不是 $G$ 的最小生成树，那么必然存在某包含 $e$ 边的最小生成树 $T^<em>$，使得 $W(T^</em>) &lt; W(T)$（即 $T^*$ 的边权小于 $T$）。</p>
+<p>此时，在 $T^<em>$ 中删除 $e$ 边，可得到 G’ 的最小生成树 $T^</em> - {e}$，且有：</p>
+<p>$$<br>W(T^* - {e}) =</p>
+<p>W(T^*) - w(e) &lt;</p>
+<p>W(T) - w(e) =</p>
+<p>W(T’)<br>$$</p>
+<p>该表达式与 $T’$ 是最优解相互矛盾，所以 $T$ 必然是 $G$ 的最小生成树，证毕。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>贪心算法不是从整体最优的角度上考虑问题，而是只考虑某种意义上的局部最优解，不可回溯，不考虑后果</li>
+<li>可以用贪心解答的题目需要满足<strong>最优子结构</strong>与<strong>贪心选择性</strong></li>
+<li>贪心算法并不能保证在所有情况下都能获得最优解，所以在使用贪心算法时需要证明算法的正确性，常见的证明方法有<strong>归纳法</strong>与<strong>交换论证法</strong></li>
+<li>数学归纳法通常被用于证明某个给定命题在整个（或者局部）自然数范围内成立，证明过程为<strong>归纳基础</strong>+<strong>归纳步骤</strong></li>
+<li>归纳证明需先给出命题，再用数学归纳法证明该命题对所有自然数为真</li>
+</ul>
+<p><img src="/img/qrcode/wechat.png" alt=""></p>
+</div><iframe src="/donate/?AliPayQR=/img/AliPayQR.jpeg&amp;WeChatQR=/img/WeChatQR.jpeg&amp;GitHub=null&amp;BTCQR=null&amp;BTCKEY=null&amp;PayPal=null" style="overflow-x:hidden; overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;" frameborder="0" scrolling="no"></iframe><div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>江五渣。欢迎关注我的公众号：「编程拯救世界」，在编程世界一起冒险，一起成长！</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="/2019/12/11/2019/greedy/">http://jalan.space/2019/12/11/2019/greedy/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 知识共享署名 3.0，可自由转载、引用，但需署名作者且注明文章出处。</li></ul></div><br><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a class="article-share-link" data-url="http://jalan.space/2019/12/11/2019/greedy/" data-id="ck41fganv009kw67uw30is60g" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABwElEQVR42u3awa7CMAwEQP7/p3nSuyKitZMYkCYnVNoy5bCK7T4e8Xr+r+T4M1jrex5YuLi429zqrV8/5+e/XpUbcHFx57nrkEoCq/rwSajh4uJ+P3d9ZH08Dz5cXNzf4ibQJAR75+Di4s5zq5uSPPiq9z9Wq+Hi4m5wqw3TG58v9ndxcXGL3GdrVRFJmRT9Li4u7gg3377shFqeTtG1uLi4I9z8dYpeoZIH2dqAi4v7WW7SEs2v6g1uo5DFxcW9wE3CKB+15mF0oOzBxcW9zM0LkuTBqmcmd8DFxf0UNx+v7mx9es0XXFzcT3GrNVO11Nkf7uLi4s5we82O9fl5+yMJSlxc3HluMgJJWPsboKh8wsXFHeFWcb2SphpkBzY6uLi4h7jVXUT+KlX11atCGwUXF3eEm7CqY9f90Wz0H+Pi4l7jJsGxM3Q51jbFxcW9xm2+INX6sTzO3n6Li4s7wu0lX9LmyIucvPmCi4s7yc3LlRtt03KQ4eLiDnJ77dFqq/RAdOLi4n4lN2ftN0+b02BcXNxBbnUztH6MZlMVFxd3kFuNm2oY9Zqwb4MMFxf3MrcXduv4S1jVjREuLu4I9w8E/i7lSHfh8QAAAABJRU5ErkJggg==">分享</a><div class="tags"><a href="/tags/算法/">算法</a></div><div class="post-nav"><a class="next" href="/2019/12/02/2019/go-oop/">聊聊 Go 语言中的面向对象编程</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://jalan.space/2019/12/11/2019/greedy/';
+    this.page.identifier = '2019/12/11/2019/greedy/';
+    this.page.title = '贪心算法与正确性归纳证明';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//jalanspace.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//jalanspace.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://jalanspace.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"><input type="hidden" name="sitesearch" value="http://jalan.space"></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Web屠龙刀/">Web屠龙刀</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/云原生应用/">云原生应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/少年人的冲动/">少年人的冲动</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/技多不压身/">技多不压身</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/磨刀石/">磨刀石</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/移动开发者/">移动开发者</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/跨过这道坎/">跨过这道坎</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/jekyll/" style="font-size: 15px;">jekyll</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/算法/" style="font-size: 15px;">算法</a> <a href="/tags/影评/" style="font-size: 15px;">影评</a> <a href="/tags/机器学习/" style="font-size: 15px;">机器学习</a> <a href="/tags/meitu/" style="font-size: 15px;">meitu</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/图像处理/" style="font-size: 15px;">图像处理</a> <a href="/tags/Bootstrap/" style="font-size: 15px;">Bootstrap</a> <a href="/tags/matlab/" style="font-size: 15px;">matlab</a> <a href="/tags/Nginx/" style="font-size: 15px;">Nginx</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/生活啊/" style="font-size: 15px;">生活啊</a> <a href="/tags/Laravel/" style="font-size: 15px;">Laravel</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/网络爬虫/" style="font-size: 15px;">网络爬虫</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Kubernetes/" style="font-size: 15px;">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/JavaScript/" style="font-size: 15px;">JavaScript</a> <a href="/tags/GCP/" style="font-size: 15px;">GCP</a> <a href="/tags/docsify/" style="font-size: 15px;">docsify</a> <a href="/tags/Git/" style="font-size: 15px;">Git</a> <a href="/tags/NodeJS/" style="font-size: 15px;">NodeJS</a> <a href="/tags/Go/" style="font-size: 15px;">Go</a> <a href="/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/Shadowsocks/" style="font-size: 15px;">Shadowsocks</a> <a href="/tags/Composer/" style="font-size: 15px;">Composer</a> <a href="/tags/Lumen/" style="font-size: 15px;">Lumen</a> <a href="/tags/数据结构/" style="font-size: 15px;">数据结构</a> <a href="/tags/Docker/" style="font-size: 15px;">Docker</a> <a href="/tags/Swift/" style="font-size: 15px;">Swift</a> <a href="/tags/iOS/" style="font-size: 15px;">iOS</a> <a href="/tags/开发者大会/" style="font-size: 15px;">开发者大会</a> <a href="/tags/SQL/" style="font-size: 15px;">SQL</a> <a href="/tags/开发规范/" style="font-size: 15px;">开发规范</a> <a href="/tags/OAuth/" style="font-size: 15px;">OAuth</a> <a href="/tags/WeChat/" style="font-size: 15px;">WeChat</a> <a href="/tags/面向对象/" style="font-size: 15px;">面向对象</a> <a href="/tags/操作系统/" style="font-size: 15px;">操作系统</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/翻译/" style="font-size: 15px;">翻译</a> <a href="/tags/DevOps/" style="font-size: 15px;">DevOps</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/12/11/2019/greedy/">贪心算法与正确性归纳证明</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/02/2019/go-oop/">聊聊 Go 语言中的面向对象编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/26/2019/binary-show/">深入浅出：举个例子解读原码、反码与补码</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/21/2019/go-array/">认识 Go 语言中的数组</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/16/2019/go-character-string-range/">聊聊 Go 语言中的字符表示与字符串遍历</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/27/2019/php-laravel-production-seed/">在 Laravel 生产环境中填充数据</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/23/2019/bibi/">二零一九碎碎念</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/15/2019/create-gallery-by-docker/">从购买云服务器到使用 Docker 部署个人相册</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/22/2019/mac-docker-desktop-kubernetes/">在 macOS 上使用 Docker Desktop 启动 Kubernetes</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/09/19/2019/swift-tableview-delete-cell/">从 UITableView 中删除 Cell 的踩坑</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//jalanspace.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://blog.w2fzu.com/" title="西二在线" target="_blank">西二在线</a><ul></ul><a href="http://www.hongweipeng.com/" title="栖迟於一丘" target="_blank">栖迟於一丘</a><ul></ul><a href="http://shixiong.name/" title="Daemon" target="_blank">Daemon</a><ul></ul><a href="http://csming1995.github.io/" title="Csming's world" target="_blank">Csming's world</a><ul></ul><a href="https://mychiaki.github.io/" title="Chiaki" target="_blank">Chiaki</a><ul></ul><a href="http://www.ruphi.cn/" title="ruphi" target="_blank">ruphi</a><ul></ul><a href="http://lizimeow.cn/" title="栗子膜法师" target="_blank">栗子膜法师</a><ul></ul><a href="https://evaaaaaaaxiao.github.io/" title="Eva.X" target="_blank">Eva.X</a><ul></ul><a href="http://gagalee.ink/" title="185大总攻嘎嘎大人" target="_blank">185大总攻嘎嘎大人</a><ul></ul><a href="https://woodenrobot.me/" title="WoodenRobot's Blog" target="_blank">WoodenRobot's Blog</a><ul></ul><a href="https://imiku.me" title="冰凌胧月的小窝" target="_blank">冰凌胧月的小窝</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">忘归.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
